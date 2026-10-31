@@ -1,0 +1,911 @@
+/* ONA · sistema de diseño
+   Cálido, cercano y plano: una sola paleta clara, esquinas más cuadradas, sin degradados,
+   sin cristal, sin brillos, tipografía propia y emojis sustituidos por iconos de línea.
+   Se carga DESPUÉS del bloque <style> de index.html, por eso puede reasignar tokens y clases. */
+
+/* ── Tipografía (autoalojada: funciona sin conexión) ───────────────── */
+@font-face{font-family:'Young Serif';src:url('fonts/YoungSerif.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Hanken Grotesk';src:url('fonts/HankenGrotesk.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+
+/* ── Tokens ──────────────────────────────────────────────────────── */
+:root{
+  /* Escala turquesa (50 → 950) y su complementaria rosada, definidas por Moni */
+  --teal-50:#ECF8F8;--teal-100:#CAECEA;--teal-200:#A8E1DD;--teal-300:#86D5CF;--teal-400:#64C9C2;
+  --teal-500:#42BDB5;--teal-600:#33918B;--teal-700:#2A7974;--teal-800:#1E5753;--teal-900:#133533;--teal-950:#071312;
+  --rose-50:#F8ECED;--rose-100:#ECCACC;--rose-200:#E1A8AC;--rose-300:#D5868B;--rose-400:#C9646B;
+  --rose-500:#BD424A;--rose-600:#913339;--rose-700:#792A30;--rose-800:#571E22;--rose-900:#351315;--rose-950:#130707;
+
+  /* Identidad de ONA: el turquesa #00a8a3 sigue siendo el relleno de las acciones principales */
+  --t:#00a8a3;--tl:var(--teal-100);
+  --az:#66bfe3;--azl:#e8f5fb;
+  --d:#e6b22b;--dl:#fdf3d0;
+  --n:var(--teal-950);           /* tinta: negro con matiz turquesa */
+  --g:var(--teal-800);           /* texto secundario (contraste >6:1, también sobre la marca de agua) */
+  --f:#ffffff;                   /* fondo: blanco */
+  --b:#ffffff;                   /* tarjetas */
+  --linea:var(--teal-100);
+  --ton:var(--teal-800);         /* texto turquesa pequeño */
+  --ton-grande:var(--teal-700);  /* cifras y títulos grandes en turquesa */
+  --r:var(--rose-500);--rl:var(--rose-50);
+  --rosa:var(--rose-500);--rosal:var(--rose-100);
+  --benBg:#ffffff;--benCard:#ffffff;--benCard2:var(--teal-100);
+  --benTxtP:var(--teal-950);--benTxtS:var(--teal-800);--benBorder:var(--teal-100);
+  --bgOsc:var(--benBg);--cardOsc:var(--benCard);--cardOsc2:var(--benCard2);
+  --txtOscP:var(--benTxtP);--txtOscS:var(--benTxtS);--bordeOsc:var(--benBorder);
+  --display:'Young Serif',Georgia,'Times New Roman',serif;
+}
+body{font-family:'Hanken Grotesk',system-ui,sans-serif !important;background:#ffffff !important;color:var(--n)}
+button,input,textarea,select{font-family:inherit}
+.ctitle,.m-title,.peso-val,.stat-value,.ciclo-day,.ex-nombre,.checkin-title,.timer-num,
+#dash-fase,#dash-racha-num,#ciclo-dia-num,#perfil-nombre-title,#dash-greeting,h1,h2{font-family:var(--display) !important}
+
+/* ── Estructura ──────────────────────────────────────────────────── */
+.phone{background:var(--f) !important}
+.header{background:var(--n) !important}
+#s-dashboard,#s-entreno.active{background:transparent !important;background-image:none !important;color:var(--n) !important}
+.scroll{background:transparent !important}
+#s-dashboard .scroll{background:transparent !important}
+
+/* ── Superficies: planas, borde fino, sin cristal ─────────────────── */
+.stat-card,.alerta-card,.grad,.ex-card,.opt,.pq,.timer-widget,
+#s-dashboard .grad,#s-dashboard .alerta-card,#s-dashboard .stat-card,
+.fase-card,.exp-item,.checkin-bottom-sheet,.m-card,.m-sheet,
+#riesgos-gate .card,#dash-recordatorio-hormonal .card{
+  background:var(--b) !important;
+  backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+  border:1px solid var(--linea) !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+  color:var(--n) !important;
+}
+.m-sheet,.m-card,.checkin-bottom-sheet{border-radius:0 !important;border-bottom:0 !important}
+#s-dashboard .card *,#s-dashboard .grad *,#s-dashboard .alerta-card *,#s-dashboard .stat-card *{color:inherit !important}
+#s-dashboard .card [style*="color:var(--g)"],#s-dashboard .alerta-card [style*="color:var(--g)"]{color:var(--g) !important}
+#s-dashboard .card [style*="color:var(--t)"]{color:var(--t) !important}
+.ex-card.hecho{background:var(--tl) !important;border-color:var(--t) !important}
+.ex-card.elim{opacity:.6}
+.fase-card.active{border-color:var(--t) !important;background:var(--tl) !important}
+.opt.sel{border-color:var(--t) !important;background:var(--tl) !important}
+
+/* títulos de tarjeta: frase normal, no etiqueta en mayúsculas */
+.ctitle,#s-dashboard .ctitle{
+  text-transform:none !important;letter-spacing:0 !important;
+  font-size:16px !important;font-weight:700 !important;color:var(--n) !important;margin-bottom:8px;
+}
+[style*="text-transform:uppercase"]{text-transform:none !important;letter-spacing:0 !important}
+.nav-btn,.stat-card-title,.alerta-appname,.hlabel{text-transform:none !important;letter-spacing:0 !important}
+/* letra pequeña legible */
+[style*="font-size:12px"],[style*="font-size:12px"],[style*="font-size:12px"],[style*="font-size:12px"]{font-size:13px !important}
+
+/* ── Formas: esquinas contenidas, sin píldoras para todo ─────────── */
+[style*="border-radius:14px;"],[style*="border-radius:16px;"]{border-radius:0 !important}
+[style*="border-radius:18px;"],[style*="border-radius:20px;"],[style*="border-radius:22px;"]{border-radius:0 !important}
+.btn-n,.btn-t,.btn-o,.save-btn,.btn-empezar-entreno,.btn-socias-glass,.modo-rapido-btn,.ax-btn,.nohoy-btn,.ci-estado-btn,.ci-btn,
+.e-btn,.msel,.bfiltro,.peso-pm,.timer-btn,.cuest-op,.chat-inp,.chat-sug,.pq-btn{border-radius:2px !important}
+.pill,.tag,.stat-pill,.racha-badge,.exercise-tag{border-radius:2px !important}
+
+/* ── Botones: planos, un solo énfasis ─────────────────────────────── */
+.btn-t,.save-btn,.btn-empezar-entreno{
+  background:var(--t) !important;color:#fff !important;border:0 !important;box-shadow:none !important;
+  animation:none !important;letter-spacing:0 !important;
+}
+.btn-n{background:var(--t) !important;color:#fff !important;box-shadow:none !important}
+.btn-o,.card .btn-o,#s-dashboard .card .btn-o,#s-dashboard .btn-o{background:var(--b) !important;color:var(--ton) !important;border:1.5px solid var(--t) !important;box-shadow:none !important}
+.btn-t:disabled,.btn-n:disabled,.btn-empezar-entreno:disabled,.save-btn:disabled{background:#dde9e9 !important;color:#3f5f5c !important}
+.btn-t:not(:disabled):hover,.btn-empezar-entreno:not(:disabled):hover{transform:none !important;box-shadow:none !important;background:#009490 !important}
+.modo-rapido-btn{
+  background:transparent !important;color:var(--ton) !important;border:1.5px solid var(--t) !important;
+  box-shadow:none !important;border-radius:2px !important;
+}
+.modo-rapido-btn:hover{transform:none !important;box-shadow:none !important}
+.btn-socias-glass{
+  background:transparent !important;color:var(--n) !important;border:1px solid var(--linea) !important;
+  box-shadow:none !important;backdrop-filter:none !important;font-weight:600 !important;
+}
+.ax-btn{background:transparent !important;color:var(--n) !important}
+.ax-btn.h-on{color:var(--t) !important}
+.nohoy-btn{background:transparent !important;color:var(--g) !important;border:1px solid var(--linea) !important}
+.ci-estado-btn,.e-btn,.msel,.cuest-op,.bfiltro{background:var(--b) !important;border:1px solid var(--linea) !important;color:var(--n) !important;box-shadow:none !important}
+.ci-estado-btn.on,.e-btn.on,.msel.on,.cuest-op.selected,.bfiltro.on{border-color:var(--t) !important;background:var(--tl) !important;color:var(--ton) !important}
+
+/* ── Navegación inferior ─────────────────────────────────────────── */
+.nav{
+  background:var(--b) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+  border-top:1px solid var(--linea) !important;box-shadow:none !important;
+}
+.nav-btn{color:var(--g) !important;font-weight:600 !important;text-shadow:none !important;font-size:13px !important}
+.nav-btn.active{color:var(--ton) !important;text-shadow:none !important;box-shadow:inset 0 2px 0 var(--t)}
+.nav-ico .o-ico,.nav-btn .o-ico{width:23px;height:23px}
+
+/* ── Avisos y avatares: planos ───────────────────────────────────── */
+.alerta-avatar,.alerta-card.alerta-info .alerta-avatar,.alerta-card.alerta-ok .alerta-avatar,
+.alerta-card.alerta-warn .alerta-avatar,.alerta-card.alerta-ciclo .alerta-avatar{
+  background:var(--tl) !important;color:var(--t) !important;box-shadow:none !important;
+}
+.alerta-card::before{display:none !important}
+.alerta-card.alerta-warn{background:var(--dl) !important}
+.alerta-stack-count{box-shadow:none !important}
+.chat-fab{background:var(--t) !important;box-shadow:none !important;color:#fff !important}
+.chat-av{background:var(--t) !important}
+.ia-badge{background:var(--n) !important}
+.grad{background:var(--n) !important;color:#fff !important}
+.logro-toast{background:var(--n) !important;border-radius:2px !important;box-shadow:none !important}
+
+/* ── Marcadores y barras ─────────────────────────────────────────── */
+.ciclo-bar,.ciclo-bar-header,#dash-ciclo-barra .ciclo-bar{background:var(--linea) !important}
+.ciclo-f,.ciclo-bar-f{background:var(--t) !important;box-shadow:none !important}
+.ciclo-lbl,.ciclo-lbl-header,#dash-ciclo-barra .ciclo-lbl{color:var(--g) !important}
+.prog{background:var(--linea) !important}
+.prog-f{background:var(--t) !important}
+.racha-badge{background:var(--b) !important;color:var(--n) !important;border:1px solid var(--linea) !important;backdrop-filter:none !important}
+#dash-header-username{color:#fff}
+[style*="color:#00beba"],[style*="color: #00beba"]{color:var(--t) !important}
+.stat-value{color:var(--t) !important}
+.dash-profile-ico{background:rgba(255,255,255,.12) !important}
+
+/* ── Iconos propios ──────────────────────────────────────────────── */
+.o-ico{display:inline-block;vertical-align:-0.2em;flex-shrink:0}
+.o-dot{display:inline-block;width:.62em;height:.62em;border-radius:50%;vertical-align:middle;margin-right:.2em}
+
+/* ── Detalles del navegador con la marca ─────────────────────────── */
+::selection{background:var(--tl);color:var(--n)}
+:focus-visible{outline:2px solid var(--t);outline-offset:2px}
+input,textarea{caret-color:var(--t)}
+input[type=range],input[type=checkbox],input[type=radio]{accent-color:var(--t)}
+.scroll{scrollbar-width:thin;scrollbar-color:var(--linea) transparent}
+
+/* texto pequeño en turquesa: el tono de ONA oscurecido lo hace legible; rellenos y logo no cambian */
+[style*="color:var(--t)"],[style*="color: var(--t)"]{color:var(--ton) !important}
+.stat-value{color:var(--ton-grande) !important}
+#s-dashboard .card [style*="color:var(--t)"]{color:var(--ton) !important}
+
+/* ── Menos tarjetas: el contenido va sobre el fondo ──────────────────
+   Solo conservan tarjeta los elementos que son un objeto en sí (cada ejercicio,
+   los avisos, las opciones a elegir y las ventanas). Lo demás se separa con
+   espacio y una línea fina. */
+.card,#s-dashboard .card{
+  background:transparent !important;border:0 !important;border-radius:0 !important;box-shadow:none !important;
+  backdrop-filter:none !important;padding:18px 0 !important;
+  border-top:1px solid var(--linea) !important;
+}
+.scroll > .card:first-child,.scroll > :first-child > .card:first-child{border-top:0 !important;padding-top:4px !important}
+.card .card{border-top:0 !important;padding:0 !important}
+/* bloques del inicio que eran mosaicos */
+#s-dashboard [style*="background:var(--benCard)"]{
+  background:transparent !important;border:0 !important;border-radius:0 !important;
+  border-top:1px solid var(--linea) !important;padding:16px 0 !important;
+}
+#s-dashboard [style*="background:var(--benCard)"][style*="grid-column:1/3"]{margin-top:2px}
+/* avisos informativos: texto, no caja */
+.alert-i{background:transparent !important;border:0 !important;padding:0 !important;color:var(--ton) !important;font-weight:600}
+#pasos-banner .alerta-card{background:transparent !important;border:0 !important;padding:6px 0 !important}
+/* tarjeta de la rueda del ciclo: sobre el fondo */
+#ciclo-flor-card{padding:8px 0 4px !important;border-top:0 !important}
+/* filas del calentamiento: líneas finas, no cajas */
+.exp-item{background:transparent !important;border:0 !important;border-bottom:1px solid var(--linea) !important;border-radius:0 !important}
+/* avisos de riesgos y adaptación: tarjeta con su propio margen interior */
+#checkin-recalibrar-box,#riesgos-gate .card,#dash-recordatorio-hormonal .card,#riesgos-gate details.card{
+  padding:14px 16px !important;border:1px solid var(--linea) !important;border-radius:2px !important;
+  background:var(--b) !important;overflow:hidden;
+}
+#riesgos-gate details.card summary{font-size:15px !important;line-height:1.4}
+#riesgos-gate details.card ul{margin:10px 0 0 0 !important;padding-left:18px !important}
+#riesgos-gate details.card li{font-size:15px !important;line-height:1.55 !important;overflow-wrap:anywhere}
+
+/* esquinas rectas: tarjetas sin redondeo y controles con apenas 2 px */
+[style*="border-radius:10px"],[style*="border-radius: 10px"],[style*="border-radius:12px"],[style*="border-radius: 12px"],
+[style*="border-radius:14px"],[style*="border-radius: 14px"],[style*="border-radius:16px"],[style*="border-radius: 16px"],
+[style*="border-radius:18px"],[style*="border-radius:20px"],[style*="border-radius:22px"]{border-radius:2px !important}
+.card,.stat-card,.alerta-card,.ex-card,.opt,.pq,.fase-card,.m-card,.m-sheet,#ciclo-flor-card,#riesgos-gate .card,
+#riesgos-gate details.card,#dash-recordatorio-hormonal .card,.alerta-stack .alerta-card,.checkin-bottom-sheet,.overlay .m-card{border-radius:0 !important}
+input,textarea,select{border-radius:2px !important}
+.alerta-cta,.alerta-stack-count{border-radius:2px !important}
+
+/* ── Progreso ────────────────────────────────────────────────────── */
+.pg-sup{font-size:14px;color:var(--g);font-weight:600}
+.pg-titulo{font-family:var(--display);font-size:30px;font-weight:800;color:var(--n);margin:2px 0 14px;letter-spacing:-.5px}
+.pg-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);margin-bottom:16px}
+.pg-stats > div{padding:14px 0;text-align:left}
+.pg-stats > div + div{padding-left:14px;border-left:1px solid var(--linea)}
+.pg-big{font-family:var(--display);font-size:26px;font-weight:800;color:var(--ton);line-height:1.1}
+.pg-eti{font-size:14px;color:var(--g);margin-top:2px}
+.pg-tabs{display:flex;border-bottom:1px solid var(--linea);margin-bottom:6px}
+.pg-tab{flex:1;background:none;border:0;border-bottom:3px solid transparent;padding:12px 0;font-size:15px;font-weight:600;color:var(--g);cursor:pointer;margin-bottom:-1px;border-radius:0 !important}
+.pg-tab.on{color:var(--n);border-bottom-color:var(--t)}
+.pg-fila{padding:16px 0;border-bottom:1px solid var(--linea)}
+.pg-cab{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.pg-nom{font-family:var(--display);font-size:16px;font-weight:700;color:var(--n);line-height:1.25}
+.pg-kg{font-family:var(--display);font-size:26px;font-weight:800;color:var(--n);white-space:nowrap}
+.pg-kg small{font-size:15px;font-weight:600;color:var(--g)}
+.pg-delta{font-size:14px;color:var(--g);margin-top:2px;text-align:right}
+.pg-spark{width:100%;height:46px;margin-top:8px;display:block}
+.pg-vacia{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
+.pg-vacia .pg-nom{font-size:16px;font-weight:600}
+.pg-sin{font-size:15px;color:var(--g)}
+.pg-mes{display:flex;align-items:center;justify-content:space-between;margin:14px 0 4px}
+.pg-mes-nom{font-family:var(--display);font-size:18px;font-weight:700;color:var(--n)}
+.pg-flecha{background:none;border:1px solid var(--linea);width:36px;height:36px;font-size:20px;color:var(--n);cursor:pointer;border-radius:0 !important}
+.pg-resumen-mes{font-size:15px;color:var(--g);margin:8px 0 12px}
+.pg-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px}
+.pg-dow{font-size:14px;font-weight:600;color:var(--g);text-align:center;padding:6px 0}
+.pg-dia{display:flex;flex-direction:column;align-items:center;min-height:62px;padding-top:4px;border-top:1px solid var(--linea)}
+.pg-num{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--n);border-radius:50%}
+.pg-num.hecho{background:var(--t);color:#fff}
+.pg-dia.hoy .pg-num:not(.hecho){border:1.5px solid var(--n)}
+.pg-lbl{font-size:12px;line-height:1.15;color:var(--g);text-align:center;margin-top:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+/* ── Progreso (estructura de ONA GYM; esquinas rectas y colores de ONA) ── */
+.pg-sup{font-size:14px;color:var(--g);font-weight:700;letter-spacing:.04em;text-transform:uppercase !important;margin:0}
+.pg-titulo{font-family:var(--display);font-size:32px;font-weight:800;color:var(--ton-grande);margin:2px 0 14px;letter-spacing:-.5px;text-transform:uppercase}
+.pg-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.pg-stats > div{background:var(--b);border:1px solid var(--linea);padding:12px 12px 10px}
+.pg-stats b{display:block;font-family:var(--display);font-size:26px;font-weight:800;color:var(--ton-grande);line-height:1.1}
+.pg-stats span{font-size:14px;color:var(--g)}
+.pg-seg{display:flex;gap:4px;background:var(--b);border:1px solid var(--linea);padding:4px;margin-bottom:6px}
+.pg-seg button{flex:1;background:none;border:0;padding:11px 0;font-size:15px;font-weight:700;color:var(--g);cursor:pointer;border-radius:0 !important}
+.pg-seg button[aria-pressed="true"]{background:var(--t);color:#fff}
+.pg-dia-h{font-family:var(--display);font-size:17px;font-weight:800;color:var(--n);margin:24px 0 10px;text-transform:uppercase;letter-spacing:.2px}
+.pg-fila{background:var(--b);border:1px solid var(--linea);padding:14px 16px;margin-bottom:8px}
+.pg-cab{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.pg-nom{font-family:var(--display);font-size:15.5px;font-weight:700;color:var(--n);line-height:1.25}
+.pg-kg{font-family:var(--display);font-size:26px;font-weight:800;color:var(--n);white-space:nowrap}
+.pg-kg small{font-size:15px;font-weight:600;color:var(--g)}
+.pg-delta{font-size:14px;color:var(--ton);margin-top:2px;text-align:right;font-weight:600}
+.pg-spark{width:100%;height:46px;margin-top:8px;display:block}
+.pg-vacia{display:flex;justify-content:space-between;align-items:center}
+.pg-sin{font-size:15px;color:var(--g)}
+.pg-hint{font-size:14px;color:var(--g);line-height:1.5;margin:10px 0}
+.pg-resumen-mes{font-size:15px;color:var(--g);margin:0 0 10px}
+.pg-calsum{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 10px}
+.pg-calsum > div{background:var(--b);border:1px solid var(--linea);padding:10px 12px}
+.pg-calsum b{display:block;font-family:var(--display);font-size:24px;font-weight:800;color:var(--ton-grande)}
+.pg-calsum span{font-size:14px;color:var(--g)}
+.pg-caldh{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:14px;font-weight:700;color:var(--g);padding:4px 0}
+.pg-calm{font-family:var(--display);font-size:16px;font-weight:800;color:var(--n);margin:18px 0 6px}
+.pg-cal2{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px}
+.pg-cd{background:none;border:0;display:flex;flex-direction:column;align-items:center;min-height:58px;padding:2px 0;cursor:pointer;color:var(--n);border-radius:0 !important}
+.pg-cd i{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:15px;font-weight:600;border-radius:50%}
+.pg-cd.on i{background:var(--t);color:#fff}
+.pg-cd.on i.act{background:var(--az)}
+.pg-cd.t i{box-shadow:inset 0 0 0 1.5px var(--n)}
+.pg-cd.sel i{outline:2px solid var(--n);outline-offset:1px}
+.pg-cd small{font-size:12px;line-height:1.15;color:var(--g);margin-top:2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pg-caldet{grid-column:1/-1;background:var(--b);border:1px solid var(--linea);padding:12px 14px;margin:4px 0 6px}
+.pg-caldet b{font-size:15px;color:var(--n);display:block;margin-bottom:6px}
+.pg-drw{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid var(--linea);font-size:15px}
+.pg-drw small{color:var(--g)}
+.pg-leg{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0 4px;font-size:14px;color:var(--g)}
+.pg-leg i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--t);margin-right:6px}
+.pg-leg i.act{background:var(--az)}
+.pg-box{background:var(--b);border:1px solid var(--linea);padding:14px 16px;margin:0 0 10px}
+.pg-box-t{font-family:var(--display);font-size:15.5px;font-weight:700;color:var(--n);margin:0 0 10px}
+.pg-ahora{color:var(--ton);margin-left:6px}
+.pg-chart{width:100%;height:auto;color:var(--n);font-size:12px}
+.pg-chart text{fill:var(--g)}
+.pg-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pg-form label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--g);font-weight:600}
+.pg-form label.full{grid-column:1/-1}
+.pg-form input[type=text],.pg-form input[type=date]{padding:10px;border:1px solid var(--linea);background:var(--f);font-size:15px;color:var(--n);width:100%}
+.pg-fbtn{display:inline-block;padding:10px 12px;border:1px dashed var(--t);color:var(--ton);font-weight:700;text-align:center;cursor:pointer}
+.pg-prev{display:block;max-width:100%;max-height:220px;margin:12px 0 0}
+.pg-guardar{width:100%;margin-top:12px;padding:13px;background:var(--t);color:#fff;border:0;font-size:15px;font-weight:700;cursor:pointer;border-radius:0 !important}
+.pg-cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pg-cmp img{width:100%;display:block}
+.pg-cmp figcaption{font-size:14px;color:var(--g);margin-top:4px}
+.pg-hist{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--linea)}
+.pg-hist img,.pg-sinfoto{width:42px;height:42px;object-fit:cover;flex-shrink:0}
+.pg-hist-t{flex:1;font-size:15px;color:var(--n);line-height:1.4}
+.pg-hist-t small{color:var(--g)}
+.pg-hist button{background:none;border:0;font-size:22px;color:var(--g);cursor:pointer}
+.pg-vacia .pg-sin{white-space:nowrap;flex-shrink:0}
+.pg-vacia .pg-nom{min-width:0}
+
+/* ── Marca de agua: la figura de ONA, muy tenue, detrás de todas las pantallas ──
+   multiply hace desaparecer el blanco de la imagen; al 9 % no resta lectura
+   (texto secundario #5d6663 sobre la zona más oscura de la figura: ≈4,7:1; el texto principal #0d0d0d, >15:1). */
+.phone::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:url('ona_fondo.webp') no-repeat 82% 46% / 92% auto;
+  mix-blend-mode:multiply;opacity:.09;
+}
+.screen{position:relative;z-index:1;background:transparent !important}
+#ent-sub-progreso,#ent-sub-historial{background:transparent !important}
+
+/* ── Tipografía B: Young Serif (titulares, cifras y nombres) + Hanken Grotesk (texto) ──
+   Young Serif solo tiene un peso: se evita el negrita sintética y se ajustan los tamaños. */
+.ctitle,.m-title,.peso-val,.stat-value,.ciclo-day,.ex-nombre,.checkin-title,.timer-num,
+#dash-fase,#dash-racha-num,#ciclo-dia-num,#perfil-nombre-title,#dash-greeting,h1,h2,h3,
+.pg-titulo,.pg-dia-h,.pg-nom,.pg-kg,.pg-big,.pg-stats b,.pg-calsum b,.pg-calm,.pg-box-t,.pg-mes-nom{
+  font-family:var(--display) !important;font-weight:400 !important;font-synthesis:none;letter-spacing:0 !important;
+}
+.pg-titulo{text-transform:none !important;font-size:36px}
+.pg-dia-h{text-transform:none !important;font-size:20px}
+.pg-kg{font-size:28px}
+.pg-nom{font-size:17px}
+.ex-nombre{font-size:16px}
+.nav-btn,.btn-t,.btn-n,.btn-o,.save-btn,.pg-seg button,.pg-tab{font-family:'Hanken Grotesk',system-ui,sans-serif !important}
+.logo{font-family:'Hanken Grotesk',system-ui,sans-serif !important}
+
+/* títulos de sección que eran etiquetas diminutas ("Bloque principal", "Fases del ciclo", "Consistencia semanal"…) */
+[style*="color:var(--g);text-transform:uppercase"],
+[style*="color:var(--benTxtS);text-transform:uppercase"],
+[style*="color:var(--txtOscS);text-transform:uppercase"]{
+  font-family:var(--display) !important;font-weight:400 !important;font-size:19px !important;line-height:1.25;
+  color:var(--n) !important;margin-top:8px;margin-bottom:6px;
+}
+.mlbl{font-size:15px !important;font-weight:700 !important;color:var(--n) !important}
+
+/* ── Botones con volumen: borde inferior grueso, luz arriba y sombra suave; se hunden al pulsar ── */
+.btn-t,.btn-empezar-entreno,.save-btn,.pg-guardar,.pg-seg button[aria-pressed="true"]{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.38),
+    inset 0 -4px 0 rgba(0,40,38,.28),
+    0 3px 8px rgba(0,70,66,.22) !important;
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.btn-n{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -4px 0 rgba(255,255,255,.12),
+    0 3px 8px rgba(0,0,0,.28) !important;
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.btn-o,.card .btn-o,#s-dashboard .card .btn-o,#s-dashboard .btn-o,.modo-rapido-btn,.btn-socias-glass{
+  background:var(--b) !important;
+  box-shadow:
+    inset 0 -3px 0 rgba(0,168,163,.30),
+    0 2px 6px rgba(0,0,0,.08) !important;
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.btn-socias-glass{box-shadow:inset 0 -3px 0 rgba(13,13,13,.10),0 2px 6px rgba(0,0,0,.06) !important}
+.btn-t:not(:disabled):active,.btn-empezar-entreno:not(:disabled):active,.save-btn:not(:disabled):active,.pg-guardar:active,
+.btn-n:not(:disabled):active,.btn-o:active,.card .btn-o:active,#s-dashboard .card .btn-o:active,#s-dashboard .btn-o:active,.modo-rapido-btn:active,.btn-socias-glass:active{
+  transform:translateY(3px) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(0,40,38,.25),0 0 0 rgba(0,0,0,0) !important;
+}
+.btn-t:not(:disabled):hover,.btn-empezar-entreno:not(:disabled):hover{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 -4px 0 rgba(0,40,38,.28),0 4px 10px rgba(0,70,66,.26) !important;
+}
+.btn-t:disabled,.btn-n:disabled,.btn-empezar-entreno:disabled,.save-btn:disabled{
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,.10) !important;
+}
+
+/* ── Espectro ampliado: escala turquesa para superficies y estados, complementaria rosada para ciclo y avisos ── */
+.header{background:var(--teal-950) !important}
+.pg-fila,.pg-stats > div,.pg-calsum > div,.pg-box,.pg-seg,.pg-caldet{border-color:var(--teal-100) !important}
+.pg-seg button[aria-pressed="false"]:hover{background:var(--teal-50)}
+.alert-w{background:var(--dl) !important}
+.alert-d,.alerta-card.alerta-ciclo .alerta-avatar{background:var(--rose-50) !important;color:var(--rose-600) !important;border-color:var(--rose-200) !important}
+.alert-d{color:var(--rose-700) !important}
+.nohoy-btn{color:var(--rose-600) !important;border-color:var(--rose-100) !important}
+.nohoy-btn:active{background:var(--rose-50) !important}
+.ex-card.hecho{background:var(--teal-50) !important;border-color:var(--teal-400) !important}
+.fase-card.active{background:var(--teal-50) !important}
+.pg-delta.neg{color:var(--rose-600)}
+#riesgos-gate .card{background:var(--rose-50) !important;border-color:var(--rose-200) !important}
+.logro-toast{background:var(--teal-900) !important}
+.chat-fab{background:var(--t) !important}
+::selection{background:var(--teal-200);color:var(--teal-950)}
+.prog,.ciclo-bar,.ciclo-bar-header{background:var(--teal-100) !important}
+.pg-dia.hoy .pg-num:not(.hecho),.pg-cd.t i{box-shadow:inset 0 0 0 1.5px var(--teal-800)}
+
+/* Resumen plegable con «+» al final (en vez del triángulo del navegador) */
+#riesgos-gate details.card > summary{
+  list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;
+}
+#riesgos-gate details.card > summary::-webkit-details-marker{display:none}
+#riesgos-gate details.card > summary::marker{content:""}
+#riesgos-gate details.card > summary::after{
+  content:"+";flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;line-height:1;font-weight:400;color:var(--ton);border:1px solid var(--linea);
+}
+#riesgos-gate details.card[open] > summary::after{content:"\2212"}
+
+/* ── Progresiones: una sola tarjeta oscura, por grupo muscular ── */
+.pg-prog{
+  background:linear-gradient(100deg,var(--teal-700) 0%,var(--teal-900) 38%,#020808 100%);
+  color:#fff;padding:20px 18px 8px;margin:14px 0 10px;border-radius:0;
+}
+.pg-prog-t{font-family:var(--display);font-weight:400 !important;font-size:22px;color:#fff;margin:0 0 4px}
+.pg-prog-cat{font-family:var(--display);font-weight:400 !important;font-size:17px;color:#fff;margin:22px 0 4px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18);text-transform:none}
+.pg-prog-t + .pg-prog-cat{border-top:0;margin-top:14px}
+.pg-prog-fila{display:flex;align-items:center;gap:10px;padding:12px 0}
+.pg-prog-izq{flex:1;min-width:0}
+.pg-prog-nom{font-size:15px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px}
+.pg-prog-graf{width:100%;height:64px;display:block;overflow:visible}
+.pg-prog-kg{font-family:var(--display);font-size:30px;line-height:1.05;color:#fff;text-align:right;white-space:nowrap;flex-shrink:0}
+.pg-prog-kg small{display:block;font-family:'Hanken Grotesk',system-ui,sans-serif;font-size:13px;color:rgba(255,255,255,.72);margin-top:4px;white-space:normal;max-width:110px;margin-left:auto}
+
+/* ══ Auditoría de diseño · grupo A: accesibilidad crítica ══════════════════════
+   1) Texto en tinta sobre el turquesa de marca (#00a8a3): 6,5:1 en lugar de 2,95:1 con blanco.
+   2) Cabeceras: texto y flechas en turquesa claro sobre negro (≈11:1 en lugar de 2,3:1).
+   3) El botón del chat sube por encima de la barra fija del entreno para no tapar «Marcar hecho».
+   4) Zonas táctiles de al menos 44 px y letra mínima de 12 px. */
+.btn-t,.btn-empezar-entreno,.save-btn,.pg-guardar,.pg-seg button[aria-pressed="true"],.tag,.chat-fab,
+#s-entreno .tag,.racha-badge.on{color:var(--teal-950) !important}
+.btn-t .o-ico,.btn-empezar-entreno .o-ico,.save-btn .o-ico,.chat-fab .o-ico{color:var(--teal-950)}
+.pg-cd.on i{color:var(--teal-950) !important;font-weight:700}
+.btn-t:disabled,.btn-n:disabled,.save-btn:disabled{color:#4b5857 !important}
+.btn-n{color:var(--teal-950) !important}
+
+.header .hlabel,.header span:not(.logo):not(.tag){color:var(--teal-200) !important}
+.header button,.header .btn-back{color:var(--teal-200) !important}
+.header [style*="color:var(--g)"]{color:var(--teal-200) !important}
+
+.phone:has(#sticky-entreno-bar[style*="flex"]) #floating-group{transform:translateY(-72px)}
+
+.pg-seg button,.pg-tab,.ci-estado-btn,.e-btn,.msel,.bfiltro,.btn-o,.btn-t,.btn-n,.save-btn,
+.alerta-cta,.dash-profile-ico,.nav-btn,#ent-tab-hoy,#ent-tab-progreso,#ent-tab-historial,.pg-flecha,.pg-cd,.pg-fbtn{
+  min-height:44px;
+}
+.dash-profile-ico{min-width:44px;width:44px !important;height:44px !important}
+.alerta-cta{padding-top:11px;padding-bottom:11px}
+input[type="text"],input[type="date"],input[type="number"],input[type="search"],select,textarea{min-height:44px}
+input[type="range"]{min-height:44px;padding:14px 0}
+[style*="font-size:12px"],[style*="font-size:12px"],[style*="font-size:12px"],[style*="font-size:12px"],
+[style*="font-size:13px"],[style*="font-size:13px"],[style*="font-size: 13px"],[style*="font-size: 12px"]{font-size:14px !important}
+.pg-cd small,.ciclo-lbl,.ciclo-lbl-header,.alerta-appname,.alerta-time,.stat-card-title,.exp-dur,.pill{font-size:14px !important}
+
+/* grupo A · ajustes tras la medición */
+.header [id$="badge"],.header .tag,.header span.tag{color:var(--teal-950) !important}
+#dash-current-date,.alerta-stack-hint,.alerta-stack-count + *{color:var(--ton) !important}
+.alerta-stack-hint{font-size:14px !important;min-height:44px;display:flex;align-items:center;justify-content:center}
+[style*="color:var(--ve)"]{color:#1f6b4a !important}
+[style*="color:var(--d)"]{color:#7a5200 !important}
+.header button,.header .btn-back{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:flex-start}
+.pg-cd{width:100%}
+#s-perfil [onclick*="seleccionarFotoPerfil"],#s-perfil button.btn-link,#s-perfil [onclick*="abrirEditarNombre"]{min-height:44px;display:inline-flex;align-items:center}
+
+#entreno-badge{color:var(--teal-950) !important}
+/* mapa corporal: zonas táctiles de 44 px sin cambiar lo que se ve */
+#ent-sub-progreso div[onclick*="mostrarDetalleGrupo"][style*="width:12px"]::after{content:"";position:absolute;inset:-16px}
+#ent-sub-progreso div[onclick*="mostrarDetalleGrupo"][style*="font-size"]{min-height:44px;display:flex;flex-direction:column;justify-content:center}
+
+/* grupo A · letra mínima de 12 px también en los estilos de clase, y chips legibles */
+.alerta-appname,.alerta-cta,.alerta-desc,.alerta-stack-count,.alerta-time,.ax-btn,.chat-disc,.chat-hdr-st,.chat-sug,
+.chk-m,.ci-ayer,.ciclo-fase-lbl,.ciclo-lbl,.ex-det,.ex-peso,.exp-dur,.exp-fase,.exp-tip,.exp-warn,.grad-desc,.grad-dia,
+.ia-badge,.ia-razon,.m-sub,.mlbl,.muscle-name,.nav-btn,.nohoy-btn,.opt-desc,.pill,.pq-num,.racha-badge,.serie-check,
+.tag,.timer-btn,.timer-label{font-size:14px !important}
+.exp-dur,.pill{color:var(--ton) !important}
+.ex-top button[onclick*="toggleExp"],.ex-top button[onclick*="abrirFichaEjercicio"],.ex-top button[onclick*="abrirYoutube"]{min-height:44px}
+.btn-t:disabled,.btn-n:disabled,.save-btn:disabled{color:#3e4a49 !important}
+.pg-cd{min-width:44px}
+
+/* ══ taste-skill · pasada del 2026-10-15 ═══════════════════════════════════════
+   Se mantienen los degradados (tarjeta de Progresiones). El resto de reglas de la casa:
+   sin sombras en reposo, sin líneas finas (se separa con un paso de tono), un solo acento
+   (turquesa = acción y estado activo), sin etiquetas pequeñas en mayúsculas. */
+
+/* botones planos: un relleno, sin sombra */
+.btn-t,.btn-empezar-entreno,.save-btn,.pg-guardar,.pg-seg button[aria-pressed="true"],.btn-n,
+.btn-t:not(:disabled):hover,.btn-empezar-entreno:not(:disabled):hover,
+.btn-o,.card .btn-o,#s-dashboard .card .btn-o,#s-dashboard .btn-o,.modo-rapido-btn,.btn-socias-glass{
+  box-shadow:none !important;
+}
+.btn-t:not(:disabled):active,.btn-empezar-entreno:not(:disabled):active,.save-btn:not(:disabled):active,.pg-guardar:active,
+.btn-n:not(:disabled):active,.btn-o:active,.card .btn-o:active,#s-dashboard .card .btn-o:active,#s-dashboard .btn-o:active,
+.modo-rapido-btn:active,.btn-socias-glass:active{
+  transform:translateY(1px) !important;box-shadow:none !important;
+}
+.btn-o,.card .btn-o,#s-dashboard .card .btn-o,#s-dashboard .btn-o,.modo-rapido-btn,.btn-socias-glass{
+  background:var(--teal-50) !important;border:0 !important;color:var(--teal-950) !important;
+}
+
+/* superficies: un paso de tono en lugar de borde */
+.pg-stats > div,.pg-calsum > div,.pg-box,.pg-fila,.pg-seg,.pg-caldet,.ex-card,.alerta-card,.alerta-stack .alerta-card,
+#riesgos-gate .card,#riesgos-gate details.card,#dash-recordatorio-hormonal .card,#checkin-recalibrar-box,
+.opt,.pq,.timer-widget,.fase-card,#s-dashboard .alerta-card{
+  background:var(--teal-50) !important;border:0 !important;
+}
+.ex-card.hecho,.fase-card.active,.opt.sel{background:var(--teal-100) !important}
+#riesgos-gate .card{background:var(--rose-50) !important}
+.pg-stats{border:0 !important;gap:8px}
+.pg-stats > div + div{border-left:0 !important}
+.card,#s-dashboard .card{border-top:0 !important}
+#s-dashboard [style*="background:var(--benCard)"]{border-top:0 !important}
+.exp-item{border-bottom:0 !important;background:var(--teal-50) !important;margin-bottom:6px}
+.pg-fila{margin-bottom:8px}
+.pg-hist,.pg-drw{border-top:0 !important}
+.ax-btn,.ex-actions{border:0 !important}
+.pg-seg button,.pg-flecha{border:0 !important}
+.pg-flecha{background:var(--teal-50)}
+
+/* un solo acento: cifras y títulos en tinta */
+.pg-big,.pg-stats b,.pg-calsum b,.stat-value,.pg-titulo,#dash-racha-num,.pg-ahora,.pg-delta,.pg-kg{color:var(--teal-950) !important}
+#dash-racha-num [style]{color:var(--teal-800) !important}
+.ex-num{background:var(--teal-100) !important;color:var(--teal-950) !important}
+.nohoy-btn{border:0 !important;background:transparent !important;color:var(--rose-600) !important;text-decoration:underline;text-underline-offset:3px}
+
+/* sin etiquetas pequeñas en mayúsculas */
+.pg-sup,.ciclo-lbl,.ciclo-lbl-header,#dash-dia,.exercise-tag,.hlabel,.stat-card-title{
+  text-transform:none !important;letter-spacing:0 !important;
+}
+.pg-sup{font-size:15px;font-weight:600}
+.ciclo-lbl{font-size:14px !important}
+
+/* titular de la fase: el protagonista de Inicio */
+#dash-fase{font-family:var(--display) !important;font-weight:400 !important;font-size:26px !important;line-height:1.1 !important;margin:6px 0 8px !important}
+#dash-dia{font-size:15px !important;font-weight:600 !important;color:var(--teal-800) !important}
+#dash-ciclo-barra{display:none !important}
+#dash-rueda{flex:0 0 136px}
+.rueda-mini{position:relative;width:136px}
+.rueda-mini svg{width:100%;display:block;height:auto}
+.rueda-mini b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--display);font-weight:400;font-size:22px;line-height:1;color:var(--teal-950)}
+
+/* tarjeta de ejercicio: nombre, prescripción y una fila de enlaces */
+
+/* ── Tarjeta de ejercicio: blanca y algo translúcida, con relieve ── */
+.ex-card{
+  background:rgba(255,255,255,.80) !important;
+  border:0 !important;
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    inset 0 -4px 0 rgba(0,70,66,.12),
+    0 8px 18px rgba(0,60,58,.14) !important;
+}
+.ex-card.hecho{background:rgba(202,236,234,.60) !important}
+.ex-card.elim{box-shadow:none !important;background:rgba(255,255,255,.5) !important}
+/* botones de la tarjeta: como estaban, con «Ficha» legible */
+.ex-top button[onclick*="abrirFichaEjercicio"]{background:var(--teal-950) !important;color:#fff !important}
+.ex-top button[onclick*="toggleExp"]{color:var(--teal-800) !important}
+.ex-top button[onclick*="toggleExp"],.ex-top button[onclick*="abrirFichaEjercicio"],.ex-top button[onclick*="abrirYoutube"]{min-height:36px;font-size:14px !important;border-radius:2px !important}
+.ex-top button[onclick*="abrirYoutube"]{color:#fff !important}
+
+/* ── Fase actual del ciclo en salmón; calendario con regla y fases ───────────── */
+:root{--salmon:#E8766A;--salmon-50:#FDEEEB;--salmon-700:#B94A3F}
+.fase-card.active{border:2px solid var(--salmon) !important;background:var(--salmon-50) !important;box-shadow:0 0 0 3px rgba(232,118,106,.16)}
+.fase-ahora{background:var(--salmon);color:#fff;font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px;line-height:1.2;margin-left:6px}
+.pg-cd .ph{display:block;width:22px;height:3px;border-radius:2px;margin-top:2px;font-style:normal}
+.ph-menstrual{background:#E8766A}.ph-folicular{background:#00a8a3}.ph-ovulacion{background:#e6b22b}.ph-lutea{background:#66bfe3}
+.pg-cd .ph.prev{opacity:.4}
+.pg-cd.mens:not(.on) i{background:var(--salmon-50);color:var(--salmon-700);box-shadow:inset 0 0 0 1.5px var(--salmon)}
+.pg-cd.mens.prev:not(.on) i{background:transparent}
+.pg-leg i.mens{background:#E8766A}.pg-leg i.fol{background:#00a8a3}.pg-leg i.ovu{background:#e6b22b}.pg-leg i.lut{background:#66bfe3}
+.pg-ciclo-det{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:15px}
+.pg-ciclo-det .ph{display:inline-block;width:10px;height:10px;border-radius:50%}
+.pg-regla-btn{width:100%;margin:6px 0}
+
+/* Las tarjetas no se aplastan dentro del contenedor con scroll (los botones de «¿Ha llegado tu regla hoy?» quedaban recortados) */
+.scroll > *{flex-shrink:0}
+
+/* Botones "Sí, hoy" / "No, aún no" (aviso de regla): tono de la flor, compactos y con volumen */
+.btn-regla{width:auto !important;flex:0 0 auto !important;min-height:0 !important;height:auto !important;padding:8px 20px !important;border-radius:999px !important;font-size:14px !important;font-weight:700 !important;letter-spacing:.2px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.btn-regla-si{background:linear-gradient(180deg,#F26A47 0%,#D12A1E 55%,#A8142A 100%) !important;color:#fff !important;border:none !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 -2px 0 rgba(0,0,0,.18),0 3px 8px rgba(168,20,42,.35) !important}
+.btn-regla-no{background:linear-gradient(180deg,#FFF3EF 0%,#FBD9D0 100%) !important;color:#8A1148 !important;border:none !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -2px 0 rgba(168,20,42,.14),0 3px 8px rgba(168,20,42,.2) !important}
+.btn-regla:active{transform:translateY(1px);box-shadow:inset 0 2px 4px rgba(0,0,0,.25) !important}
+#checkin-recalibrar-box .btn-regla-si{color:#fff !important;text-shadow:0 1px 1px rgba(90,10,20,.35)}
+#checkin-recalibrar-box .btn-regla-no{color:#8A1148 !important}
+#checkin-recalibrar-box > div:nth-child(1){color:#A8142A !important}
+#checkin-recalibrar-box > div:nth-child(2){color:#8A1148 !important}
+/* Botones del ciclo: variante a todo el ancho y colores de texto con prioridad */
+body .btn-regla-full{width:100% !important;flex:1 1 auto !important;display:block;text-align:center;padding:11px 20px !important;font-size:15px !important}
+body .btn-regla-si{color:#fff !important}
+body .btn-regla-no{color:#8A1148 !important}
+.opcion-ciclo{display:flex;align-items:center;width:100%;text-align:left;padding:12px 18px;border:none;border-radius:16px;cursor:pointer;font-family:inherit}
+.opcion-ciclo-si{background:linear-gradient(180deg,#F26A47 0%,#D12A1E 55%,#A8142A 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 -2px 0 rgba(0,0,0,.18),0 3px 8px rgba(168,20,42,.35)}
+.opcion-ciclo-no{background:linear-gradient(180deg,#FFF3EF 0%,#FBD9D0 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -2px 0 rgba(168,20,42,.14),0 3px 8px rgba(168,20,42,.2)}
+.opcion-ciclo-si div div:first-child{color:#fff !important}
+.opcion-ciclo-si div div:last-child{color:rgba(255,255,255,.85) !important}
+.opcion-ciclo-no div div:first-child{color:#8A1148 !important}
+.opcion-ciclo-no div div:last-child{color:#A8142A !important}
+.opcion-ciclo:active{transform:translateY(1px)}
+#perfil-ciclo-btn{border:none !important;background:linear-gradient(180deg,#FFF3EF 0%,#FBD9D0 100%) !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -2px 0 rgba(168,20,42,.14),0 3px 8px rgba(168,20,42,.2) !important;border-radius:14px !important;color:#8A1148 !important}
+#perfil-ciclo-btn span{color:#8A1148 !important}
+/* Aviso de ciclo en la pila: tonos rojos de la flor */
+.alerta-card.alerta-ciclo .alerta-avatar{background:#FDECEA !important}
+.alerta-card.alerta-ciclo .alerta-appname{color:#A8142A !important}
+
+/* ── Pila de avisos tipo Google Wallet: todas las tarjetas con el mismo tamaño y formato ── */
+#dash-alertas .alerta-stack .alerta-card{
+  height:176px;box-sizing:border-box;display:flex !important;flex-direction:column;justify-content:space-between;align-items:stretch;gap:6px;
+  padding:16px 18px !important;border:none !important;border-radius:20px !important;overflow:hidden;
+  background:linear-gradient(135deg,#00a8a3 0%,#00726f 100%) !important;color:#fff !important;
+  box-shadow:0 6px 16px rgba(0,60,58,.25) !important;
+}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo{background:linear-gradient(135deg,#E8452E 0%,#C8102E 55%,#8A1148 100%) !important;box-shadow:0 6px 16px rgba(168,20,42,.35) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn{background:linear-gradient(135deg,#F0B93A 0%,#D48A12 100%) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ok{background:linear-gradient(135deg,#2a8a82 0%,#1e5753 100%) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-info{background:linear-gradient(135deg,#00a8a3 0%,#00726f 100%) !important}
+#dash-alertas .alerta-stack .alerta-card::after{content:'';position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.10);pointer-events:none}
+#dash-alertas .alerta-stack .alerta-head{display:flex;align-items:center;gap:8px;margin:0}
+#dash-alertas .alerta-stack .alerta-avatar{width:26px !important;height:26px !important;background:#fff !important;box-shadow:none !important;color:inherit}
+#dash-alertas .alerta-stack .alerta-ico{font-size:15px}
+#dash-alertas .alerta-stack .alerta-appname{flex:1;color:rgba(255,255,255,.92) !important;font-size:14px !important;font-weight:700}
+#dash-alertas .alerta-stack .alerta-time{color:rgba(255,255,255,.75) !important;font-size:13px !important}
+#dash-alertas .alerta-stack .alerta-body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+#dash-alertas .alerta-stack .alerta-titulo{color:#fff !important;font-family:var(--display);font-weight:400;font-size:18px;line-height:1.2;margin:0 0 4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#dash-alertas .alerta-stack .alerta-desc{color:rgba(255,255,255,.9) !important;font-size:14px;line-height:1.4;margin:0;-webkit-line-clamp:2}
+#dash-alertas .alerta-stack.expanded .alerta-desc{-webkit-line-clamp:2;display:-webkit-box}
+#dash-alertas .alerta-stack .alerta-cta{align-self:flex-start;background:#fff !important;color:#8A1148 !important;border-radius:999px !important;padding:7px 14px !important;font-size:14px;min-height:0}
+#dash-alertas .alerta-stack .alerta-card.alerta-info .alerta-cta,#dash-alertas .alerta-stack .alerta-card.alerta-ok .alerta-cta{color:#00726f !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-cta{color:#8a6400 !important}
+/* Tarjetas de aviso más translúcidas (cristal) */
+#dash-alertas .alerta-stack .alerta-card{background:linear-gradient(135deg,rgba(0,168,163,.78) 0%,rgba(0,114,111,.78) 100%) !important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 6px 16px rgba(0,60,58,.18) !important;outline:1px solid rgba(255,255,255,.35);outline-offset:-1px}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo{background:linear-gradient(135deg,rgba(232,69,46,.78) 0%,rgba(200,16,46,.78) 55%,rgba(138,17,72,.78) 100%) !important;box-shadow:0 6px 16px rgba(168,20,42,.22) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn{background:linear-gradient(135deg,rgba(240,185,58,.8) 0%,rgba(212,138,18,.8) 100%) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ok{background:linear-gradient(135deg,rgba(42,138,130,.8) 0%,rgba(30,87,83,.8) 100%) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-info{background:linear-gradient(135deg,rgba(0,168,163,.78) 0%,rgba(0,114,111,.78) 100%) !important}
+/* Tarjetas de aviso: colores más claros y opacos (no se transparenta lo de detrás), texto oscuro legible */
+#dash-alertas .alerta-stack .alerta-card{height:252px;-webkit-backdrop-filter:none;backdrop-filter:none;outline:none;
+  background:linear-gradient(135deg,#D3EFED 0%,#9ADBD7 100%) !important;color:#1e5753 !important;box-shadow:0 6px 16px rgba(0,60,58,.15) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-info{background:linear-gradient(135deg,#D3EFED 0%,#9ADBD7 100%) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo{background:linear-gradient(135deg,#FDE3DC 0%,#F6A596 100%) !important;box-shadow:0 6px 16px rgba(168,20,42,.15) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn{background:linear-gradient(135deg,#FDF0CC 0%,#F6D27A 100%) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ok{background:linear-gradient(135deg,#D8EBE5 0%,#A5D2C9 100%) !important}
+#dash-alertas .alerta-stack .alerta-card::after{background:rgba(255,255,255,.35)}
+#dash-alertas .alerta-stack .alerta-avatar{box-shadow:0 1px 4px rgba(0,0,0,.12) !important}
+#dash-alertas .alerta-stack .alerta-appname{color:#1e5753 !important}
+#dash-alertas .alerta-stack .alerta-time{color:rgba(30,87,83,.7) !important}
+#dash-alertas .alerta-stack .alerta-titulo{color:#0d3b38 !important;font-size:17px;-webkit-line-clamp:3}
+#dash-alertas .alerta-stack .alerta-desc{color:#2c5a56 !important;-webkit-line-clamp:5;overflow:visible}
+#dash-alertas .alerta-stack.expanded .alerta-desc{-webkit-line-clamp:5}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-appname{color:#8A1148 !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-time{color:rgba(138,17,72,.7) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-titulo{color:#6b0f2a !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-desc{color:#7a2a3a !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-appname,#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-titulo{color:#5c4000 !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-desc{color:#6b5316 !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-time{color:rgba(92,64,0,.7) !important}
+#dash-alertas .alerta-stack .alerta-cta{background:#fff !important;color:#00726f !important;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-cta{color:#A8142A !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-cta{color:#8a6400 !important}
+#dash-alertas .alerta-stack .alerta-card::after{z-index:0}
+#dash-alertas .alerta-stack .alerta-head,#dash-alertas .alerta-stack .alerta-body,#dash-alertas .alerta-stack .alerta-cta{position:relative;z-index:1}
+
+/* Botón "Vamos a entrenar": gris perlado con la silueta, tipografía de la app */
+button.btn-entrenar{flex:1;display:flex !important;align-items:center;gap:18px;min-height:72px;padding:8px 22px 8px 20px !important;cursor:pointer;
+  background:linear-gradient(180deg,#f3f3f3 0%,#e2e2e2 60%,#d6d6d6 100%) !important;color:#2b2b2b !important;border:1px solid #bdbdbd !important;
+  border-radius:22px 22px 22px 22px / 22px 22px 22px 22px !important;
+  box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 rgba(0,0,0,.08),0 3px 8px rgba(0,0,0,.18) !important;text-align:left;transition:transform .1s,box-shadow .1s}
+button.btn-entrenar img{height:54px;width:auto;flex:0 0 auto;display:block}
+button.btn-entrenar span{flex:1;text-align:center;font-family:'Hanken Grotesk',system-ui,sans-serif !important;font-size:16px !important;font-weight:500 !important;letter-spacing:1.2px;text-transform:uppercase;color:#2b2b2b !important}
+button.btn-entrenar:active{transform:translateY(1px);box-shadow:inset 0 2px 5px rgba(0,0,0,.25) !important}
+
+/* ── Progresiones: una tarjeta por ejercicio, mismo formato que los avisos de Inicio, un color por grupo muscular ── */
+.pg-prog{background:none !important;padding:0 !important;margin:14px 0 10px}
+.pg-prog-t{margin:0 0 12px}
+.pg-pcard{height:150px;box-sizing:border-box;margin-bottom:12px;padding:14px 18px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;
+  border-radius:20px;background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 100%);color:var(--tx);box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.pg-pcard::after{content:'';position:absolute;right:-40px;top:-40px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.35);pointer-events:none}
+.pg-pcard > *{position:relative;z-index:1}
+.pg-pcard-head{display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:var(--tx)}
+.pg-pcard-head span:last-child{font-weight:500;opacity:.75}
+.pg-pcard-nom{font-family:var(--display);font-size:17px;line-height:1.2;color:var(--tx);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pg-pcard-pie{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.pg-pcard-kg{font-family:var(--display);font-size:28px;line-height:1;color:var(--tx);white-space:nowrap}
+.pg-pcard-kg small{display:block;font-family:'Hanken Grotesk',system-ui,sans-serif;font-size:13px;color:var(--tx);opacity:.8;margin-top:4px;white-space:normal}
+.pg-pcard-graf{width:46%;height:46px;flex-shrink:0;overflow:visible}
+.pg-prog-t{color:var(--n) !important}
+
+/* Calentamiento plegable */
+button.cal-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;background:none !important;border:none !important;box-shadow:none !important;padding:4px 0 !important;cursor:pointer;color:var(--ton) !important;text-align:left;min-height:44px}
+button.cal-toggle .cal-chev{flex:0 0 auto;transition:transform .2s ease;color:var(--ton)}
+button.cal-toggle[aria-expanded="false"] .cal-chev{transform:rotate(-90deg)}
+
+/* Avisos de Inicio: solo variantes del turquesa de la app (tintes, sombras y tonos) */
+#dash-alertas .alerta-stack .alerta-card.alerta-info{background:linear-gradient(135deg,#CCE6E5 0%,#96D1CC 100%) !important;box-shadow:0 6px 16px rgba(0,60,58,.15) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo{background:linear-gradient(135deg,#EEF7F6 0%,#A4D8D3 100%) !important;box-shadow:0 6px 16px rgba(0,60,58,.15) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn{background:linear-gradient(135deg,#84C8C3 0%,#3FB0AB 100%) !important;box-shadow:0 6px 16px rgba(0,60,58,.18) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ok{background:linear-gradient(135deg,#1d7977 0%,#1a4a48 100%) !important;box-shadow:0 6px 16px rgba(0,40,38,.25) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-info .alerta-appname,#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-appname,#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-appname{color:#0d3b38 !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-info .alerta-titulo,#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-titulo{color:#0d3b38 !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-titulo{color:#06302e !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-info .alerta-desc,#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-desc{color:#1e5753 !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-desc{color:#0d3b38 !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-info .alerta-time,#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-time,#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-time{color:rgba(13,59,56,.7) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ok .alerta-appname,#dash-alertas .alerta-stack .alerta-card.alerta-ok .alerta-titulo{color:#fff !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ok .alerta-desc{color:rgba(255,255,255,.9) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ok .alerta-time{color:rgba(255,255,255,.75) !important}
+#dash-alertas .alerta-stack .alerta-card.alerta-ciclo .alerta-cta,#dash-alertas .alerta-stack .alerta-card.alerta-warn .alerta-cta,#dash-alertas .alerta-stack .alerta-card.alerta-info .alerta-cta,#dash-alertas .alerta-stack .alerta-card.alerta-ok .alerta-cta{color:#00726f !important}
+
+/* Ejercicio descartado hoy: tarjeta plegada de una línea */
+.ex-card.ex-descartado{opacity:1 !important;background:#f1f6f5 !important;box-shadow:none !important}
+.ex-desc-fila{display:flex;align-items:center;gap:12px;padding:10px 14px}
+.ex-desc-txt{flex:1;min-width:0}
+.ex-desc-nom{font-size:15px;font-weight:600;color:var(--g);text-decoration:line-through;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ex-desc-sub{font-size:13px;color:var(--ton);margin-top:2px}
+button.ex-desc-undo{flex:0 0 auto;background:#fff !important;color:var(--ton) !important;border:1px solid var(--linea) !important;border-radius:999px !important;padding:6px 14px !important;font-size:14px;font-weight:600;cursor:pointer;min-height:0}
+
+/* "Añadir ejercicio a la sesión": sin marco, con volumen (turquesa de la app) */
+button.btn-anadir{width:100%;display:flex !important;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;padding:13px 16px !important;cursor:pointer;
+  border:none !important;border-radius:999px !important;font-size:15px !important;font-weight:700 !important;color:#0d3b38 !important;
+  background:linear-gradient(180deg,#DCEEEE 0%,#A4D8D3 100%) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -2px 0 rgba(0,90,86,.18),0 3px 8px rgba(0,90,86,.22) !important}
+button.btn-anadir:active{transform:translateY(1px);box-shadow:inset 0 2px 5px rgba(0,60,58,.3) !important}
+button.btn-entrenar.btn-finalizar{width:100%;margin-bottom:20px}
+button.btn-entrenar.btn-finalizar span{font-size:14.5px !important;letter-spacing:.8px}
+button.btn-entrenar.btn-finalizar img{height:46px}
+
+/* Señales de parada: desplegable rojo, sin recuadro */
+body #cr-wrap{margin:2px 0 8px!important}
+body #cr-wrap .cr-toggle{width:100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:6px 2px!important;background:none!important;border:0!important;box-shadow:none!important;color:#D12A1E!important;font-size:15px!important;font-weight:700!important;text-align:left!important;cursor:pointer!important}
+body #cr-wrap .cr-toggle i{font-style:normal!important;color:#D12A1E!important;transition:transform .2s!important}
+body #cr-wrap .cr-toggle[aria-expanded="true"] i{transform:rotate(180deg)!important}
+body #cr-cuerpo{padding:2px 2px 6px!important}
+body #cr-cuerpo .cr-intro{margin:0 0 8px!important;font-size:14px!important;color:#A8142A!important;line-height:1.5!important}
+body #cr-cuerpo .cr-item{padding:7px 0!important;font-size:14px!important;color:#1e5753!important;line-height:1.5!important;border-top:1px solid #f3d6d3!important}
+body #cr-cuerpo .cr-item b{display:block!important;color:#D12A1E!important;font-size:13px!important;text-transform:uppercase!important;letter-spacing:.6px!important;margin-bottom:2px!important}
+body #cr-cuerpo .cr-que{margin-top:3px!important;color:#69908c!important;font-size:13px!important}
+body #cr-cuerpo .cr-item small{display:block!important;font-size:12px!important;color:#69908c!important;margin:-1px 0 3px!important}
+
+body #pasos-banner .pasos-ok{margin-top:8px!important;padding:5px 14px!important;border-radius:999px!important;border:0!important;background:#00a8a3!important;color:#fff!important;font-size:14px!important;font-weight:700!important;cursor:pointer!important}
+
+/* Pop-up de cambio de fase: el icono anterior se encoge, un anillo y una lluvia de pétalos
+   anuncian el cambio y el nuevo icono crece con un pequeño rebote. */
+.sn-stage{position:relative;width:150px;height:130px;margin:0 auto 10px}
+.sn-stage>span{position:absolute;left:50%;top:50%;line-height:1;display:block}
+.sn-old,.sn-new{font-size:64px;transform:translate(-50%,-50%)}
+.sn-old{animation:snOld 1.1s ease-in forwards}
+.sn-new{opacity:0;animation:snNew .9s cubic-bezier(.34,1.56,.64,1) 1s forwards}
+.sn-halo{width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:radial-gradient(circle,rgba(0,168,163,.35),rgba(0,168,163,0) 70%);opacity:0;animation:snHalo 1.2s ease-out .9s forwards}
+.sn-ring{width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:3px solid #00a8a3;opacity:0;animation:snRing 1s ease-out .95s forwards}
+.sn-ring2{border-color:#D12A1E;animation-delay:1.1s}
+.sn-p{position:absolute;left:50%;top:50%;width:9px;height:9px;margin:-4px 0 0 -4px;border-radius:50% 50% 50% 0;background:var(--c);opacity:0;animation:snPart 1s ease-out calc(1s + var(--t)) forwards}
+.sn-txt{opacity:0;transform:translateY(8px);animation:snTxt .5s ease-out 1.6s forwards}
+@keyframes snOld{0%{transform:translate(-50%,-50%) scale(1) rotate(0);opacity:1}55%{transform:translate(-50%,-50%) scale(1.15) rotate(-8deg);opacity:1}100%{transform:translate(-50%,-50%) scale(.1) rotate(40deg);opacity:0}}
+@keyframes snNew{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(-30deg)}100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+@keyframes snHalo{0%{opacity:0;transform:scale(.3)}40%{opacity:1}100%{opacity:.7;transform:scale(1.25)}}
+@keyframes snRing{0%{opacity:.9;transform:scale(.3)}100%{opacity:0;transform:scale(3.4)}}
+@keyframes snPart{0%{opacity:1;transform:rotate(var(--a)) translateY(0) scale(.6)}100%{opacity:0;transform:rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(1.1)}}
+@keyframes snTxt{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .sn-old,.sn-ring,.sn-p,.sn-halo{display:none}
+  .sn-new,.sn-txt{animation:none;opacity:1;transform:translate(-50%,-50%)}
+  .sn-txt{transform:none}
+}
+
+/* Pestañas Progreso e Historial: el texto verde oscuro de los botones con fondo teal pasa a verde clarito casi blanco */
+body #ent-sub-progreso .pg-guardar,
+body #ent-sub-progreso .pg-cd.on i,
+body #ent-sub-historial .btn-t,
+body #ent-sub-historial .save-btn{color:#EAFBF9 !important}
+
+/* Progreso · resumen de 7 días: sin fondo, números más pequeños y centrados */
+body .pg-stats > div{background:none !important;border:0 !important;box-shadow:none !important;text-align:center !important;padding:6px 4px !important}
+body .pg-stats b{font-size:20px !important;text-align:center !important}
+body .pg-stats span{display:block !important;text-align:center !important}
+
+/* Progreso · Fuerza / Calendario / Cuerpo: una sola barra con un botón (estilo «Añadir ejercicio») que se desliza */
+body .pg-seg{position:relative !important;display:grid !important;grid-template-columns:repeat(3,1fr) !important;gap:0 !important;padding:4px !important;
+  background:#EEF7F6 !important;border:0 !important;border-radius:999px !important;
+  box-shadow:inset 0 2px 5px rgba(0,90,86,.14) !important;margin-bottom:12px !important}
+body .pg-seg::before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px) / 3);border-radius:999px;
+  transform:translateX(calc(var(--i,0) * 100%));transition:transform .32s cubic-bezier(.4,.1,.2,1);
+  background:linear-gradient(180deg,#DCEEEE 0%,#A4D8D3 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -2px 0 rgba(0,90,86,.18),0 3px 8px rgba(0,90,86,.22)}
+body .pg-seg button,body .pg-seg button[aria-pressed="true"],body .pg-seg button[aria-pressed="false"]:hover{
+  position:relative;z-index:1;background:none !important;border:0 !important;box-shadow:none !important;border-radius:999px !important;
+  padding:11px 0 !important;font-size:15px !important;font-weight:700 !important;transition:color .25s}
+body .pg-seg button[aria-pressed="false"]{color:#5e9a95 !important}
+body .pg-seg button[aria-pressed="true"]{color:#0d3b38 !important}
+@media (prefers-reduced-motion:reduce){body .pg-seg::before{transition:none}}
+
+/* Asistente: icono del cerebro con pesas y bocadillo de ayuda */
+body #chat-fab{width:62px !important;height:62px !important;padding:0 !important;background:none !important;border:0 !important;box-shadow:none !important;border-radius:50% !important;overflow:visible}
+body #chat-fab img{width:100%;height:100%;display:block;pointer-events:none;filter:drop-shadow(0 3px 6px rgba(0,70,66,.28))}
+#chat-bocadillo{position:absolute;right:2px;bottom:calc(100% + 6px);width:max-content;max-width:190px;padding:8px 12px;border-radius:14px;
+  background:#fff;color:#1e5753;font-size:14px;font-weight:700;line-height:1.3;text-align:center;pointer-events:none;
+  box-shadow:0 3px 12px rgba(0,70,66,.22);opacity:0;transform:translateY(6px) scale(.92);transform-origin:90% 100%;transition:opacity .3s,transform .3s}
+#chat-bocadillo::after{content:"";position:absolute;right:22px;bottom:-6px;width:12px;height:12px;background:#fff;transform:rotate(45deg);border-radius:0 0 3px 0;box-shadow:3px 3px 6px rgba(0,70,66,.10)}
+#chat-bocadillo.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){#chat-bocadillo{transition:none}}
+
+/* Aviso inicial del asistente: la IA no sustituye a profesionales sanitarios */
+body #chat-msgs .bbl.bot.aviso{background:#EEF7F6 !important;color:#1e5753 !important;border-left:3px solid #D12A1E !important;border-radius:4px 14px 14px 14px !important;font-size:14px;line-height:1.55}
+
+/* Barra fija del entreno: sin solaparse con la navegación; botón «Marcar hecho» con el estilo de la app */
+body #sticky-btn-hecho{background:linear-gradient(180deg,#DCEEEE 0%,#A4D8D3 100%) !important;color:#0d3b38 !important;border:0 !important;border-radius:999px !important;
+  padding:11px 18px !important;font-size:14px !important;font-weight:700 !important;flex:0 0 auto;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -2px 0 rgba(0,90,86,.18),0 3px 8px rgba(0,90,86,.22) !important}
+body #sticky-btn-hecho:active{transform:translateY(1px)}
+
+/* Navegación inferior: la pestaña activa se marca sutilmente (color turquesa, trazo más firme y un halo suave tras el icono) */
+body .nav .nav-btn{color:#7f9a97 !important;font-weight:600 !important;transition:color .2s}
+body .nav .nav-btn.active{color:#00918c !important;font-weight:700 !important}
+body .nav .nav-btn .o-ico{border-radius:12px;box-sizing:content-box;padding:3px 12px;margin:-3px 0;transition:background .25s}
+body .nav .nav-btn.active .o-ico{background:#DDF3F1}
+
+/* Entreno > Hoy: el nombre de la sesión es el título principal de la pestaña */
+body #ent-sub-hoy .ent-hero{margin:4px 0 8px}
+body #ent-sub-hoy .ent-hero .pg-titulo{margin:0 0 4px !important;font-size:30px !important;line-height:1.1;text-transform:none !important}
+body #ent-sub-hoy .ent-sub{margin:0;font-size:15px;line-height:1.5;color:#1e5753}
+
+/* Check-in y Perfil: sin recuadros, solo separadores finos */
+body #s-perfil .btn-o{background:none !important;border:0 !important;border-bottom:1px solid var(--linea) !important;border-radius:0 !important;box-shadow:none !important;padding-left:2px !important;padding-right:2px !important}
+body #s-perfil .btn-o[style*="width:auto"]{border-bottom:0 !important;padding:6px 0 6px 12px !important;color:#1e5753 !important;font-weight:700 !important;text-decoration:underline;text-underline-offset:3px}
+body #s-checkin .ci-estado-btn{background:none !important;border:0 !important;border-bottom:1px solid var(--linea) !important;border-radius:0 !important;box-shadow:none !important}
+body #s-checkin .ci-estado-btn.on{background:#EEF7F6 !important;border-bottom:2px solid #00a8a3 !important}
+body #s-checkin button[style*="dashed"]{background:none !important;border:0 !important;border-top:1px solid var(--linea) !important;border-radius:0 !important}
+
+/* Accesibilidad (WCAG 1.4.3): contrastes mínimos de 4,5:1 */
+body .nav .nav-btn{color:#587a76 !important}
+body .nav .nav-btn.active{color:#007a76 !important}
+body .pg-seg button[aria-pressed="false"]{color:#3f7a76 !important}
+body .chat-sug{color:#0d5a56 !important}
+body #cr-cuerpo .cr-que{color:#4f6f6c !important}
+
+body #chat-msgs .bbl.bot.aviso{transition:opacity .25s}
+body #chat-msgs .aviso-ok{display:block;margin:10px 0 0 auto;padding:7px 18px;border:0 !important;border-radius:999px !important;background:linear-gradient(180deg,#DCEEEE,#A4D8D3) !important;color:#0d3b38 !important;font:600 14px/1 inherit;cursor:pointer;box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(13,59,56,.18)}
+body #chat-msgs .aviso-ok:active{transform:translateY(1px)}
+
+body .nav .nav-btn.active .o-ico{background:transparent !important}
+
+/* La barra fija «Marcar hecho» (~72 px) ya no tapa «Finalizar entrenamiento» ni la última tarjeta al llegar al final */
+.phone:has(#sticky-entreno-bar[style*="flex"]) #ent-sub-hoy{padding-bottom:104px !important}
+body #ent-sub-hoy .btn-anadir{margin-top:16px !important}
+
+/* Popups: botones rellenos con letra verde claro casi blanco sobre teal oscuro (contraste ~9:1) */
+:is(.overlay,.m-sheet,.m-card,.checkin-bottom-sheet) :is(.btn-t,.btn-n,.save-btn){
+  background:var(--teal-800) !important;color:#effaf2 !important;border:0 !important}
+:is(.overlay,.m-sheet,.m-card,.checkin-bottom-sheet) :is(.btn-t,.btn-n,.save-btn) :is(.o-ico,span,i,svg){color:#effaf2 !important}
+:is(.overlay,.m-sheet,.m-card,.checkin-bottom-sheet) :is(.btn-t,.btn-n,.save-btn):disabled{background:#dde9e9 !important;color:#3f5f5c !important}
+.m-card .save-btn[onclick="guardarValoracionYMostrarResumen('mal')"]{background:#8f2a22 !important;color:#effaf2 !important}
+/* Popups con listas/filtros: solo se marca lo elegido (chip con aria-pressed="true"); filas y chips sin elegir quedan claros */
+.m-sheet button[aria-pressed]{background:#fff !important;color:var(--teal-950) !important;border:1.5px solid var(--teal-300) !important}
+.m-sheet button[aria-pressed="true"]{background:var(--teal-800) !important;color:#effaf2 !important;border-color:var(--teal-800) !important}
+.m-sheet button[onclick^="usarVariante"],.m-sheet button[onclick^="_seleccionarEjercicioSticky"]{background:#fff !important;border:1.5px solid var(--teal-200) !important;color:var(--teal-950) !important}
+
+/* Onboarding: botones principales con letra verde claro casi blanco sobre teal oscuro (≈9:1) */
+:is(#s-welcome,#s-parq,#s-consent,#s-plan,#s-etapa,#s-entorno,#s-hormonal) :is(.btn-n,.btn-t){
+  background:var(--teal-800) !important;color:#effaf2 !important;border:0 !important}
+:is(#s-welcome,#s-parq,#s-consent,#s-plan,#s-etapa,#s-entorno,#s-hormonal) :is(.btn-n,.btn-t) :is(span,i,svg,.o-ico){color:#effaf2 !important}
+
+/* Series: sin marcar = botón con relieve; marcada = botón hundido (pulsado), teal oscuro con letra clara */
+.ex-card .serie-check{
+  background:#fff !important;border:1.5px solid var(--teal-300) !important;color:var(--teal-950) !important;
+  box-shadow:inset 0 -3px 0 var(--teal-200) !important;transition:transform .08s ease, box-shadow .08s ease, background .15s}
+.ex-card .serie-check.done{
+  background:var(--teal-800) !important;border-color:var(--teal-900) !important;color:#effaf2 !important;
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.35) !important;transform:translateY(2px)}
+.ex-card .serie-check.done .sc-num,.ex-card .serie-check.done span{color:#effaf2 !important}
+
+/* Tarjeta de ejercicio: título a ancho completo (máx. 2 líneas) y botones en fila debajo, en todos los planes */
+.ex-card .ex-top{display:grid !important;grid-template-columns:auto 1fr;column-gap:10px;row-gap:0;align-items:start}
+.ex-card .ex-top>.ex-num{grid-column:1;grid-row:1}
+.ex-card .ex-top>.ex-info{display:contents !important}
+.ex-card .ex-top .ex-nombre{grid-column:2;grid-row:1;font-size:17px !important;line-height:1.2 !important;
+  display:-webkit-box !important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.ex-card .ex-top .ex-info>:not(.ex-nombre){grid-column:2}
+.ex-card .ex-top>.ex-btns{grid-column:1/-1 !important;grid-row:auto !important;flex-direction:row !important;gap:8px !important;margin-top:8px;align-self:stretch !important}
+.ex-card .ex-top>.ex-btns>button{flex:1;white-space:nowrap;padding:4px 6px !important}
+.ex-card .ex-top>.ex-btns>button{min-width:0 !important;padding:4px 2px !important}
+@media (max-width:350px){
+  .ex-card .ex-top .ex-nombre{font-size:14px !important}
+  .ex-card .ex-top>.ex-btns{gap:5px !important}
+  .ex-card .ex-top>.ex-btns>button{font-size:13px !important}
+}
+
+/* Popups: texto de botones sin estilo propio en teal casi negro (antes negro puro) */
+.m-sheet button,.m-card button{color:var(--teal-950)}
+
+/* Ciclo > Energía: flechas de mes y pestañas */
+.ener-nav{background:none;border:1px solid var(--teal-300);color:var(--teal-950);width:44px;height:40px;font-size:18px;border-radius:0 !important}
+#ciclo-tab-energia svg text{font-family:'Hanken Grotesk',system-ui,sans-serif}
+body .pg-seg2{grid-template-columns:repeat(2,1fr) !important}
+body .pg-seg2::before{width:calc((100% - 8px) / 2)}
+
+
+/* ── Compatibilidad iOS Safari / PWA y Safe Area Insets ──────────── */
+@supports (padding-top: env(safe-area-inset-top)) {
+  body {
+    min-height: -webkit-fill-available;
+  }
+  .phone {
+    min-height: -webkit-fill-available;
+  }
+  .header {
+    padding-top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+  }
+  .nav {
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  #floating-group {
+    bottom: calc(85px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  #sticky-entreno-bar {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  .m-sheet {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
