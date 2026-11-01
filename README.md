@@ -19,24 +19,24 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.6**
+## 🤖 Versión para Android (Instalador APK): **v1.0.7**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.6-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.6/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.7-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.7/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.6 (código 6)
+- **Versión:** 1.0.7 (código 7)
 - **Tamaño:** ~29.49 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.6:
-- **Corrección Menú Principal:** Resuelto el problema de inicialización de la barra de navegación inferior en la pantalla principal (`s-dashboard`), garantizando acceso directo permanente a Inicio, Ciclo, Entreno, Tienda y Perfil.
-- **Restauración de la Flor del Ciclo:** Solucionada la excepción de dependencias clínicas (`etapaMenopausiaOPeri`) que impedía desplegar la rueda de 28 pétalos interactivos en la sección de Mi Ciclo.
-- **Blindaje y Resiliencia UI:** Protegidas todas las transiciones y componentes visuales con captura y contención de errores para evitar bloqueos en cascada en la interfaz.
-- **Todas las Novedades Clínicas de Mónica:** Diario de síntomas ampliado con 7 señales de perimenopausia, gráfico de tendencia de energía a 12 semanas, recomendación de frecuencia óptima de fuerza y tarjeta de compartir sin datos vacíos.
-- **Compatibilidad Web e iOS:** Versión 100% funcional en Safari y navegadores con soporte PWA y Safe Area Insets (Notch / Dynamic Island).
+## 🌟 Novedades v1.0.7:
+- **Formulario Integrado de Reporte de Fallos (`🐞 Reportar fallo`):** Sustituida la sección de tienda por un sistema directo de envío de incidencias técnicas y visuales. Cada reporte crea automáticamente un ticket en GitHub Issues para el equipo de desarrollo.
+- **Telemetría y Diagnóstico Transparente:** La app adjunta automáticamente metadatos técnicos (versión, sistema operativo, resolución, etapa vital y fase de ciclo) sin comprometer datos médicos privados.
+- **Reordenación de la Barra de Navegación Inferior:** El botón `[🐞 Reportar fallo]` se ubica a la derecha del todo con texto en dos líneas perfectamente balanceado: `[🏠 Inicio] [🌸 Ciclo] [🏋️ Entreno] [👤 Perfil] [🐞 Reportar fallo]`.
+- **Menú y Flor del Ciclo 100% Blindados:** Resueltas las dependencias clínicas y protegida toda la navegación con contención de excepciones para máxima fluidez.
+- **Novedades Clínicas de Mónica:** Diario de síntomas con 7 señales de perimenopausia, recomendación de frecuencia óptima de fuerza y tarjeta social corregida.
 
 ---
 

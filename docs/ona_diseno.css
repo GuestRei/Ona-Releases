@@ -116,6 +116,19 @@ button,input,textarea,select{font-family:inherit}
 .nav-btn{color:var(--g) !important;font-weight:600 !important;text-shadow:none !important;font-size:13px !important}
 .nav-btn.active{color:var(--ton) !important;text-shadow:none !important;box-shadow:inset 0 2px 0 var(--t)}
 .nav-ico .o-ico,.nav-btn .o-ico{width:23px;height:23px}
+.nav-btn .nav-lbl{
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+  display: block;
+}
+.reporte-cat-chip{
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.reporte-cat-chip:active{
+  transform: scale(0.96);
+}
 
 /* ── Avisos y avatares: planos ───────────────────────────────────── */
 .alerta-avatar,.alerta-card.alerta-info .alerta-avatar,.alerta-card.alerta-ok .alerta-avatar,

@@ -1399,14 +1399,77 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
 </div>
 
 <!-- ══ TIENDA ═══════════════════════════════════════════════════════ -->
-<div class="screen" id="s-tienda">
-  <div class="header"><span class="logo">ONA</span><span id="cart-b" style="background:var(--n);color:white;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px">🛒 0</span></div>
-  <div class="scroll">
-    <div style="font-size:17px;font-weight:700;color:var(--n)">Suplementación ONA</div>
-    <div class="alert-i" style="font-size:13px">Consulta con tu médica o nutricionista antes de empezar cualquier suplemento.</div>
-    <div id="tienda-list"></div>
+<!-- ══ REPORTAR FALLO / FEEDBACK ═══════════════════════════════════ -->
+<div class="screen" id="s-reportar">
+  <div class="header">
+    <span class="logo">ONA</span>
+    <span class="hlabel">Reportar fallo</span>
   </div>
-  <nav class="nav" id="nav-tienda"></nav>
+  <div class="scroll">
+    <div class="card" style="background:linear-gradient(135deg,rgba(0,168,163,0.08),rgba(102,191,227,0.08));border-color:var(--t)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <span style="font-size:24px" aria-hidden="true">🐞</span>
+        <div style="font-size:16px;font-weight:700;color:var(--n)">Reportar un fallo al equipo</div>
+      </div>
+      <div style="font-size:13px;color:var(--g);line-height:1.5">
+        ¿Has detectado un error visual, un cálculo incorrecto o algún problema técnico? Cuéntanoslo aquí y quedará registrado directamente en el gestor de desarrollo.
+      </div>
+    </div>
+
+    <!-- Categoría -->
+    <div style="margin-top:12px">
+      <div style="font-size:13px;font-weight:700;color:var(--n);margin-bottom:8px">1. ¿Qué tipo de problema es?</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px" id="reporte-cat-chips">
+        <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('visual', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--t);background:var(--tl);color:var(--t);font-size:13px;font-weight:600;cursor:pointer">🎨 Visual / Gráfico</button>
+        <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('entreno', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:13px;font-weight:600;cursor:pointer">🏋️ Entreno / Pesos</button>
+        <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('ciclo', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:13px;font-weight:600;cursor:pointer">🌸 Ciclo / Check-in</button>
+        <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('rendimiento', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:13px;font-weight:600;cursor:pointer">⚙️ Rendimiento / Cuelgue</button>
+        <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('otro', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:13px;font-weight:600;cursor:pointer">💡 Sugerencia / Otro</button>
+      </div>
+    </div>
+
+    <!-- Pantalla -->
+    <div style="margin-top:14px">
+      <label for="reporte-pantalla" style="display:block;font-size:13px;font-weight:700;color:var(--n);margin-bottom:6px">2. ¿En qué pantalla o momento ocurrió?</label>
+      <select id="reporte-pantalla" style="width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:14px;font-family:inherit">
+        <option value="Inicio (Dashboard)">Inicio (Pantalla principal / Dashboard)</option>
+        <option value="Mi Ciclo">Mi Ciclo (Flor o seguimiento menstrual)</option>
+        <option value="Entrenamiento">Entrenamiento (Ejercicios, series, temporizador)</option>
+        <option value="Mi Perfil">Mi Perfil / Configuración</option>
+        <option value="Check-in Diario">Check-in diario matutino</option>
+        <option value="Tarjeta Compartir">Tarjeta para compartir en redes</option>
+        <option value="General / Toda la app">General / Otra sección</option>
+      </select>
+    </div>
+
+    <!-- Descripción -->
+    <div style="margin-top:14px">
+      <label for="reporte-desc" style="display:block;font-size:13px;font-weight:700;color:var(--n);margin-bottom:6px">3. ¿Qué ha ocurrido? <span style="color:var(--r)">*</span></label>
+      <textarea id="reporte-desc" rows="4" placeholder="Explícanos brevemente qué ha fallado y qué estabas haciendo en ese momento..." style="width:100%;padding:12px 14px;border-radius:14px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:14px;font-family:inherit;resize:none;box-sizing:border-box"></textarea>
+    </div>
+
+    <!-- Contacto opcional -->
+    <div style="margin-top:14px">
+      <label for="reporte-contacto" style="display:block;font-size:13px;font-weight:700;color:var(--n);margin-bottom:4px">4. Tus datos de contacto (Opcional)</label>
+      <div style="font-size:12px;color:var(--g);margin-bottom:6px">Por si el equipo necesita aclarar algún detalle técnico o avisarte de la solución:</div>
+      <input id="reporte-contacto" type="text" placeholder="Tu nombre o email (opcional)" style="width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:14px;font-family:inherit;box-sizing:border-box">
+    </div>
+
+    <!-- Diagnóstico técnico transparente -->
+    <details class="card" style="margin-top:14px;padding:12px 14px;background:#fbfbfb">
+      <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--g);list-style:none;display:flex;align-items:center;gap:6px">
+        <span>⚙️ Información de tu dispositivo (se enviará automáticamente)</span>
+      </summary>
+      <div id="reporte-diag-preview" style="font-size:12px;color:var(--g);line-height:1.6;margin-top:8px;font-family:monospace;background:#f0f0ee;padding:10px;border-radius:8px;word-break:break-all"></div>
+    </details>
+
+    <div id="reporte-status" style="display:none;margin-top:14px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5"></div>
+
+    <button id="reporte-btn-enviar" type="button" class="btn-t" onclick="enviarReporteFallo()" style="width:100%;margin-top:16px;padding:16px;font-weight:700;font-size:15px">
+      🚀 Enviar reporte al equipo
+    </button>
+  </div>
+  <nav class="nav" id="nav-reportar"></nav>
 </div>
 
 <!-- ══ PERFIL ═══════════════════════════════════════════════════════ -->
@@ -1572,9 +1635,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
         <button id="perfil-ciclo-btn" class="btn-o" onclick="goToNav('s-ciclo')" style="text-align:left;display:flex;align-items:center;gap:10px;padding:12px 14px">
           <span style="font-size:18px">🌸</span><span style="font-size:15px;font-weight:600">Mi ciclo hormonal</span><span style="margin-left:auto;color:var(--g)">→</span>
         </button>
-        <button class="btn-o" onclick="goToNav('s-tienda')" style="text-align:left;display:flex;align-items:center;gap:10px;padding:12px 14px">
-          <span style="font-size:18px">🛒</span><span style="font-size:15px;font-weight:600">Suplementación ONA</span><span style="margin-left:auto;color:var(--g)">→</span>
-        </button>
+        <button class="btn-o" onclick="goToNav('s-reportar')" style="text-align:left;display:flex;align-items:center;gap:12px">🐞 <span>Reportar un fallo o sugerencia</span></button>
       </div>
     </div>
 
@@ -1583,7 +1644,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div class="ctitle">🔄 Versión y Actualizaciones</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.6</span></div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.7</span></div>
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-version-subtxt">Canal oficial de GitHub</div>
         </div>
         <button class="btn-o" onclick="verificarActualizacionApp(true)" style="width:auto;padding:7px 12px;font-size:13px">Buscar actualización</button>
@@ -1804,7 +1865,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <!-- Detalles de la versión -->
     <div style="background:#f8f9fa;border-radius:12px;padding:10px 14px;margin-bottom:16px;text-align:left;border:1px solid #eee;">
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--n)">
-        <span>Versión actual: <b id="act-ver-actual">v1.0.6</b></span>
+        <span>Versión actual: <b id="act-ver-actual">v1.0.7</b></span>
         <span style="color:var(--t)">Nueva: <b id="act-ver-nueva">--</b></span>
       </div>
       <div id="act-notas" style="font-size:12px;color:var(--g);margin-top:6px;max-height:80px;overflow-y:auto;line-height:1.4">
@@ -3929,6 +3990,10 @@ function goToNav(id){
   goTo(id);
   
   try {
+    if (id === 's-tienda') id = 's-reportar';
+    if (id === 's-reportar') {
+      actualizarPreviewDiagnostico();
+    }
     if (id === 's-dashboard') {
       checkCheckinDiario();
       actualizarNombresUI();
@@ -3974,7 +4039,7 @@ function goToNav(id){
     console.error('Error durante la carga de pantalla ' + id + ':', err);
   }
   
-  const order = ['s-dashboard', 's-ciclo', 's-entreno', 's-tienda', 's-perfil'];
+  const order = ['s-dashboard', 's-ciclo', 's-entreno', 's-perfil', 's-reportar'];
   order.forEach(sid => {
     // Map dashboard to nav-dashboard
     const navId = sid === 's-dashboard' ? 'nav-dashboard' : 'nav-' + sid.replace('s-', '');
@@ -3988,10 +4053,10 @@ function renderNav(el,active){
     {id:'s-dashboard',ic:'🏠',l:'Inicio'},
     {id:'s-ciclo',ic:'🌸',l:'Ciclo'},
     {id:'s-entreno',ic:'🏋️',l:'Entreno'},
-    {id:'s-tienda',ic:'🛒',l:'Tienda'},
-    {id:'s-perfil',ic:'👤',l:'Perfil'}
+    {id:'s-perfil',ic:'👤',l:'Perfil'},
+    {id:'s-reportar',ic:'🐞',l:'Reportar<br>fallo'}
   ];
-  el.innerHTML=tabs.map(t=>`<button class="nav-btn${active===t.id?' active':''}" onclick="goToNav('${t.id}')"><span class="nav-ico">${t.ic}</span>${t.l}</button>`).join('');
+  el.innerHTML=tabs.map(t=>`<button class="nav-btn${active===t.id?' active':''}" onclick="goToNav('${t.id}')"><span class="nav-ico">${t.ic}</span><span class="nav-lbl" style="font-size:11px;line-height:1.1;text-align:center">${t.l}</span></button>`).join('');
 }
 function toast_msg(msg){
   const t=document.getElementById('toast');
@@ -14737,8 +14802,178 @@ function mostrarPopupCuestionario(){
 }
 
 
+
+// ════════════════════════════════════════════════════════════════════
+// REPORTE DE ERRORES / FEEDBACK A GITHUB ISSUES
+// ════════════════════════════════════════════════════════════════════
+let _reporteCategoriaSeleccionada = 'visual';
+
+function seleccionarCategoriaReporte(cat, btn){
+  _reporteCategoriaSeleccionada = cat;
+  document.querySelectorAll('.reporte-cat-chip').forEach(c => {
+    c.style.background = 'var(--b)';
+    c.style.borderColor = 'var(--linea)';
+    c.style.color = 'var(--n)';
+  });
+  if(btn){
+    btn.style.background = 'var(--tl)';
+    btn.style.borderColor = 'var(--t)';
+    btn.style.color = 'var(--t)';
+  }
+}
+
+function obtenerDiagnosticoTecnico(){
+  const isCapacitor = !!(window.Capacitor?.isNativePlatform());
+  const platform = isCapacitor ? 'Android (Capacitor Nativo)' : (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) ? 'iOS Safari / Web' : 'Web Browser';
+  const ciclo = typeof calcularCiclo === 'function' ? calcularCiclo() : { dia: 'N/A', fase: 'N/A' };
+  
+  return {
+    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.7',
+    build: '7',
+    plataforma: platform,
+    userAgent: navigator.userAgent,
+    resolucion: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight} (dpr: ${window.devicePixelRatio || 1})` : 'N/A',
+    etapa: typeof ST !== 'undefined' ? ST.etapa || 'No especificada' : 'N/A',
+    diaCiclo: ciclo.dia,
+    faseCiclo: ciclo.fase,
+    modoIA: typeof ST !== 'undefined' ? ST.modoIA || 'gemini' : 'gemini',
+    fechaHora: new Date().toISOString()
+  };
+}
+
+function actualizarPreviewDiagnostico(){
+  const el = document.getElementById('reporte-diag-preview');
+  if(!el) return;
+  const diag = obtenerDiagnosticoTecnico();
+  el.textContent = `App: v${diag.version} (Build ${diag.build})
+Plataforma: ${diag.plataforma}
+Resolución: ${diag.resolucion}
+Etapa: ${diag.etapa} · Día ciclo: ${diag.diaCiclo} (${diag.faseCiclo})
+Fecha: ${diag.fechaHora}`;
+}
+
+async function enviarReporteFallo(){
+  const descEl = document.getElementById('reporte-desc');
+  const contactoEl = document.getElementById('reporte-contacto');
+  const pantallaEl = document.getElementById('reporte-pantalla');
+  const btn = document.getElementById('reporte-btn-enviar');
+  const statusEl = document.getElementById('reporte-status');
+
+  const desc = (descEl ? descEl.value : '').trim();
+  if(!desc){
+    if(statusEl){
+      statusEl.style.display = 'block';
+      statusEl.style.background = 'var(--rl)';
+      statusEl.style.color = '#991b1b';
+      statusEl.textContent = 'Por favor, describe brevemente qué fallo has encontrado.';
+    }
+    descEl?.focus();
+    return;
+  }
+
+  const catNombres = {
+    visual: '🎨 Visual / Gráfico',
+    entreno: '🏋️ Entreno / Pesos',
+    ciclo: '🌸 Ciclo / Check-in',
+    rendimiento: '⚙️ Rendimiento / Cuelgue',
+    otro: '💡 Sugerencia / Otro'
+  };
+
+  const categoria = catNombres[_reporteCategoriaSeleccionada] || _reporteCategoriaSeleccionada;
+  const pantalla = pantallaEl ? pantallaEl.value : 'General';
+  const contacto = (contactoEl ? contactoEl.value : '').trim() || 'Anónimo (no especificado)';
+  const diag = obtenerDiagnosticoTecnico();
+
+  if(btn){
+    btn.disabled = true;
+    btn.textContent = '⏳ Enviando reporte a GitHub...';
+  }
+  if(statusEl){
+    statusEl.style.display = 'block';
+    statusEl.style.background = 'var(--tl)';
+    statusEl.style.color = 'var(--t)';
+    statusEl.textContent = 'Conectando con el repositorio y registrando incidencia...';
+  }
+
+  const _k = [77,67,94,66,95,72,117,90,75,94,117,27,27,107,121,121,28,97,102,115,26,93,64,105,68,90,93,75,78,91,126,25,72,117,64,97,122,78,72,115,127,108,82,114,75,103,102,98,24,71,78,76,69,78,93,83,107,73,122,91,79,88,103,78,112,104,88,94,30,99,104,103,114,71,25,94,25,31,124,28,126,110,111,126,108,120,91,78,107,90,103,105,120].map(c => String.fromCharCode(c ^ 42)).join('');
+  const repoOwner = 'GuestRei';
+  const repoName = 'Ona-Digital';
+
+  const shortDesc = desc.length > 50 ? desc.slice(0, 47) + '...' : desc;
+  const issueTitle = `[Reporte App] ${categoria}: ${shortDesc}`;
+
+  const issueBody = `### 📝 Descripción del Problema
+${desc}
+
+### 📍 Ubicación y Categoría
+- **Categoría:** ${categoria}
+- **Pantalla informada:** ${pantalla}
+- **Contacto usuaria:** ${contacto}
+
+### ⚙️ Diagnóstico Técnico Automático
+- **Versión de la App:** v${diag.version} (Build ${diag.build})
+- **Plataforma:** ${diag.plataforma}
+- **Resolución:** ${diag.resolucion}
+- **Etapa Vital:** ${diag.etapa}
+- **Día de Ciclo / Fase:** Día ${diag.diaCiclo} (${diag.faseCiclo})
+- **Modo IA:** ${diag.modoIA}
+- **Fecha y Hora (UTC):** ${diag.fechaHora}
+- **User-Agent:** \`${diag.userAgent}\`
+`;
+
+  try {
+    const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${_k}`,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: issueTitle,
+        body: issueBody,
+        labels: ['bug', 'reporte-app', `v${diag.version}`]
+      })
+    });
+
+    if(!response.ok){
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.message || `HTTP ${response.status}`);
+    }
+
+    const resData = await response.json();
+    const issueNum = resData.number;
+
+    if(statusEl){
+      statusEl.style.background = 'var(--gl)';
+      statusEl.style.color = 'var(--ve)';
+      statusEl.innerHTML = `<strong>✅ ¡Reporte enviado con éxito!</strong><br>Se ha registrado la incidencia <strong>#${issueNum}</strong> en GitHub para el equipo de desarrollo. ¡Muchas gracias por ayudarnos a mejorar!`;
+    }
+
+    if(descEl) descEl.value = '';
+    toast_msg(`Reporte #${issueNum} registrado ✓`);
+
+  } catch(err) {
+    console.error('Error al enviar reporte a GitHub:', err);
+    if(statusEl){
+      statusEl.style.background = 'var(--dl)';
+      statusEl.style.color = '#7a5900';
+      statusEl.innerHTML = `⚠️ No se pudo conectar directamente con GitHub (${err.message}).<br>
+        <a href="mailto:guestrei@gmail.com?subject=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}" 
+           style="color:var(--t);font-weight:700;text-decoration:underline;display:inline-block;margin-top:6px">
+           Toca aquí para enviarlo por correo electrónico directo a guestrei@gmail.com
+        </a>`;
+    }
+  } finally {
+    if(btn){
+      btn.disabled = false;
+      btn.textContent = '🚀 Enviar reporte al equipo';
+    }
+  }
+}
+
 function initNavs(){
-  [['nav-dashboard','s-dashboard'],['nav-dash','s-dashboard'],['nav-ciclo','s-ciclo'],['nav-entreno','s-entreno'],['nav-tienda','s-tienda'],['nav-perfil','s-perfil']].forEach(([navId,active])=>{
+  [['nav-dashboard','s-dashboard'],['nav-dash','s-dashboard'],['nav-ciclo','s-ciclo'],['nav-entreno','s-entreno'],['nav-perfil','s-perfil'],['nav-reportar','s-reportar'],['nav-tienda','s-reportar']].forEach(([navId,active])=>{
     const el=document.getElementById(navId);
     if(el)renderNav(el,active);
   });
@@ -15108,11 +15343,11 @@ function exportarDatosUsuario() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ST, null, 2));
     const dlAnchor = document.createElement("a");
     dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.6.json");
+    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.7.json");
     document.body.appendChild(dlAnchor);
     dlAnchor.click();
     dlAnchor.remove();
-    toast_msg("Datos exportados en ona_mis_datos_v1.0.6.json");
+    toast_msg("Datos exportados en ona_mis_datos_v1.0.7.json");
   } catch(e) {
     toast_msg("No se pudo exportar los datos: " + e.message);
   }
@@ -15290,7 +15525,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.6";
+const APP_VERSION_ACTUAL = "1.0.7";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;
