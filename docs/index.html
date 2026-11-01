@@ -1607,6 +1607,14 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <button type="button" id="ctab-energia" aria-pressed="false" onclick="cicloTab('energia')">Energía</button>
     </div>
     <div id="ciclo-tab-ciclo">
+    <button type="button" id="ciclo-btn-diario" onclick="abrirDiarioSintomas()" style="
+      width:100%;display:flex;align-items:center;gap:10px;text-align:left;
+      padding:12px 14px;border-radius:14px;border:1.5px dashed var(--t);
+      background:var(--tl);cursor:pointer;margin-bottom:10px">
+      <span style="font-size:18px" aria-hidden="true">📝</span>
+      <span style="flex:1;font-size:14px;font-weight:700;color:var(--n)">Diario de síntomas de hoy</span>
+      <span style="color:var(--t);font-size:16px" aria-hidden="true">→</span>
+    </button>
     <button type="button" onclick="mostrarPatronCiclo()" style="
       width:100%;display:flex;align-items:center;gap:10px;text-align:left;
       padding:12px 14px;border-radius:14px;border:none;
@@ -1646,6 +1654,8 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       </div>
     </div>
 
+    <div id="ciclo-etapa-info"></div>
+
     <!-- Tarjetas de fase -->
     <div style="font-size:13px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:1px;margin-top:10px">Fases del ciclo</div>
     <div id="fases-cards"></div>
@@ -1668,7 +1678,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     </div>
     </div>
     <div id="ciclo-tab-energia" style="display:none">
-      <div style="font-size:13px;color:var(--g);text-align:center;margin:12px 0 6px">Tu energía media según el día de tu ciclo</div>
+      <div id="ener-subtitulo" style="font-size:13px;color:var(--g);text-align:center;margin:12px 0 6px">Tu energía media según el día de tu ciclo</div>
       <div id="ener-grafico"></div>
       <div id="ener-detalle" style="font-size:14px;color:var(--n);min-height:22px;text-align:center;margin:4px 0 8px" aria-live="polite"></div>
       <div id="ener-fases"></div>
@@ -3925,6 +3935,7 @@ function goToNav(id){
     actualizarDashboard();
   }
   if (id === 's-ciclo') {
+    renderInfoEtapaMenopausia();
     renderCicloGrafico();
     renderHormonasCurvas();
     try{ if(document.getElementById('ctab-energia').getAttribute('aria-pressed')==='true') renderEnergiaGrafico(); }catch(e){}
@@ -8872,6 +8883,7 @@ function _hojaFase(id){
 function renderEnergiaCiclo(faseHoy){
   const el = document.getElementById('ciclo-energia-bloque');
   if(!el) return;
+  if(energiaModoSemanal()){ el.innerHTML = ''; return; }
   const a = analizarEnergiaCiclo();
   const total = a.hist.length;
   const titulo = `<div style="font-size:13px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:1px">Tu energía y tu ciclo</div>`;
@@ -8930,15 +8942,70 @@ function _energiaPorDiaCiclo(len){
   });
   return por;
 }
+/** ¿La energía se muestra por semanas? Sin ciclo (menopausia, embarazo, posparto) o con ciclos irregulares (perimenopausia). */
+function energiaModoSemanal(){
+  return !cicloAplica() || condicionesClinicas().includes('perimenopausia');
+}
+const ENERGIA_SEMANAS = 12;
+/** Media de energía por semana (lunes a domingo) de las últimas ENERGIA_SEMANAS: [{ini:Date, m:number|null, n}] */
+function _energiaPorSemana(){
+  _normalizarEnergiaHist();
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const lunes = new Date(hoy); lunes.setDate(hoy.getDate() - ((hoy.getDay() + 6) % 7));
+  const semanas = [];
+  for(let k = ENERGIA_SEMANAS - 1; k >= 0; k--){
+    const ini = new Date(lunes); ini.setDate(lunes.getDate() - 7 * k);
+    semanas.push({ ini, vals: [] });
+  }
+  (ST.energiaHist || []).forEach(r => {
+    if(!r.f) return;
+    const d = new Date(r.f + 'T00:00:00');
+    const idx = Math.floor((d - semanas[0].ini) / (7 * 86400000));
+    if(idx >= 0 && idx < semanas.length) semanas[idx].vals.push(r.v);
+  });
+  return semanas.map(w => ({ ini: w.ini, n: w.vals.length, m: w.vals.length ? w.vals.reduce((a,x)=>a+x,0) / w.vals.length : null }));
+}
+/** Gráfico de línea por semanas para etapas sin ciclo o con ciclos irregulares. Color neutro (turquesa): el rojo queda para las fases del ciclo. */
+function renderEnergiaSemanal(cont, el){
+  const sub = document.getElementById('ener-subtitulo');
+  if(sub) sub.textContent = 'Tu energía media por semana (últimas ' + ENERGIA_SEMANAS + ' semanas)';
+  const sem = _energiaPorSemana();
+  const W = 360, H = 220, x0 = 62, x1 = 346, yT = 20, yB = 176;
+  const cw = (x1 - x0) / sem.length;
+  const X = i => x0 + cw * (i + 0.5);
+  const Yv = v => yB - (v - 1) / 3 * (yB - yT);
+  let grid = '', ejeX = '', pts = [];
+  [1,2,3,4].forEach(v => { grid += `<line x1="${x0}" x2="${x1}" y1="${Yv(v).toFixed(1)}" y2="${Yv(v).toFixed(1)}" stroke="#d6e3e1" stroke-width="1"/><text x="${x0 - 8}" y="${(Yv(v) + 4).toFixed(1)}" text-anchor="end" font-size="12" fill="#3f5f5c">${ENERGIA_NOMBRE_ESTADO[v]}</text>`; });
+  sem.forEach((w, i) => {
+    if(i % 3 === 0 || i === sem.length - 1) ejeX += `<text x="${X(i).toFixed(1)}" y="${yB + 22}" text-anchor="middle" font-size="11" fill="#3f5f5c">${w.ini.getDate()}/${w.ini.getMonth() + 1}</text>`;
+    if(w.m != null) pts.push({ i, m: w.m });
+  });
+  let linea = '';
+  for(let k = 0; k < pts.length - 1; k++){
+    const a = pts[k], b = pts[k + 1], seguido = (b.i - a.i === 1);
+    linea += `<line x1="${X(a.i).toFixed(1)}" y1="${Yv(a.m).toFixed(1)}" x2="${X(b.i).toFixed(1)}" y2="${Yv(b.m).toFixed(1)}" style="stroke:#1F5C58" stroke-width="2.2" stroke-linecap="round" ${seguido ? '' : 'stroke-dasharray="3 4" stroke-opacity=".6"' }/>`;
+  }
+  const dots = pts.map(p => `<circle cx="${X(p.i).toFixed(1)}" cy="${Yv(p.m).toFixed(1)}" r="4" fill="#fff" style="stroke:#1F5C58" stroke-width="2"/>`).join('');
+  const vacio = pts.length ? '' : `<text x="${(x0 + x1) / 2}" y="${(yT + yB) / 2}" text-anchor="middle" font-size="14" fill="#3f5f5c">Aún no hay check-ins</text>`;
+  cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="display:block;width:100%;height:auto" role="img" aria-label="Gráfico de tu energía media por semana">${grid}${linea}${dots}${ejeX}${vacio}</svg>`;
+  document.getElementById('ener-detalle').textContent = '';
+  // Conclusión: últimas 4 semanas frente a las 4 anteriores (necesita datos en las dos mitades)
+  const media = arr => { const v = arr.filter(w => w.m != null); return v.length >= 2 ? v.reduce((a,w)=>a+w.m,0) / v.length : null; };
+  const rec = media(sem.slice(-4)), prev = media(sem.slice(-8, -4));
+  let frase;
+  if(rec == null || prev == null) frase = 'ONA va aprendiendo con cada check-in. Con unas semanas de registros verás aquí cómo evoluciona tu energía.';
+  else if(rec - prev >= ENERGIA_DIF_TENDENCIA) frase = 'Según tus registros, tu energía de las últimas semanas es <strong>más alta</strong> que la de las anteriores.';
+  else if(prev - rec >= ENERGIA_DIF_TENDENCIA) frase = 'Según tus registros, tu energía de las últimas semanas es <strong>más baja</strong> que la de las anteriores.';
+  else frase = 'Según tus registros, tu energía se mantiene <strong>estable</strong> en las últimas semanas.';
+  el.innerHTML = `<div style="font-size:12px;color:var(--g);margin:4px 0 6px;line-height:1.5">Cada punto es la media de una semana. Sin ciclo regular no se compara con las fases, sino contigo misma a lo largo del tiempo.</div><div style="font-size:15px;color:var(--n);line-height:1.6;margin-top:10px">${frase}</div>`;
+}
 function renderEnergiaGrafico(){
   const cont = document.getElementById('ener-grafico');
   if(!cont) return;
   const el = document.getElementById('ener-fases');
-  if(!cicloAplica()){
-    cont.innerHTML = '';
-    el.innerHTML = `<div style="font-size:14px;color:var(--g);line-height:1.55;padding:14px 0">En tu etapa actual no hay ciclo menstrual, así que no hay gráfico por días del ciclo.</div>`;
-    return;
-  }
+  if(energiaModoSemanal()){ renderEnergiaSemanal(cont, el); return; }
+  const sub = document.getElementById('ener-subtitulo');
+  if(sub) sub.textContent = 'Tu energía media según el día de tu ciclo';
   const len = ST.durCiclo || 28;
   const por = _energiaPorDiaCiclo(len);
   const hoyDia = (() => { try{ return Math.min(len, calcularCiclo().dia); }catch(e){ return 0; } })();
@@ -10933,28 +11000,66 @@ function datosTarjetaEntreno(){
   const ses = (ST.historialSesiones || []).filter(s => s.tipo !== 'activacion' && (s.ejercicios || []).length);
   const ult = ses[ses.length - 1];
   if(!ult) return null;
-  const tonel = (s) => (s.ejercicios || []).reduce((a, e) => a + (parseInt(e.s, 10) || 0) * _repsNum(e.r) * (parseFloat(e.p) || 0), 0);
-  // RPP (récord personal de peso): solo cuenta si hoy ha superado su máximo anterior en ese ejercicio
+
+  const _pNum = (v) => { const n = parseFloat(String(v == null ? 0 : v).replace(',', '.')); return isFinite(n) && n > 0 ? n : 0; };
+  const tonel = (s) => (s.ejercicios || []).reduce((a, e) => {
+    const se = parseInt(e.s, 10) || 1;
+    const re = _repsNum(e.r) || 1;
+    const pe = _pNum(e.p);
+    return a + (se * re * pe);
+  }, 0);
+
   const previas = ses.slice(0, -1);
-  let maxPeso = 0, nombreRecord = '';
+  let maxPesoSesion = 0, nombreMaxPeso = '';
+  let maxRecord = 0, nombreRecord = '', esRecord = false;
+
   (ult.ejercicios || []).forEach(e => {
-    const p = parseFloat(e.p) || 0;
-    const antes = previas.map(s => (s.ejercicios || []).filter(x => x.n === e.n).map(x => parseFloat(x.p) || 0)).reduce((a, b) => a.concat(b), []);
-    if(p > 0 && antes.length && p > Math.max(...antes) && p > maxPeso){ maxPeso = p; nombreRecord = e.n; }
+    const p = _pNum(e.p);
+    const nom = nombreComun(e) || e.n || 'Ejercicio';
+    if(p > maxPesoSesion){
+      maxPesoSesion = p;
+      nombreMaxPeso = nom;
+    }
+    // RPP: récord histórico. Si es la primera vez que se hace con peso o si supera el histórico previo
+    const antes = previas
+      .map(s => (s.ejercicios || []).filter(x => (x.id && e.id && x.id === e.id) || x.n === e.n).map(x => _pNum(x.p)))
+      .reduce((a, b) => a.concat(b), []);
+    
+    const esNuevoRecord = p > 0 && ((antes.length === 0) || (antes.length > 0 && p > Math.max(...antes)));
+    if(esNuevoRecord && p > maxRecord){
+      maxRecord = p;
+      nombreRecord = nom;
+      esRecord = true;
+    }
   });
+
   const total = Math.round(tonel(ult));
   const anterior = ses.length > 1 ? Math.round(tonel(ses[ses.length - 2])) : 0;
+  const mas = total > anterior && anterior > 0 ? total - anterior : 0;
+
+  const totalSeries = (ult.ejercicios || []).reduce((a, e) => a + (parseInt(e.s, 10) || 1), 0);
+  const totalEjercicios = (ult.ejercicios || []).length;
+
   // Semanas seguidas con al menos un entreno (de lunes a domingo), contando desde esta
   const lunes = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x.getTime(); };
   const semanas = new Set((ST.historialSesiones || []).map(s => _fechaSesion(s)).filter(Boolean).map(lunes));
   let racha = 0, w = lunes(new Date());
   while(semanas.has(w)){ racha++; w -= 7 * 86400000; }
   const ahora = new Date();
+
   return {
     fecha: String(ahora.getDate()).padStart(2, '0') + '/' + String(ahora.getMonth() + 1).padStart(2, '0'),
     hora: String(ahora.getHours()).padStart(2, '0') + ':' + String(ahora.getMinutes()).padStart(2, '0') + ' HR',
-    maxPeso: Math.round(maxPeso * 10) / 10, nombreRecord, total, mas: total > anterior && anterior > 0 ? total - anterior : 0,
-    racha, sesiones: ses.length
+    maxPeso: Math.round((esRecord ? maxRecord : maxPesoSesion) * 10) / 10,
+    nombreRecord: esRecord ? nombreRecord : nombreMaxPeso,
+    esRecord,
+    maxPesoSesion: Math.round(maxPesoSesion * 10) / 10,
+    total,
+    mas,
+    totalSeries,
+    totalEjercicios,
+    racha,
+    sesiones: ses.length
   };
 }
 
@@ -11038,8 +11143,9 @@ function dibujarTarjeta(canvas, d, foto){
     _texto(c, 'DE HOY', W / 2, 206, BEBAS, 62, true, 4);
   }
 
-  // Datos: peso máximo, peso total y logros
-  const cols = [W * 0.18, W * 0.50, W * 0.82], etiq = ['RPP MÁX', 'PESO TOTAL', 'LOGROS'];
+  // Datos: peso máximo/RPP, peso total y logros
+  const col0Label = d.esRecord ? 'RPP MÁX' : (d.maxPeso > 0 ? 'PESO MÁX' : 'CARGA');
+  const cols = [W * 0.18, W * 0.50, W * 0.82], etiq = [col0Label, 'PESO TOTAL', 'LOGROS'];
   cols.forEach((cx, i) => {
     const w = 300, h = 68, x = cx - w / 2, y = H * (foto ? 0.702 : 0.695);
     const gr = c.createLinearGradient(x, 0, x + w, 0); gr.addColorStop(0, 'rgba(196,60,140,1)'); gr.addColorStop(1, 'rgba(176,70,150,1)');
@@ -11047,12 +11153,32 @@ function dibujarTarjeta(canvas, d, foto){
     c.lineWidth = 5; c.strokeStyle = 'rgba(134,189,224,1)'; _rrect(c, x, y, w, h, h / 2); c.stroke();
     _texto(c, etiq[i], cx, y + h * 0.67, ARCH, 31, false, 3);
   });
-  _texto(c, d.maxPeso ? String(d.maxPeso).replace('.', ',') + 'KG' : '—', cols[0], H * 0.835, BEBAS, 125, true, 3, 290);
-  _texto(c, d.maxPeso ? d.nombreRecord.toUpperCase() : 'SIN RÉCORD HOY', cols[0], H * 0.835 + 50, ARCH, 20, false, 1, 300);
-  // Peso total: lo que has subido respecto a la última sesión; si no hay, el total de hoy
-  const totalTxt = d.mas ? '+' + _fmtMiles(d.mas) + 'KG' : (d.total ? _fmtMiles(d.total) + 'KG' : '—');
-  _texto(c, totalTxt, cols[1], H * 0.835, BEBAS, 125, true, 3, 290);
-  if(d.total) _texto(c, d.mas ? 'MÁS QUE LA ÚLTIMA SESIÓN' : 'MOVIDOS HOY', cols[1], H * 0.835 + 50, ARCH, 20, false, 1, 300);
+
+  // Columna 0: Peso máximo o RPP (nunca sale un guion vacío si se ha registrado peso)
+  let valCol0 = '', subCol0 = '';
+  if(d.maxPeso > 0){
+    valCol0 = String(d.maxPeso).replace('.', ',') + 'KG';
+    subCol0 = d.nombreRecord ? d.nombreRecord.toUpperCase() : (d.esRecord ? '¡NUEVO RÉCORD!' : 'PESO MÁX. HOY');
+  } else {
+    valCol0 = 'CORPO';
+    subCol0 = 'PESO CORPORAL';
+  }
+  _texto(c, valCol0, cols[0], H * 0.835, BEBAS, valCol0.length > 6 ? 100 : 125, true, 3, 290);
+  _texto(c, subCol0, cols[0], H * 0.835 + 50, ARCH, 20, false, 1, 300);
+
+  // Columna 1: Peso total movido (o series/ejercicios si fue peso corporal)
+  let totalTxt = '', totalSub = '';
+  if(d.total > 0){
+    totalTxt = d.mas ? '+' + _fmtMiles(d.mas) + 'KG' : _fmtMiles(d.total) + 'KG';
+    totalSub = d.mas ? 'MÁS QUE LA ÚLTIMA SESIÓN' : 'MOVIDOS HOY';
+  } else {
+    totalTxt = d.totalSeries ? d.totalSeries + ' SERIES' : (d.totalEjercicios ? d.totalEjercicios + ' EJERC.' : 'COMPLETO');
+    totalSub = d.totalEjercicios ? d.totalEjercicios + ' EJERCICIOS' : 'RUTINA COMPLETADA';
+  }
+  _texto(c, totalTxt, cols[1], H * 0.835, BEBAS, totalTxt.length > 7 ? 100 : 125, true, 3, 290);
+  _texto(c, totalSub, cols[1], H * 0.835 + 50, ARCH, 20, false, 1, 300);
+
+  // Columna 2: Logros y constancia
   const lineas = d.racha >= 2 ? [d.racha + ' SEMANAS', 'SEGUIDAS', 'ENTRENANDO'] : [d.sesiones + (d.sesiones === 1 ? ' SESIÓN' : ' SESIONES'), 'COMPLETADA' + (d.sesiones === 1 ? '' : 'S')];
   lineas.forEach((l, i) => _texto(c, l, cols[2], H * 0.775 + 18 + i * 50 + (lineas.length === 2 ? 14 : 0), BEBAS, 42, true, 3, 300));
 }
@@ -11206,6 +11332,18 @@ function calcularAlertas(){
 
   const ciclo = calcularCiclo();
   const sesiones = ST.historialSesiones;
+
+  // Menopausia / perimenopausia: sin regla no hay señal de alarma de baja energía disponible.
+  // Se avisa cuando lleva varios días con poca energía (mismo criterio que el chequeo de energía).
+  if(etapaMenopausiaOPeri() && diasEnergiaBajaRecientes() >= 2){
+    alertas.push({
+      tipo: 'info',
+      ico: '🔋',
+      titulo: 'Come lo suficiente para lo que entrenas',
+      desc: TEXTO_ENERGIA_SUFICIENTE,
+      prioridad: 2,
+    });
+  }
 
   // ────────────────────────────────────────────────────────────────
   // A1 — Sin entrenar hace más de 7 días
@@ -11879,6 +12017,36 @@ function riesgosPendientes(){
   return !(ST.riesgosAceptados && ST.riesgosAceptados.firma === firmaRiesgos());
 }
 
+const TEXTO_ENERGIA_SUFICIENTE = 'En esta etapa, entrenar la fuerza sin comer suficiente desgasta más de lo que suma. Si llevas varios días con la energía baja, asegúrate de que tus platos incluyan suficiente energía (carbohidratos y grasas saludables) y proteína.';
+const TEXTOS_MENOPAUSIA = [
+  { t:'Fuerza',   d:'Mantiene la masa muscular y la densidad ósea que los estrógenos protegían. Es la base para seguir encontrándote fuerte y ágil con los años.' },
+  { t:'Hueso',    d:'La bajada de estrógenos acelera la pérdida de masa ósea, y la fuerza es clave para el hueso. El ejercicio con carga, como pesas o saltos suaves, ayuda a protegerlo. Adáptalo siempre a tu situación.' },
+  { t:'Proteína', d:'Con la menopausia el músculo responde peor al entrenamiento y a la proteína. Repartir bien la proteína a lo largo del día ayuda.' },
+];
+const TEXTO_SUENO_ACTIVIDAD = 'Dormir mal y entrenar menos se alimentan entre sí. Moverte con regularidad suele mejorar el sueño.';
+/** Bloque «Para tu etapa» en Ciclo › Mi ciclo (solo menopausia / perimenopausia) */
+function renderInfoEtapaMenopausia(){
+  const el = document.getElementById('ciclo-etapa-info');
+  if(!el) return;
+  if(!etapaMenopausiaOPeri()){ el.innerHTML = ''; return; }
+  el.innerHTML = `<div style="font-size:13px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:1px;margin-top:18px">Para tu etapa</div>` +
+    TEXTOS_MENOPAUSIA.map(x => `<div style="padding:12px 0;border-bottom:1px solid var(--linea)"><div style="font-size:15px;font-weight:700;color:var(--n)">${x.t}</div><div style="font-size:14px;color:var(--n);line-height:1.6;margin-top:3px">${x.d}</div></div>`).join('');
+}
+/** En el diario: si marca sofocos, sudores o despertares nocturnos, o dice que durmió mal, se muestra el texto del sueño */
+const _SINTOMAS_SUENO = ['sofocos','sudores_noct','sueno_cortado'];
+function _diarioActualizarMsgSueno(){
+  const el = document.getElementById('ds-sueno-msg');
+  if(!el || !_diarioTemp) return;
+  const hay = _diarioTemp.sintomas.some(x => _SINTOMAS_SUENO.includes(x)) || _diarioTemp.respuestas.sueno === 'mal';
+  el.style.display = hay ? '' : 'none';
+}
+/** Menopausia o perimenopausia SIN ninguna patología marcada (la perimenopausia en sí no cuenta como patología).
+ *  Con osteoporosis, osteopenia u otra condición marcada por la usuaria NO se cambia nada: decisión de Moni. */
+function frecuenciaFuerzaSugerida(){
+  const conds = condicionesClinicas().filter(c => c !== 'perimenopausia');
+  if(conds.length) return false;
+  return ST.etapa === 'menopausia' || condicionesClinicas().includes('perimenopausia');
+}
 /** Cómo se ha adaptado la rutina: solo lo que la app realmente hace */
 function mensajeAdaptacionRutina(){
   const li = [];
@@ -11892,6 +12060,9 @@ function mensajeAdaptacionRutina(){
   const cfg = obtenerConfigClinica();
   if(cfg){
     li.push('🦴 ' + cfg.nombre + ': máximo ' + cfg.series[1] + ' series, ' + cfg.reps[0] + '-' + cfg.reps[1] + ' repeticiones y descansos de ' + Math.round(cfg.descanso[1] / 60 * 10) / 10 + ' min. ' + (cfg.evitar || ''));
+  }
+  if(frecuenciaFuerzaSugerida()){
+    li.push('💪 En esta etapa la fuerza marca la diferencia: entrena al menos 2 días a la semana y, si puedes, hasta 4.');
   }
   ['lumbar','rodilla'].filter(c => condicionesActivasEtiqueta().includes(c)).forEach(c => {
     const idx = ORDEN_CONDICIONES_ETIQUETA.indexOf(c);
@@ -12475,6 +12646,15 @@ const DIARIO_SINTOMAS_CHECKLIST = [
   {id:'ansiedad',      grupo:'Emocional', label:'Ansiedad'},
   {id:'animo_bajo',    grupo:'Emocional', label:'Bajón de ánimo'},
   {id:'niebla_mental',grupo:'Emocional', label:'Niebla mental'},
+  // Cambios hormonales (perimenopausia): se registran para tu historial y para llevar a la consulta.
+  // No entran en calcularFaseSintomas: no cambian la fase estimada ni el entreno.
+  {id:'sofocos',        grupo:'Cambios hormonales', label:'Sofocos'},
+  {id:'sudores_noct',   grupo:'Cambios hormonales', label:'Sudores nocturnos'},
+  {id:'sequedad',       grupo:'Cambios hormonales', label:'Sequedad vaginal'},
+  {id:'palpitaciones',  grupo:'Cambios hormonales', label:'Palpitaciones'},
+  {id:'dolor_articular',grupo:'Cambios hormonales', label:'Dolor articular'},
+  {id:'deseo_bajo',     grupo:'Cambios hormonales', label:'Cambios en el deseo'},
+  {id:'sueno_cortado',  grupo:'Cambios hormonales', label:'Despertares nocturnos'},
 ];
 
 // Matriz de pesos: cada señal suma puntos a favor de una o varias fases.
@@ -12548,8 +12728,10 @@ function abrirDiarioSintomas(){
     <div style="font-size:14px;font-weight:700;color:var(--n);margin:6px 0 2px">¿Algo más que notes hoy?</div>
     <div style="font-size:13px;color:var(--g);margin-bottom:4px">Opcional — marca lo que aplique</div>
     <div id="ds-checklist">${checklistHTML}</div>
+    <div id="ds-sueno-msg" style="display:none;font-size:14px;color:var(--n);line-height:1.6;margin-top:12px;padding-top:10px;border-top:1px solid var(--linea)">${TEXTO_SUENO_ACTIVIDAD}</div>
     <button class="btn-t" style="width:100%;margin-top:16px" onclick="guardarDiarioSintomas()">Guardar</button>
   </div>`);
+  _diarioActualizarMsgSueno();
 }
 
 function _diarioSetRespuesta(preguntaId, valor){
@@ -12562,6 +12744,7 @@ function _diarioSetRespuesta(preguntaId, valor){
     btn.style.borderColor = activo ? 'var(--t)' : '#e0e0e0';
     btn.style.background  = activo ? 'var(--tl)' : 'var(--b)';
   });
+  _diarioActualizarMsgSueno();
 }
 
 function _diarioToggleSintoma(id){
@@ -12572,6 +12755,7 @@ function _diarioToggleSintoma(id){
   const activo = _diarioTemp.sintomas.includes(id);
   btn.style.borderColor = activo ? 'var(--t)' : '#e0e0e0';
   btn.style.background  = activo ? 'var(--tl)' : 'var(--b)';
+  _diarioActualizarMsgSueno();
 }
 
 // Compara los pesos de hoy con la sesión anterior del mismo ejercicio,
