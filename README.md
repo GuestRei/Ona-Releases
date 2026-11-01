@@ -19,26 +19,24 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.4**
+## 🤖 Versión para Android (Instalador APK): **v1.0.5**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.4-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.4/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.5-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.5/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.4 (código 4)
-- **Tamaño:** ~29.48 MB
+- **Versión:** 1.0.5 (código 5)
+- **Tamaño:** ~30.92 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.4:
+## 🌟 Novedades v1.0.5:
+- **Diario de Síntomas Ampliado:** Botón de acceso directo en Mi ciclo y 7 nuevos síntomas hormonales y de perimenopausia con consejos empáticos de sueño y descanso.
+- **Gráfico de Energía por Semanas:** Evolución de las últimas 12 semanas en turquesa para etapas sin ciclo o con ciclos irregulares.
+- **Frecuencia Óptima de Fuerza y Nutrición:** Recomendación de 2 a 4 días de fuerza semanales en menopausia/perimenopausia y alerta preventiva de nutrición (*«Come lo suficiente para lo que entrenas»*).
+- **Corrección en la Tarjeta Social:** Solucionado el error de los datos vacíos (`—`) en la captura para redes; ahora siempre muestra el peso máximo de la sesión con su nombre de ejercicio, récords históricos y soporta entrenamientos de autocarga.
 - **Compatibilidad Web e iOS:** Versión 100% funcional en Safari y navegadores con soporte PWA y Safe Area Insets (Notch / Dynamic Island).
-- **Rediseño UI/UX Completo:** Paleta teal minimalista, separadores finos, escala tipográfica accesible (+13 px) y tarjetas tipo Wallet.
-- **Asistente Inteligente Renovado:** Icono de cerebro con mancuernas (`chat_cerebro.png`) y bocadillo de ayuda emergente.
-- **Hero de Entreno y Código Rojo Dinámico:** Título de foco muscular y señales de alarma personalizadas según tus cuestionarios de salud.
-- **Pestaña de Energía y Pétalos SVG:** Gráfico de correlación energía-ciclo y animación vectorial de pétalos.
-- **Chequeo LEAF-Q Científico:** Detección de baja disponibilidad energética estandarizada y privada en tu dispositivo.
-- **Compartir en Redes:** Diálogo nativo para compartir resúmenes en Instagram, TikTok o WhatsApp.
 
 ---
 
