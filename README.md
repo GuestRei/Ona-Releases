@@ -19,24 +19,24 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.7**
+## 🤖 Versión para Android (Instalador APK): **v1.0.8**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.7-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.7/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.8-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.8/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.7 (código 7)
+- **Versión:** 1.0.8 (código 8)
 - **Tamaño:** ~29.49 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.7:
+## 🌟 Novedades v1.0.8:
+- **Hotfix Crítico de Pantalla en Blanco al Iniciar:** Subsanado el error que bloqueaba la activación de las pantallas dejando solo visible el fondo y el botón del chat. Implementados mecanismos de protección y arranque resiliente en `goTo()`, `startApp()` y los inicializadores principales.
+- **Desaparición Automática del Prompt de Recalibración del Ciclo:** El aviso "¿Ha llegado tu regla hoy?" desaparece inmediatamente al seleccionar "Sí, hoy" o "No, aún no" y persiste la respuesta para no volver a insistir a la usuaria durante el mismo día.
 - **Formulario Integrado de Reporte de Fallos (`🐞 Reportar fallo`):** Sustituida la sección de tienda por un sistema directo de envío de incidencias técnicas y visuales. Cada reporte crea automáticamente un ticket en GitHub Issues para el equipo de desarrollo.
-- **Telemetría y Diagnóstico Transparente:** La app adjunta automáticamente metadatos técnicos (versión, sistema operativo, resolución, etapa vital y fase de ciclo) sin comprometer datos médicos privados.
 - **Reordenación de la Barra de Navegación Inferior:** El botón `[🐞 Reportar fallo]` se ubica a la derecha del todo con texto en dos líneas perfectamente balanceado: `[🏠 Inicio] [🌸 Ciclo] [🏋️ Entreno] [👤 Perfil] [🐞 Reportar fallo]`.
-- **Menú y Flor del Ciclo 100% Blindados:** Resueltas las dependencias clínicas y protegida toda la navegación con contención de excepciones para máxima fluidez.
-- **Novedades Clínicas de Mónica:** Diario de síntomas con 7 señales de perimenopausia, recomendación de frecuencia óptima de fuerza y tarjeta social corregida.
+- **Novedades Clínicas y Estabilidad Global:** Diario de síntomas con señales de perimenopausia, frecuencia óptima de entrenamiento de fuerza y flor interactiva del ciclo protegida.
 
 ---
 

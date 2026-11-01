@@ -1644,7 +1644,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div class="ctitle">🔄 Versión y Actualizaciones</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.7</span></div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.8</span></div>
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-version-subtxt">Canal oficial de GitHub</div>
         </div>
         <button class="btn-o" onclick="verificarActualizacionApp(true)" style="width:auto;padding:7px 12px;font-size:13px">Buscar actualización</button>
@@ -1865,7 +1865,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <!-- Detalles de la versión -->
     <div style="background:#f8f9fa;border-radius:12px;padding:10px 14px;margin-bottom:16px;text-align:left;border:1px solid #eee;">
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--n)">
-        <span>Versión actual: <b id="act-ver-actual">v1.0.7</b></span>
+        <span>Versión actual: <b id="act-ver-actual">v1.0.8</b></span>
         <span style="color:var(--t)">Nueva: <b id="act-ver-nueva">--</b></span>
       </div>
       <div id="act-notas" style="font-size:12px;color:var(--g);margin-top:6px;max-height:80px;overflow-y:auto;line-height:1.4">
@@ -3707,7 +3707,7 @@ const CAMPOS_PERSISTIDOS_EXTRA = [
   'condicionesHormonales','anticonceptivosHormonales','_alertaTCA','_prescripcionMedica','_prescripcionMedicaConfirmada',
   '_arrancarDesdeNivelBajo','_alertasClinicas','diarioSintomas','energiaHist','_historialInicioCiclo','_ovulacionConfirmadaDia',
   '_ovulacionesRegistradas','_sintomasLuteos','_ultimoAviso','_ultimoAvisoDia1','_ultimoAvisoDia1Fecha',
-  'cuestionario','cuestionarioCompletado','_recomendacionesCuestionario','_cuestionarioPopupVisto','_modoEjercicio','posparto','bloqueActivacionHecho','riesgosAceptados','medidas','alturaCm','extrasHoy','_stickyEjercicioId',
+  'cuestionario','cuestionarioCompletado','_recomendacionesCuestionario','_cuestionarioPopupVisto','_modoEjercicio','posparto','bloqueActivacionHecho','riesgosAceptados','medidas','alturaCm','extrasHoy','_stickyEjercicioId','_recalibrarRespondidoFecha',
 ];
 
 async function saveState() {
@@ -4070,8 +4070,14 @@ function goTo(id){
   if (!ST.onboardingDone && ONB_PASOS.includes(id) && !puedeIrA(id)) {
     id = primerPasoIncompleto() || id;
   }
+  let target = document.getElementById(id);
+  if (!target) {
+    console.warn('goTo: pantalla no encontrada para id=' + id + ', usando fallback');
+    id = (ST.onboardingDone ? 's-dashboard' : 's-welcome');
+    target = document.getElementById(id);
+  }
+  if (!target) return;
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const target = document.getElementById(id);
   target.classList.add('active');
   const scrollEl = target.querySelector('.scroll');
   if (scrollEl) scrollEl.scrollTop = 0;
@@ -8504,7 +8510,9 @@ function ejecutarAccionIA(action) {
 // TIENDA
 // ════════════════════════════════════════════════════════════════════
 function initTienda(){
-  document.getElementById('tienda-list').innerHTML=SUPLEMENTOS.map(s=>`
+  const el = document.getElementById('tienda-list');
+  if(!el) return;
+  el.innerHTML=SUPLEMENTOS.map(s=>`
     <div class="card" style="margin-bottom:10px;${s.ideal?'border-color:var(--t);':''}">
       ${s.ideal?'<div style="font-size:12px;font-weight:700;color:var(--t);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">⭐ Ideal esta semana</div>':''}
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
@@ -9649,31 +9657,47 @@ function abrirHormonaInfo(faseId) {
 // El cálculo de día y fase vive en calcularCiclo() (ST.fur + ST.durCiclo); la antigua calcularDiaYFaseCiclo() se eliminó
 
 function chequearRecalibracionCiclo() {
-  if (ST.etapa !== 'general') {
-    document.getElementById('checkin-recalibrar-box').style.display = 'none';
+  const box = document.getElementById('checkin-recalibrar-box');
+  if (!box) return;
+  if (!cicloAplica()) {
+    box.style.display = 'none';
+    return;
+  }
+  const hoyStr = new Date().toISOString().split('T')[0];
+  // Si la usuaria ya respondió hoy (pulsó Sí o No), el aviso desaparece y no vuelve a salir hoy
+  if (ST._recalibrarRespondidoFecha === hoyStr) {
+    box.style.display = 'none';
     return;
   }
   const { dia } = calcularCiclo();
   const totalDias = ST.durCiclo || 28;
-  const trigger = (dia >= totalDias - 1) || (dia <= 2);
-  document.getElementById('checkin-recalibrar-box').style.display = trigger ? 'block' : 'none';
+  // Solo se pregunta al final del ciclo previsto
+  const trigger = (dia >= totalDias - 1);
+  box.style.display = trigger ? 'block' : 'none';
 }
 
 function recalibrarCiclo(haLlegado) {
+  const hoyStr = new Date().toISOString().split('T')[0];
+  // Marcar inmediatamente como respondido para que el aviso desaparezca
+  ST._recalibrarRespondidoFecha = hoyStr;
+
   if (haLlegado) {
     const { dia } = calcularCiclo();
+    if (!ST.ciclosRegistrados) ST.ciclosRegistrados = [];
     ST.ciclosRegistrados.push(dia);
     if (ST.ciclosRegistrados.length >= 3) {
       const sum = ST.ciclosRegistrados.reduce((a, b) => a + b, 0);
       ST.durCiclo = Math.round(sum / ST.ciclosRegistrados.length);
     }
-    ST.fur = new Date().toISOString().split('T')[0];
+    ST.fur = hoyStr;
     toast_msg("Regla registrada. ¡Ciclo recalculado! 🌸");
   } else {
     ST.durCiclo = (ST.durCiclo || 28) + 1;
     toast_msg("Estimación del ciclo extendida +1 día.");
   }
   saveState();
+  const box = document.getElementById('checkin-recalibrar-box');
+  if (box) box.style.display = 'none';
   chequearRecalibracionCiclo();
   actualizarDashboard();
 }
@@ -14828,8 +14852,8 @@ function obtenerDiagnosticoTecnico(){
   const ciclo = typeof calcularCiclo === 'function' ? calcularCiclo() : { dia: 'N/A', fase: 'N/A' };
   
   return {
-    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.7',
-    build: '7',
+    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.8',
+    build: '8',
     plataforma: platform,
     userAgent: navigator.userAgent,
     resolucion: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight} (dpr: ${window.devicePixelRatio || 1})` : 'N/A',
@@ -14982,11 +15006,11 @@ function initNavs(){
 // ════════════════════════════════════════════════════════════════════
 // ARRANQUE
 // ════════════════════════════════════════════════════════════════════
-initParq();
-initEtapa();
-initEntorno();
-initTienda();
-initNavs();
+try { initParq(); } catch(e) { console.warn('initParq', e); }
+try { initEtapa(); } catch(e) { console.warn('initEtapa', e); }
+try { initEntorno(); } catch(e) { console.warn('initEntorno', e); }
+try { initTienda(); } catch(e) { console.warn('initTienda', e); }
+try { initNavs(); } catch(e) { console.warn('initNavs', e); }
 
 let downloadListener = null;
 
@@ -15343,11 +15367,11 @@ function exportarDatosUsuario() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ST, null, 2));
     const dlAnchor = document.createElement("a");
     dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.7.json");
+    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.8.json");
     document.body.appendChild(dlAnchor);
     dlAnchor.click();
     dlAnchor.remove();
-    toast_msg("Datos exportados en ona_mis_datos_v1.0.7.json");
+    toast_msg("Datos exportados en ona_mis_datos_v1.0.8.json");
   } catch(e) {
     toast_msg("No se pudo exportar los datos: " + e.message);
   }
@@ -15432,7 +15456,8 @@ function toggleConsentimientoDesdeAjustes(activo) {
 }
 
 async function startApp() {
-  const hasState = await loadState();
+  try {
+    const hasState = await loadState();
   obtenerVersionApp().then(ver => {
     const lbl = document.getElementById('perfil-app-version');
     if (lbl) lbl.textContent = 'v' + ver;
@@ -15464,6 +15489,10 @@ async function startApp() {
 
   // En modo Gemini (o en navegador), no se descarga el archivo de 1.5 GB y se arranca directamente
   continueStartApp();
+  } catch (err) {
+    console.error("Error crítico en startApp:", err);
+    goTo(ST.onboardingDone ? 's-dashboard' : 's-welcome');
+  }
 }
 
 async function continueStartApp() {
@@ -15525,7 +15554,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.7";
+const APP_VERSION_ACTUAL = "1.0.8";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;
