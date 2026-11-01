@@ -1583,7 +1583,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div class="ctitle">🔄 Versión y Actualizaciones</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.5</span></div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.6</span></div>
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-version-subtxt">Canal oficial de GitHub</div>
         </div>
         <button class="btn-o" onclick="verificarActualizacionApp(true)" style="width:auto;padding:7px 12px;font-size:13px">Buscar actualización</button>
@@ -1804,7 +1804,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <!-- Detalles de la versión -->
     <div style="background:#f8f9fa;border-radius:12px;padding:10px 14px;margin-bottom:16px;text-align:left;border:1px solid #eee;">
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--n)">
-        <span>Versión actual: <b id="act-ver-actual">v1.0.5</b></span>
+        <span>Versión actual: <b id="act-ver-actual">v1.0.6</b></span>
         <span style="color:var(--t)">Nueva: <b id="act-ver-nueva">--</b></span>
       </div>
       <div id="act-notas" style="font-size:12px;color:var(--g);margin-top:6px;max-height:80px;overflow-y:auto;line-height:1.4">
@@ -3928,46 +3928,50 @@ function sincronizarFurPerfil(){
 function goToNav(id){
   goTo(id);
   
-  if (id === 's-dashboard') {
-    checkCheckinDiario();
-    actualizarNombresUI();
-    chequearRecalibracionCiclo();
-    actualizarDashboard();
-  }
-  if (id === 's-ciclo') {
-    renderInfoEtapaMenopausia();
-    renderCicloGrafico();
-    renderHormonasCurvas();
-    try{ if(document.getElementById('ctab-energia').getAttribute('aria-pressed')==='true') renderEnergiaGrafico(); }catch(e){}
-  }
-  if (id === 's-entreno') {
-    cargarRutinaHoy();
-    aplicarAjusteCheckin();
-    actualizarEntrenoBadge();
-    renderEjercicios();
-    initCal();
-    actualizarProgresionSesion();
-  }
-  if (id === 's-perfil') {
-    sincronizarFurPerfil();
-    updStrikes();
-    actualizarRacha();      // nivel + logros
-    actualizarLogrosUI();   // badges de logros
-    const subCuest = document.getElementById('perfil-cuestionario-subtxt');
-    if (subCuest && ST.cuestionarioCompletado) subCuest.textContent = '✅ Cuestionario completado · Toca para editar';
-    
-    // E3: Sincronizar etapa vital mostrada en el perfil
-    const etapaEl = document.getElementById('perfil-etapa');
-    if(etapaEl && ST.etapa){
-      const ed = ETAPAS.find(e => e.id === ST.etapa);
-      if(ed) etapaEl.textContent = ed.e + ' ' + ed.n;
+  try {
+    if (id === 's-dashboard') {
+      checkCheckinDiario();
+      actualizarNombresUI();
+      chequearRecalibracionCiclo();
+      actualizarDashboard();
     }
-    const entornoEl = document.getElementById('perfil-entorno');
-    if(entornoEl && ST.entorno){
-      const ed = ENTORNOS.find(e => e.id === ST.entorno);
-      if(ed) entornoEl.textContent = ed.e+' '+ed.n+' · '+(ST.dias||3)+' días/sem';
+    if (id === 's-ciclo') {
+      renderInfoEtapaMenopausia();
+      renderCicloGrafico();
+      renderHormonasCurvas();
+      try{ if(document.getElementById('ctab-energia').getAttribute('aria-pressed')==='true') renderEnergiaGrafico(); }catch(e){}
     }
-    actualizarPerfilModoIA();
+    if (id === 's-entreno') {
+      cargarRutinaHoy();
+      aplicarAjusteCheckin();
+      actualizarEntrenoBadge();
+      renderEjercicios();
+      initCal();
+      actualizarProgresionSesion();
+    }
+    if (id === 's-perfil') {
+      sincronizarFurPerfil();
+      updStrikes();
+      actualizarRacha();      // nivel + logros
+      actualizarLogrosUI();   // badges de logros
+      const subCuest = document.getElementById('perfil-cuestionario-subtxt');
+      if (subCuest && ST.cuestionarioCompletado) subCuest.textContent = '✅ Cuestionario completado · Toca para editar';
+      
+      // E3: Sincronizar etapa vital mostrada en el perfil
+      const etapaEl = document.getElementById('perfil-etapa');
+      if(etapaEl && ST.etapa){
+        const ed = ETAPAS.find(e => e.id === ST.etapa);
+        if(ed) etapaEl.textContent = ed.e + ' ' + ed.n;
+      }
+      const entornoEl = document.getElementById('perfil-entorno');
+      if(entornoEl && ST.entorno){
+        const ed = ENTORNOS.find(e => e.id === ST.entorno);
+        if(ed) entornoEl.textContent = ed.e+' '+ed.n+' · '+(ST.dias||3)+' días/sem';
+      }
+      actualizarPerfilModoIA();
+    }
+  } catch (err) {
+    console.error('Error durante la carga de pantalla ' + id + ':', err);
   }
   
   const order = ['s-dashboard', 's-ciclo', 's-entreno', 's-tienda', 's-perfil'];
@@ -12017,6 +12021,11 @@ function riesgosPendientes(){
   return !(ST.riesgosAceptados && ST.riesgosAceptados.firma === firmaRiesgos());
 }
 
+/** Etapa de menopausia o condición de perimenopausia (con o sin otras patologías). */
+function etapaMenopausiaOPeri(){
+  return (typeof ST !== 'undefined' && ST.etapa === 'menopausia') || (typeof condicionesClinicas === 'function' && condicionesClinicas().includes('perimenopausia'));
+}
+
 const TEXTO_ENERGIA_SUFICIENTE = 'En esta etapa, entrenar la fuerza sin comer suficiente desgasta más de lo que suma. Si llevas varios días con la energía baja, asegúrate de que tus platos incluyan suficiente energía (carbohidratos y grasas saludables) y proteína.';
 const TEXTOS_MENOPAUSIA = [
   { t:'Fuerza',   d:'Mantiene la masa muscular y la densidad ósea que los estrógenos protegían. Es la base para seguir encontrándote fuerte y ágil con los años.' },
@@ -12330,18 +12339,18 @@ function actualizarDashboard() {
     : `Suplementación adaptada a tu etapa vital`;
   const nEl = document.getElementById('nombre-display');
   if(nEl) nEl.textContent = ST.nombreUsuaria ? 'Hola, ' + ST.nombreUsuaria + ' 👋' : 'Hola 👋';
-  actualizarRacha();
-  renderAlertas();
-  renderRecordatorioHormonal();
-  renderRecuperacionMuscular();
-  renderConsistenciaSemanal();
-  renderUltimoPR();
-  verificarOlvidoRegistro();
-  alertarVariabilidadAlta();
-  verificarDia1Regla();
+  try { actualizarRacha(); } catch(e) { console.warn('racha', e); }
+  try { renderAlertas(); } catch(e) { console.warn('alertas', e); }
+  try { renderRecordatorioHormonal(); } catch(e) { console.warn('recordatorioHormonal', e); }
+  try { renderRecuperacionMuscular(); } catch(e) { console.warn('recuperacionMuscular', e); }
+  try { renderConsistenciaSemanal(); } catch(e) { console.warn('consistenciaSemanal', e); }
+  try { renderUltimoPR(); } catch(e) { console.warn('ultimoPR', e); }
+  try { verificarOlvidoRegistro(); } catch(e) { console.warn('olvidoRegistro', e); }
+  try { alertarVariabilidadAlta(); } catch(e) { console.warn('variabilidadAlta', e); }
+  try { verificarDia1Regla(); } catch(e) { console.warn('dia1Regla', e); }
 
   // Predicción próxima fase (solo en casos no cubiertos por alertas)
-  actualizarPrediccion();
+  try { actualizarPrediccion(); } catch(e) { console.warn('prediccion', e); }
 }
 
 function actualizarFUR() {
@@ -14729,7 +14738,7 @@ function mostrarPopupCuestionario(){
 
 
 function initNavs(){
-  [['nav-dash','s-dashboard'],['nav-ciclo','s-ciclo'],['nav-entreno','s-entreno'],['nav-tienda','s-tienda'],['nav-perfil','s-perfil']].forEach(([navId,active])=>{
+  [['nav-dashboard','s-dashboard'],['nav-dash','s-dashboard'],['nav-ciclo','s-ciclo'],['nav-entreno','s-entreno'],['nav-tienda','s-tienda'],['nav-perfil','s-perfil']].forEach(([navId,active])=>{
     const el=document.getElementById(navId);
     if(el)renderNav(el,active);
   });
@@ -15099,11 +15108,11 @@ function exportarDatosUsuario() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ST, null, 2));
     const dlAnchor = document.createElement("a");
     dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.5.json");
+    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.6.json");
     document.body.appendChild(dlAnchor);
     dlAnchor.click();
     dlAnchor.remove();
-    toast_msg("Datos exportados en ona_mis_datos_v1.0.5.json");
+    toast_msg("Datos exportados en ona_mis_datos_v1.0.6.json");
   } catch(e) {
     toast_msg("No se pudo exportar los datos: " + e.message);
   }
@@ -15281,7 +15290,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.5";
+const APP_VERSION_ACTUAL = "1.0.6";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;
