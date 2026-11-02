@@ -774,6 +774,51 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
 .muscle-fill{height:8px;border-radius:4px;transition:width .6s}
 .semaforo{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 
+/* ══ VISITA GUIADA (TOUR INTERACTIVO CON SPOTLIGHT Y DESENFOQUE) ══ */
+#tour-backdrop-layer {
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 19, 18, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  mask: url(#spotlight-exact-mask);
+  -webkit-mask: url(#spotlight-exact-mask);
+  z-index: 9000;
+  pointer-events: auto;
+}
+#tour-spotlight-halo {
+  position: absolute;
+  z-index: 9001;
+  pointer-events: none;
+  border: 2px solid var(--t);
+  box-shadow: 0 0 0 3px rgba(0, 168, 163, 0.35), 0 0 20px rgba(0, 168, 163, 0.45);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: tourHaloPulse 2s infinite ease-in-out;
+}
+@keyframes tourHaloPulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(0, 168, 163, 0.35), 0 0 20px rgba(0, 168, 163, 0.45); }
+  50% { box-shadow: 0 0 0 6px rgba(0, 168, 163, 0.55), 0 0 28px rgba(0, 168, 163, 0.7); }
+}
+#tour-tooltip-card {
+  position: absolute;
+  z-index: 9002;
+  left: 16px;
+  right: 16px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#tour-tooltip-card.tooltip-pos-bottom {
+  bottom: 24px;
+  top: auto;
+}
+#tour-tooltip-card.tooltip-pos-top {
+  top: 24px;
+  bottom: auto;
+}
+
 </style>
 <link rel="stylesheet" href="ona_diseno.css">
 <script src="ona_iconos.js" defer></script>
@@ -1046,7 +1091,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
   </div>
   <div class="scroll" style="background:var(--benBg)">
     <!-- Saludo + insignias de racha y nivel -->
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+    <div id="dash-header-racha-wrap" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
       <div>
         <div id="dash-greeting" style="font-size:16px;font-weight:700;color:var(--benTxtP)"><span id="nombre-display">Hola 👋</span></div>
         <div id="dash-current-date" style="font-size:12px;font-weight:700;color:#00beba;text-transform:uppercase;letter-spacing:1.5px;margin-top:2px"></div>
@@ -1058,7 +1103,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     </div>
 
     <!-- BENTO GRID (bordes asimétricos a propósito: no es un fallo de CSS) -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div id="dash-bento-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
 
       <!-- Tarjeta grande 2x2: ciclo / etapa vital — sin fondo ni borde, se funde con la página -->
       <div id="dash-grad" style="grid-column:1/3;padding:20px 4px;display:flex;align-items:center;gap:14px">
@@ -1116,7 +1161,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <div id="dash-recordatorio-hormonal" style="display:none;flex-direction:column;gap:8px;margin-bottom:4px"></div>
 
     <!-- CTA doble: entrenar + 20 min -->
-    <div style="display:flex;gap:10px">
+    <div id="dash-btn-entrenar-wrap" style="display:flex;gap:10px">
       <button type="button" class="btn-entrenar" onclick="iniciarEntrenamientoFlujo(false)"><img src="silueta_entrenar.png" alt="" aria-hidden="true"><span>Vamos a entrenar</span></button>
       <button class="modo-rapido-btn" onclick="iniciarEntrenamientoFlujo(true)" style="padding:16px">⚡<br><span style="font-size:12px">20 min</span></button>
     </div>
@@ -1476,7 +1521,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
 <div class="screen" id="s-perfil">
   <div class="header"><span class="logo">ONA</span><span class="hlabel">Mi perfil</span></div>
   <div class="scroll">
-    <div class="card" style="position:relative;display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,var(--tl),var(--azl));padding:20px 16px;">
+    <div class="card" id="perfil-card-main" style="position:relative;display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,var(--tl),var(--azl));padding:20px 16px;">
       <button onclick="abrirEditarNombreModal()" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--t);font-size:13px;font-weight:600;cursor:pointer;padding:0;display:flex;align-items:center;gap:3px">
         ✏️ <span style="text-decoration:underline">Editar</span>
       </button>
@@ -1635,6 +1680,9 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
         <button id="perfil-ciclo-btn" class="btn-o" onclick="goToNav('s-ciclo')" style="text-align:left;display:flex;align-items:center;gap:10px;padding:12px 14px">
           <span style="font-size:18px">🌸</span><span style="font-size:15px;font-weight:600">Mi ciclo hormonal</span><span style="margin-left:auto;color:var(--g)">→</span>
         </button>
+        <button id="perfil-tour-btn" class="btn-o" onclick="iniciarVisitaGuiada(true)" style="text-align:left;display:flex;align-items:center;gap:10px;padding:12px 14px">
+          <span style="font-size:18px">✨</span><span style="font-size:15px;font-weight:600">Repetir visita guiada de la app</span><span style="margin-left:auto;color:var(--t);font-weight:700">Iniciar →</span>
+        </button>
         <button class="btn-o" onclick="goToNav('s-reportar')" style="text-align:left;display:flex;align-items:center;gap:12px">🐞 <span>Reportar un fallo o sugerencia</span></button>
       </div>
     </div>
@@ -1644,7 +1692,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div class="ctitle">🔄 Versión y Actualizaciones</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.8</span></div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.9</span></div>
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-version-subtxt">Canal oficial de GitHub</div>
         </div>
         <button class="btn-o" onclick="verificarActualizacionApp(true)" style="width:auto;padding:7px 12px;font-size:13px">Buscar actualización</button>
@@ -1865,7 +1913,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <!-- Detalles de la versión -->
     <div style="background:#f8f9fa;border-radius:12px;padding:10px 14px;margin-bottom:16px;text-align:left;border:1px solid #eee;">
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--n)">
-        <span>Versión actual: <b id="act-ver-actual">v1.0.8</b></span>
+        <span>Versión actual: <b id="act-ver-actual">v1.0.9</b></span>
         <span style="color:var(--t)">Nueva: <b id="act-ver-nueva">--</b></span>
       </div>
       <div id="act-notas" style="font-size:12px;color:var(--g);margin-top:6px;max-height:80px;overflow-y:auto;line-height:1.4">
@@ -1891,6 +1939,58 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       </button>
       <button class="save-btn" id="act-btn-descargar" onclick="descargarYInstalarActualizacion()" style="flex:1.2;padding:10px;font-size:14px;margin:0">
         Actualizar ahora
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ VISITA GUIADA (SPOTLIGHT CON RECORTE EXACTO Y DESENFOQUE) ══ -->
+<svg id="tour-svg-defs" style="position:absolute;width:0;height:0;pointer-events:none;overflow:hidden" aria-hidden="true">
+  <defs>
+    <mask id="spotlight-exact-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <!-- Capa blanca: aplica el desenfoque y oscurecimiento en el fondo -->
+      <rect id="tour-mask-base" x="0" y="0" width="100%" height="100%" fill="white" />
+      <!-- Hueco negro: perfora la máscara dejando el elemento 100% nítido -->
+      <rect id="tour-cutout-rect" x="0" y="0" width="0" height="0" rx="14" fill="black" />
+      <circle id="tour-cutout-circle" cx="-500" cy="-500" r="0" fill="black" />
+    </mask>
+  </defs>
+</svg>
+
+<div id="tour-backdrop-layer" style="display:none"></div>
+<div id="tour-spotlight-halo" style="display:none"></div>
+
+<div id="tour-tooltip-card" class="tooltip-pos-bottom" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <span id="tour-step-tag" style="background:var(--tl);color:var(--t);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:3px 8px;border-radius:10px">Inicio · 1 de 10</span>
+    <button onclick="finalizarVisitaGuiada(true)" style="background:none;border:none;color:var(--g);font-size:12px;font-weight:600;cursor:pointer;padding:4px">Saltar guía</button>
+  </div>
+  <div id="tour-step-title" style="font-size:16px;font-weight:800;color:var(--n);margin-bottom:6px;line-height:1.3">1. Saludo, Racha y Nivel de Hábito</div>
+  <div id="tour-step-desc" style="font-size:13.5px;color:var(--g);line-height:1.55;margin-bottom:16px">Accede a tu saludo diario, racha de días constantes y tu nivel de hábito actual.</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f0f0f0;padding-top:12px">
+    <span id="tour-step-count" style="font-size:12px;font-weight:700;color:var(--gt)">1 / 10</span>
+    <div style="display:flex;gap:8px">
+      <button id="btn-tour-prev" class="btn-o" onclick="tourPasoAnterior()" style="padding:7px 14px;font-size:13px;border-radius:10px" disabled>← Anterior</button>
+      <button id="btn-tour-next" class="btn-t" onclick="tourPasoSiguiente()" style="padding:7px 18px;font-size:13px;border-radius:10px">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-bienvenida-tour" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:9990;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;">
+  <div style="background:var(--b);border-radius:24px;padding:26px 22px;max-width:360px;width:100%;box-shadow:0 16px 40px rgba(0,0,0,0.35);text-align:center;position:relative;border:1.5px solid var(--linea,#e0e0e0)">
+    <div style="width:58px;height:58px;border-radius:50%;background:rgba(0,168,163,0.12);color:var(--t);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:30px">
+      ✨
+    </div>
+    <div style="font-size:19px;font-weight:800;color:var(--n);margin-bottom:8px">¡Bienvenida a ONA Digital!</div>
+    <div style="font-size:14px;color:var(--g);line-height:1.6;margin-bottom:18px">
+      Hemos preparado una visita rápida de 10 pasos para que conozcas todas las secciones: entrenamientos, fases del ciclo, energía y tu asistente inteligente.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn-t" onclick="comenzarTourDesdeModal()" style="width:100%;padding:13px;font-size:15px;font-weight:700">
+        Comenzar visita guiada →
+      </button>
+      <button class="btn-o" onclick="omitirVisitaGuiadaInicial()" style="width:100%;padding:11px;font-size:13px;color:var(--g);border-color:#e0e0e0">
+        Explorar por mi cuenta
       </button>
     </div>
   </div>
@@ -3634,6 +3734,7 @@ const ST = {
   checkinUltimo: null,
   historialSesiones: [],
   onboardingDone: false,
+  visitaGuiadaDone: false,
   mp: null,
   me: null,
   nombreUsuaria:       '',
@@ -3892,6 +3993,8 @@ function _popupCuestionarioInicial() {
     ST._cuestionarioPopupVisto = true;
     saveState();
     setTimeout(mostrarPopupCuestionario, 600);
+  } else if (!ST.visitaGuiadaDone) {
+    setTimeout(mostrarModalBienvenidaTour, 600);
   }
 }
 
@@ -14661,7 +14764,11 @@ function cuestFinalizar(){
 
   // Siempre se vuelve al dashboard y las recomendaciones se muestran encima
   goToNav('s-dashboard');
-  setTimeout(() => mostrarRecomendacionesCuestionario(), 600);
+  if (recomendaciones?.length) {
+    setTimeout(() => mostrarRecomendacionesCuestionario(), 600);
+  } else if (!ST.visitaGuiadaDone) {
+    setTimeout(mostrarModalBienvenidaTour, 600);
+  }
 }
 
 function generarRecomendacionesCuestionario(r){
@@ -14755,7 +14862,7 @@ function mostrarRecomendacionesCuestionario(){
         <div class="m-title">🎯 Recomendaciones para ti</div>
         <div class="m-sub">Basadas en tu cuestionario de personalización</div>
       </div>
-      <button class="m-x" onclick="cerrarOv()">✕</button>
+      <button class="m-x" onclick="cerrarOv();if(!ST.visitaGuiadaDone){setTimeout(mostrarModalBienvenidaTour,400)}">✕</button>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
       ${recs.map(r=>`
@@ -14764,7 +14871,7 @@ function mostrarRecomendacionesCuestionario(){
         </div>`).join('')}
     </div>
     <div style="font-size:13px;color:var(--g);text-align:center;margin-bottom:12px">Estas recomendaciones se irán aplicando en tu entrenamiento progresivamente.</div>
-    <button class="btn-t" onclick="cerrarOv()">Entendido</button>
+    <button class="btn-t" onclick="cerrarOv();if(!ST.visitaGuiadaDone){setTimeout(mostrarModalBienvenidaTour,400)}">Entendido</button>
   </div>`);
 }
 
@@ -14818,7 +14925,7 @@ function mostrarPopupCuestionario(){
     <button class="btn-t" style="width:100%;margin-bottom:10px" onclick="cerrarOv();goTo('s-cuestionario')">
       Sí, quiero personalizarlo más →
     </button>
-    <button class="btn-o" style="width:100%" onclick="cerrarOv()">
+    <button class="btn-o" style="width:100%" onclick="cerrarOv();if(!ST.visitaGuiadaDone){setTimeout(mostrarModalBienvenidaTour,400)}">
       Ahora no, seguir a mi panel
     </button>
 
@@ -14852,8 +14959,8 @@ function obtenerDiagnosticoTecnico(){
   const ciclo = typeof calcularCiclo === 'function' ? calcularCiclo() : { dia: 'N/A', fase: 'N/A' };
   
   return {
-    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.8',
-    build: '8',
+    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.9',
+    build: '9',
     plataforma: platform,
     userAgent: navigator.userAgent,
     resolucion: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight} (dpr: ${window.devicePixelRatio || 1})` : 'N/A',
@@ -15367,11 +15474,11 @@ function exportarDatosUsuario() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ST, null, 2));
     const dlAnchor = document.createElement("a");
     dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.8.json");
+    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.9.json");
     document.body.appendChild(dlAnchor);
     dlAnchor.click();
     dlAnchor.remove();
-    toast_msg("Datos exportados en ona_mis_datos_v1.0.8.json");
+    toast_msg("Datos exportados en ona_mis_datos_v1.0.9.json");
   } catch(e) {
     toast_msg("No se pudo exportar los datos: " + e.message);
   }
@@ -15524,6 +15631,9 @@ async function continueStartApp() {
     }
 
     goToNav('s-dashboard');
+    if (!ST.visitaGuiadaDone) {
+      setTimeout(mostrarModalBienvenidaTour, 700);
+    }
   } else {
     // Retoma el cuestionario en el primer paso sin completar
     goTo(hasState ? pasoParaRetomar() : 's-welcome');
@@ -15554,7 +15664,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.8";
+const APP_VERSION_ACTUAL = "1.0.9";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;
@@ -15746,6 +15856,361 @@ async function descargarYInstalarActualizacion() {
   }
   cerrarModalActualizacion();
 }
+
+// ════════════════════════════════════════════════════════════════════
+// VISITA GUIADA (TOUR INTERACTIVO - SPOTLIGHT CON RECORTE Y DESENFOQUE)
+// ════════════════════════════════════════════════════════════════════
+const TOUR_PASOS = [
+  {
+    paso: 1,
+    screen: 's-dashboard',
+    targetId: 'dash-header-racha-wrap',
+    posTooltip: 'bottom',
+    isCircle: false,
+    pad: 6,
+    rx: 14,
+    tag: 'Inicio · Tu Ritmo',
+    title: '1. Saludo, Racha y Nivel de Hábito',
+    desc: 'Aquí ves tu constancia con el contador de racha y tu nivel de hábito. Con cada entreno o check-in tu hábito sigue creciendo.'
+  },
+  {
+    paso: 2,
+    screen: 's-dashboard',
+    targetId: 'dash-btn-entrenar-wrap',
+    posTooltip: 'top',
+    isCircle: false,
+    pad: 6,
+    rx: 16,
+    tag: 'Inicio · Acción',
+    title: '2. Vamos a Entrenar y Modo 20 min',
+    desc: 'Inicia tu sesión del día adaptada a ti. Si vas justa de tiempo o energía, pulsa «⚡ 20 min» para una versión express concentrada.'
+  },
+  {
+    paso: 3,
+    screen: 's-dashboard',
+    targetId: 'dash-bento-grid',
+    posTooltip: 'bottom',
+    isCircle: false,
+    pad: 6,
+    rx: 16,
+    tag: 'Inicio · Visión Global',
+    title: '3. Bento Grid: Ciclo, Hábitos y Alertas',
+    desc: 'Panel dinámico con tu fase hormonal, adherencia semanal, avisos fisiológicos y recomendaciones personalizadas en tiempo real.'
+  },
+  {
+    paso: 4,
+    screen: 's-entreno',
+    subtabEntreno: 'hoy',
+    targetId: 'ent-sub-hoy',
+    posTooltip: 'bottom',
+    isCircle: false,
+    pad: 6,
+    rx: 14,
+    tag: 'Entreno · Hoy',
+    title: '4. Subpestaña «Hoy» y Código Rojo',
+    desc: 'Tu sesión del día con series, RIR, pesos y descansos cronometrados. Además, incluye el Código Rojo con señales clínicas de parada segura.'
+  },
+  {
+    paso: 5,
+    screen: 's-entreno',
+    subtabEntreno: 'progreso',
+    targetId: 'ent-sub-progreso',
+    posTooltip: 'bottom',
+    isCircle: false,
+    pad: 6,
+    rx: 14,
+    tag: 'Entreno · Progreso',
+    title: '5. Subpestaña «Progreso»',
+    desc: 'Analiza tu volumen de fuerza acumulado, calendario de adherencia con fases hormonales y el mapa corporal de estímulo muscular.'
+  },
+  {
+    paso: 6,
+    screen: 's-entreno',
+    subtabEntreno: 'historial',
+    targetId: 'ent-sub-historial',
+    posTooltip: 'bottom',
+    isCircle: false,
+    pad: 6,
+    rx: 14,
+    tag: 'Entreno · Historial',
+    title: '6. Subpestaña «Historial»',
+    desc: 'Revisa todas tus sesiones completadas en detalle y genera tu tarjeta visual para celebrar y compartir tus logros en redes.'
+  },
+  {
+    paso: 7,
+    screen: 's-ciclo',
+    subtabCiclo: 'ciclo',
+    targetId: 'ciclo-flor-card',
+    posTooltip: 'bottom',
+    isCircle: false,
+    pad: 6,
+    rx: 16,
+    tag: 'Ciclo · Mi ciclo',
+    title: '7. Rueda Floral de 28 Días y Diario',
+    desc: 'Visualiza tu ciclo completo con la flor ONA de 28 pétalos. Toca en «Diario de síntomas» para registrar cómo te sientes hoy.'
+  },
+  {
+    paso: 8,
+    screen: 's-ciclo',
+    subtabCiclo: 'energia',
+    targetId: 'ciclo-tab-energia',
+    posTooltip: 'bottom',
+    isCircle: false,
+    pad: 6,
+    rx: 14,
+    tag: 'Ciclo · Energía',
+    title: '8. Curva de Energía a 12 Semanas',
+    desc: 'Seguimiento continuo de tu vitalidad a lo largo de las semanas, especialmente diseñado para perimenopausia, menopausia o ciclos irregulares.'
+  },
+  {
+    paso: 9,
+    screen: 's-dashboard',
+    targetId: 'chat-fab',
+    posTooltip: 'top',
+    isCircle: true,
+    pad: 4,
+    tag: 'Asistente · IA ONA',
+    title: '9. Tu Asistente Chat Cerebro',
+    desc: 'Tu aliada inteligente disponible 24h. Pulsa este botón flotante para resolver cualquier duda sobre técnica, nutrición, ciclo o adaptaciones.'
+  },
+  {
+    paso: 10,
+    screen: 's-perfil',
+    targetId: 'perfil-card-main',
+    posTooltip: 'bottom',
+    isCircle: false,
+    pad: 6,
+    rx: 16,
+    tag: 'Perfil · Configuración',
+    title: '10. Tu Perfil y Repetir Visita Guiada',
+    desc: 'Gestiona tu etapa vital, material disponible y chequeo LEAF-Q. Siempre que quieras recordar estas funciones, usa el botón «Repetir visita guiada».'
+  }
+];
+
+let _tourPasoActual = 0;
+let _tourActivo = false;
+
+function iniciarVisitaGuiada(forzar = false) {
+  if (_tourActivo) return;
+  _tourActivo = true;
+  _tourPasoActual = 0;
+
+  // Ocultar bocadillo de bienvenida del chat para que no interfiera
+  const bocadillo = document.getElementById('chat-bocadillo');
+  if (bocadillo) bocadillo.style.opacity = '0';
+
+  const backdrop = document.getElementById('tour-backdrop-layer');
+  const halo = document.getElementById('tour-spotlight-halo');
+  const tooltip = document.getElementById('tour-tooltip-card');
+  if (backdrop) backdrop.style.display = 'block';
+  if (halo) halo.style.display = 'block';
+  if (tooltip) tooltip.style.display = 'block';
+
+  renderPasoTour(0);
+}
+
+function renderPasoTour(idx) {
+  if (idx < 0 || idx >= TOUR_PASOS.length) return;
+  _tourPasoActual = idx;
+  const cfg = TOUR_PASOS[idx];
+
+  // 1. Navegar a la pantalla correspondiente
+  if (cfg.screen) {
+    goToNav(cfg.screen);
+  }
+
+  // 2. Subpestañas específicas
+  if (cfg.subtabEntreno) {
+    cambiarSubTabEntreno(cfg.subtabEntreno);
+  }
+  if (cfg.subtabCiclo) {
+    cicloTab(cfg.subtabCiclo);
+  }
+
+  // 3. Scroll suave al elemento si no es fijo ni circular
+  const targetEl = document.getElementById(cfg.targetId);
+  if (targetEl && !cfg.isCircle && cfg.targetId !== 'chat-fab') {
+    try {
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (e) {
+      targetEl.scrollIntoView();
+    }
+  }
+
+  // 4. Actualizar máscara de corte exacto
+  setTimeout(() => {
+    const el = document.getElementById(cfg.targetId);
+    if (el) ajustarMascaraExacta(el, cfg.isCircle, cfg.pad, cfg.rx);
+  }, 60);
+  setTimeout(() => {
+    const el = document.getElementById(cfg.targetId);
+    if (el) ajustarMascaraExacta(el, cfg.isCircle, cfg.pad, cfg.rx);
+  }, 220);
+
+  // 5. Textos y posición del tooltip
+  const tagEl = document.getElementById('tour-step-tag');
+  const titleEl = document.getElementById('tour-step-title');
+  const descEl = document.getElementById('tour-step-desc');
+  const countEl = document.getElementById('tour-step-count');
+  const btnPrev = document.getElementById('btn-tour-prev');
+  const btnNext = document.getElementById('btn-tour-next');
+
+  if (tagEl) tagEl.textContent = `${cfg.tag} · ${cfg.paso} de 10`;
+  if (titleEl) titleEl.textContent = cfg.title;
+  if (descEl) descEl.textContent = cfg.desc;
+  if (countEl) countEl.textContent = `${cfg.paso} / 10`;
+
+  if (btnPrev) btnPrev.disabled = (_tourPasoActual === 0);
+  if (btnNext) {
+    btnNext.textContent = (_tourPasoActual === TOUR_PASOS.length - 1) ? '¡Finalizar! 🚀' : 'Siguiente →';
+  }
+
+  const tooltip = document.getElementById('tour-tooltip-card');
+  if (tooltip) {
+    if (cfg.posTooltip === 'top') {
+      tooltip.className = 'tooltip-pos-top';
+    } else {
+      tooltip.className = 'tooltip-pos-bottom';
+    }
+  }
+}
+
+function ajustarMascaraExacta(targetEl, isCircle = false, pad = 6, rx = 14) {
+  const phone = document.getElementById('phone') || document.querySelector('.phone');
+  if (!phone || !targetEl) return;
+  const phoneRect = phone.getBoundingClientRect();
+  const targetRect = targetEl.getBoundingClientRect();
+
+  // Asegurar que el fondo blanco de la máscara cubra exactamente el teléfono
+  const baseRect = document.getElementById('tour-mask-base');
+  if (baseRect) {
+    baseRect.setAttribute('width', Math.round(phoneRect.width));
+    baseRect.setAttribute('height', Math.round(phoneRect.height));
+  }
+
+  const p = (typeof pad === 'number') ? pad : 6;
+  const x = Math.round(targetRect.left - phoneRect.left - p);
+  const y = Math.round(targetRect.top - phoneRect.top - p);
+  const w = Math.round(targetRect.width + p * 2);
+  const h = Math.round(targetRect.height + p * 2);
+
+  const maskRect = document.getElementById('tour-cutout-rect');
+  const maskCircle = document.getElementById('tour-cutout-circle');
+  const halo = document.getElementById('tour-spotlight-halo');
+
+  if (isCircle) {
+    if (maskRect) {
+      maskRect.setAttribute('width', '0');
+      maskRect.setAttribute('height', '0');
+    }
+    const cx = Math.round(x + w / 2);
+    const cy = Math.round(y + h / 2);
+    const r = Math.round(Math.max(w, h) / 2);
+
+    if (maskCircle) {
+      maskCircle.setAttribute('cx', cx);
+      maskCircle.setAttribute('cy', cy);
+      maskCircle.setAttribute('r', r);
+    }
+    if (halo) {
+      halo.style.left = (cx - r) + 'px';
+      halo.style.top = (cy - r) + 'px';
+      halo.style.width = (r * 2) + 'px';
+      halo.style.height = (r * 2) + 'px';
+      halo.style.borderRadius = '50%';
+    }
+  } else {
+    if (maskCircle) {
+      maskCircle.setAttribute('r', '0');
+      maskCircle.setAttribute('cx', '-500');
+      maskCircle.setAttribute('cy', '-500');
+    }
+    if (maskRect) {
+      maskRect.setAttribute('x', x);
+      maskRect.setAttribute('y', y);
+      maskRect.setAttribute('width', Math.max(0, w));
+      maskRect.setAttribute('height', Math.max(0, h));
+      maskRect.setAttribute('rx', rx || 14);
+    }
+    if (halo) {
+      halo.style.left = x + 'px';
+      halo.style.top = y + 'px';
+      halo.style.width = Math.max(0, w) + 'px';
+      halo.style.height = Math.max(0, h) + 'px';
+      halo.style.borderRadius = (rx || 14) + 'px';
+    }
+  }
+}
+
+function tourPasoSiguiente() {
+  if (_tourPasoActual < TOUR_PASOS.length - 1) {
+    renderPasoTour(_tourPasoActual + 1);
+  } else {
+    finalizarVisitaGuiada(false);
+  }
+}
+
+function tourPasoAnterior() {
+  if (_tourPasoActual > 0) {
+    renderPasoTour(_tourPasoActual - 1);
+  }
+}
+
+function finalizarVisitaGuiada(saltado = false) {
+  _tourActivo = false;
+  ST.visitaGuiadaDone = true;
+  saveState();
+
+  const backdrop = document.getElementById('tour-backdrop-layer');
+  const halo = document.getElementById('tour-spotlight-halo');
+  const tooltip = document.getElementById('tour-tooltip-card');
+  if (backdrop) backdrop.style.display = 'none';
+  if (halo) halo.style.display = 'none';
+  if (tooltip) tooltip.style.display = 'none';
+
+  // Restaurar visibilidad del bocadillo del chat
+  const bocadillo = document.getElementById('chat-bocadillo');
+  if (bocadillo) bocadillo.style.opacity = '';
+
+  goToNav('s-dashboard');
+  if (!saltado) {
+    toast_msg('✨ ¡Visita guiada completada! Ya conoces todo el potencial de ONA');
+  }
+}
+
+function mostrarModalBienvenidaTour() {
+  const m = document.getElementById('modal-bienvenida-tour');
+  if (m) m.style.display = 'flex';
+}
+
+function comenzarTourDesdeModal() {
+  const m = document.getElementById('modal-bienvenida-tour');
+  if (m) m.style.display = 'none';
+  iniciarVisitaGuiada(true);
+}
+
+function omitirVisitaGuiadaInicial() {
+  const m = document.getElementById('modal-bienvenida-tour');
+  if (m) m.style.display = 'none';
+  ST.visitaGuiadaDone = true;
+  saveState();
+}
+
+window.addEventListener('resize', () => {
+  if (_tourActivo && TOUR_PASOS[_tourPasoActual]) {
+    const cfg = TOUR_PASOS[_tourPasoActual];
+    const el = document.getElementById(cfg.targetId);
+    if (el) ajustarMascaraExacta(el, cfg.isCircle, cfg.pad, cfg.rx);
+  }
+});
+
+document.addEventListener('scroll', () => {
+  if (_tourActivo && TOUR_PASOS[_tourPasoActual]) {
+    const cfg = TOUR_PASOS[_tourPasoActual];
+    const el = document.getElementById(cfg.targetId);
+    if (el) ajustarMascaraExacta(el, cfg.isCircle, cfg.pad, cfg.rx);
+  }
+}, true);
 
 startApp();
 // Comprobar actualización automáticamente 3 segundos tras el arranque
