@@ -1670,6 +1670,18 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div id="strikes-info" style="font-size:14px;color:var(--g);line-height:1.6">Ninguno aún. Si cambias un ejercicio 3 veces, deja de salirte en tu plan.</div>
     </div>
 
+    <!-- Guía de inicio y bienvenida -->
+    <div class="card" style="border-color:var(--t);background:linear-gradient(135deg,rgba(0,168,163,0.08),rgba(102,191,227,0.05));cursor:pointer" onclick="iniciarVisitaGuiada(true)" role="button" tabindex="0" onkeydown="if(event.key==='Enter')iniciarVisitaGuiada(true)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:26px" aria-hidden="true">✨</div>
+        <div style="flex:1">
+          <div style="font-size:15px;font-weight:700;color:var(--n)">Guía de inicio de ONA</div>
+          <div style="font-size:13px;color:var(--g);margin-top:2px">Vuelve a ver la visita guiada paso a paso por todas las funciones de la aplicación.</div>
+        </div>
+        <button id="perfil-tour-btn" class="btn-t" style="width:auto;padding:8px 14px;font-size:13px;font-weight:700;white-space:nowrap" onclick="event.stopPropagation();iniciarVisitaGuiada(true)">Ver guía →</button>
+      </div>
+    </div>
+
     <!-- Más contenido -->
     <div class="card">
       <div class="ctitle">Más contenido</div>
@@ -1680,8 +1692,8 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
         <button id="perfil-ciclo-btn" class="btn-o" onclick="goToNav('s-ciclo')" style="text-align:left;display:flex;align-items:center;gap:10px;padding:12px 14px">
           <span style="font-size:18px">🌸</span><span style="font-size:15px;font-weight:600">Mi ciclo hormonal</span><span style="margin-left:auto;color:var(--g)">→</span>
         </button>
-        <button id="perfil-tour-btn" class="btn-o" onclick="iniciarVisitaGuiada(true)" style="text-align:left;display:flex;align-items:center;gap:10px;padding:12px 14px">
-          <span style="font-size:18px">✨</span><span style="font-size:15px;font-weight:600">Repetir visita guiada de la app</span><span style="margin-left:auto;color:var(--t);font-weight:700">Iniciar →</span>
+        <button id="perfil-tour-btn-sub" class="btn-o" onclick="iniciarVisitaGuiada(true)" style="text-align:left;display:flex;align-items:center;gap:10px;padding:12px 14px">
+          <span style="font-size:18px">✨</span><span style="font-size:15px;font-weight:600">Volver a ver la guía de inicio</span><span style="margin-left:auto;color:var(--t);font-weight:700">Iniciar →</span>
         </button>
         <button class="btn-o" onclick="goToNav('s-reportar')" style="text-align:left;display:flex;align-items:center;gap:12px">🐞 <span>Reportar un fallo o sugerencia</span></button>
       </div>
@@ -1692,7 +1704,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div class="ctitle">🔄 Versión y Actualizaciones</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.9</span></div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.10</span></div>
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-version-subtxt">Canal oficial de GitHub</div>
         </div>
         <button class="btn-o" onclick="verificarActualizacionApp(true)" style="width:auto;padding:7px 12px;font-size:13px">Buscar actualización</button>
@@ -1913,7 +1925,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <!-- Detalles de la versión -->
     <div style="background:#f8f9fa;border-radius:12px;padding:10px 14px;margin-bottom:16px;text-align:left;border:1px solid #eee;">
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--n)">
-        <span>Versión actual: <b id="act-ver-actual">v1.0.9</b></span>
+        <span>Versión actual: <b id="act-ver-actual">v1.0.10</b></span>
         <span style="color:var(--t)">Nueva: <b id="act-ver-nueva">--</b></span>
       </div>
       <div id="act-notas" style="font-size:12px;color:var(--g);margin-top:6px;max-height:80px;overflow-y:auto;line-height:1.4">
@@ -3808,7 +3820,7 @@ const CAMPOS_PERSISTIDOS_EXTRA = [
   'condicionesHormonales','anticonceptivosHormonales','_alertaTCA','_prescripcionMedica','_prescripcionMedicaConfirmada',
   '_arrancarDesdeNivelBajo','_alertasClinicas','diarioSintomas','energiaHist','_historialInicioCiclo','_ovulacionConfirmadaDia',
   '_ovulacionesRegistradas','_sintomasLuteos','_ultimoAviso','_ultimoAvisoDia1','_ultimoAvisoDia1Fecha',
-  'cuestionario','cuestionarioCompletado','_recomendacionesCuestionario','_cuestionarioPopupVisto','_modoEjercicio','posparto','bloqueActivacionHecho','riesgosAceptados','medidas','alturaCm','extrasHoy','_stickyEjercicioId','_recalibrarRespondidoFecha',
+  'cuestionario','cuestionarioCompletado','_recomendacionesCuestionario','_cuestionarioPopupVisto','_modoEjercicio','posparto','bloqueActivacionHecho','riesgosAceptados','medidas','alturaCm','extrasHoy','_stickyEjercicioId','_recalibrarRespondidoFecha','visitaGuiadaDone',
 ];
 
 async function saveState() {
@@ -3844,6 +3856,7 @@ async function saveState() {
       fasePreferences: ST.fasePreferences || {},
       fotoPerfil: ST.fotoPerfil,
       onboardingDone: !!ST.onboardingDone,
+      visitaGuiadaDone: !!ST.visitaGuiadaDone,
       consentAt: ST.consentAt || null,
       consentVersion: ST.consentVersion || null,
       consentParqConSi: !!ST.consentParqConSi,
@@ -14959,8 +14972,8 @@ function obtenerDiagnosticoTecnico(){
   const ciclo = typeof calcularCiclo === 'function' ? calcularCiclo() : { dia: 'N/A', fase: 'N/A' };
   
   return {
-    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.9',
-    build: '9',
+    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.10',
+    build: '10',
     plataforma: platform,
     userAgent: navigator.userAgent,
     resolucion: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight} (dpr: ${window.devicePixelRatio || 1})` : 'N/A',
@@ -15474,11 +15487,11 @@ function exportarDatosUsuario() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ST, null, 2));
     const dlAnchor = document.createElement("a");
     dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.9.json");
+    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.10.json");
     document.body.appendChild(dlAnchor);
     dlAnchor.click();
     dlAnchor.remove();
-    toast_msg("Datos exportados en ona_mis_datos_v1.0.9.json");
+    toast_msg("Datos exportados en ona_mis_datos_v1.0.10.json");
   } catch(e) {
     toast_msg("No se pudo exportar los datos: " + e.message);
   }
@@ -15631,9 +15644,6 @@ async function continueStartApp() {
     }
 
     goToNav('s-dashboard');
-    if (!ST.visitaGuiadaDone) {
-      setTimeout(mostrarModalBienvenidaTour, 700);
-    }
   } else {
     // Retoma el cuestionario en el primer paso sin completar
     goTo(hasState ? pasoParaRetomar() : 's-welcome');
@@ -15664,7 +15674,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.9";
+const APP_VERSION_ACTUAL = "1.0.10";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;

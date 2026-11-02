@@ -19,24 +19,24 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.9**
+## 🤖 Versión para Android (Instalador APK): **v1.0.10**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.9-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.9/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.10-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.10/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.9 (código 9)
+- **Versión:** 1.0.10 (código 10)
 - **Tamaño:** ~29.50 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.9:
-- **Visita Guiada Exhaustiva e Interactiva:** Recorrido visual paso a paso para nuevas socias al terminar el onboarding inicial (o el cuestionario avanzado), y repetible en cualquier momento desde Mi Perfil.
+## 🌟 Novedades v1.0.10:
+- **Ajuste del Disparador de la Visita Guiada:** La guía de inicio salta única y exclusivamente tras completar los cuestionarios iniciales la primera vez que se utiliza la aplicación. En los arranques posteriores normales, la aplicación abre directamente en el panel principal sin interrumpir a la usuaria.
+- **Acceso Permanente y Destacado en Mi Perfil:** Se añade en la pantalla de Perfil una tarjeta destacada (`✨ Visita guiada de la app`) y una opción en el menú para volver a ver la guía interactiva en cualquier momento.
+- **Persistencia Robusta del Estado de la Guía:** Integración de `visitaGuiadaDone` en el esquema de almacenamiento seguro (`localStorage` y `Capacitor.Preferences`) para evitar cualquier repetición indeseada entre sesiones.
 - **Efecto Spotlight Matemático con Recorte Exacto y Desenfoque:** Todo el fondo de la pantalla se oscurece y desenfoca con `backdrop-filter: blur(4px)`, recortando matemáticamente mediante máscara SVG (`userSpaceOnUse`) la tarjeta o botón resaltado para mantenerlo 100% nítido, cristalino y brillante, sin oscurecimiento ni blur.
 - **Cobertura Completa de Secciones y Subpestañas (10 Pasos):** Guía por el Saludo y Racha, Botón Entrenar y Modo 20 min, Bento Grid, Entreno (subpestañas Hoy, Progreso con Body Map y Fuerza, Historial con tarjeta social), Ciclo (Rueda de 28 pétalos, Diario de síntomas y Curva de energía a 12 semanas), Asistente Inteligente flotante y Mi Perfil.
-- **Enfoque Circular Exacto en el Asistente:** Resaltado preciso del botón del cerebro (`#chat-fab`) en círculo con halo adaptativo y tooltip en zona superior para una experiencia visual libre de desbordamientos.
-- **Hotfix de Pantalla Blanca y Desaparición Automática del Prompt del Ciclo:** Mantenimiento de la estabilidad crítica introducida en v1.0.8 con arranque blindado.
 
 ---
 
