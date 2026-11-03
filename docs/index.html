@@ -778,7 +778,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
 #tour-backdrop-layer {
   position: absolute;
   inset: 0;
-  background: rgba(7, 19, 18, 0.72);
+  background: rgba(3, 26, 24, 0.84);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   mask: url(#spotlight-exact-mask);
@@ -790,32 +790,101 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
   position: absolute;
   z-index: 9001;
   pointer-events: none;
-  border: 2px solid var(--t);
-  box-shadow: 0 0 0 3px rgba(0, 168, 163, 0.35), 0 0 20px rgba(0, 168, 163, 0.45);
+  border: 3px solid #2FE0D6;
+  box-shadow: 0 0 0 3px rgba(47, 224, 214, 0.45), 0 0 24px rgba(47, 224, 214, 0.7);
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   animation: tourHaloPulse 2s infinite ease-in-out;
 }
 @keyframes tourHaloPulse {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(0, 168, 163, 0.35), 0 0 20px rgba(0, 168, 163, 0.45); }
-  50% { box-shadow: 0 0 0 6px rgba(0, 168, 163, 0.55), 0 0 28px rgba(0, 168, 163, 0.7); }
+  0%, 100% { box-shadow: 0 0 0 3px rgba(47, 224, 214, 0.45), 0 0 24px rgba(47, 224, 214, 0.7); }
+  50% { box-shadow: 0 0 0 7px rgba(47, 224, 214, 0.65), 0 0 34px rgba(47, 224, 214, 0.9); }
 }
 #tour-tooltip-card {
   position: absolute;
   z-index: 9002;
-  left: 16px;
-  right: 16px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 18px 20px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  left: 0;
+  right: 0;
+  background: #0B4F4B;
+  border-radius: 0;
+  border-top: 4px solid #2FE0D6;
+  padding: 16px 18px 14px;
+  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.4);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+/* Tarjeta «Antes de entrenar»: misma estética que las tarjetas de aviso, en rojo ONA (Inicio y Entreno) */
+#s-entreno .aviso-riesgos.card, #s-dashboard .aviso-riesgos.card { position: relative; overflow: hidden; background: linear-gradient(135deg, #F6DFE1 0%, #E9B4BA 100%) !important; border: 0 !important; border-radius: 28px !important; box-shadow: none !important; padding: 22px 22px 24px !important; }
+#s-entreno .aviso-riesgos.card::after, #s-dashboard .aviso-riesgos.card::after { content: ""; position: absolute; top: -70px; right: -70px; width: 190px; height: 190px; border-radius: 50%; background: rgba(255,255,255,.32); pointer-events: none; }
+#s-entreno .aviso-riesgos.card > *, #s-dashboard .aviso-riesgos.card > * { position: relative; z-index: 1; }
+#s-entreno .aviso-riesgos .ar-cab, #s-dashboard .aviso-riesgos .ar-cab { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+#s-entreno .aviso-riesgos .ar-avatar, #s-dashboard .aviso-riesgos .ar-avatar { width: 40px; height: 40px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; flex: 0 0 auto; }
+#s-entreno .aviso-riesgos .ar-app, #s-dashboard .aviso-riesgos .ar-app { font-size: 15px; font-weight: 700; color: #4A1218; }
+#s-entreno .aviso-riesgos .ar-titulo, #s-dashboard .aviso-riesgos .ar-titulo { font-family: var(--display); font-weight: 400 !important; font-size: 21px; line-height: 1.25; color: #4A1218; margin-bottom: 8px; }
+#s-entreno .aviso-riesgos .ar-texto, #s-dashboard .aviso-riesgos .ar-texto { font-size: 14.5px; line-height: 1.55; color: #6B2B33; }
+#s-entreno .aviso-riesgos .ar-aparte, #s-dashboard .aviso-riesgos .ar-aparte { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(168,20,42,.18); }
+#s-entreno .aviso-riesgos .ar-lista, #s-dashboard .aviso-riesgos .ar-lista { margin: 8px 0 12px 18px; padding: 0; font-size: 14.5px; line-height: 1.55; color: #6B2B33; }
+#s-entreno .aviso-riesgos .ar-det, #s-dashboard .aviso-riesgos .ar-det { margin-bottom: 14px; }
+#s-entreno .aviso-riesgos .ar-alarma, #s-dashboard .aviso-riesgos .ar-alarma { font-size: 14px; font-weight: 700; color: #A8142A; cursor: pointer; }
+#s-entreno .aviso-riesgos .ar-boton, #s-dashboard .aviso-riesgos .ar-boton { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; margin-top: 10px; padding: 13px 20px; background: #fff !important; color: #A8142A !important; border: 0 !important; border-radius: 999px !important; box-shadow: 0 2px 8px rgba(120,20,40,.14) !important; font-family: inherit; font-size: 15px; font-weight: 700; line-height: 1.3; text-align: left; cursor: pointer; }
+#s-entreno .aviso-riesgos .ar-boton *, #s-dashboard .aviso-riesgos .ar-boton * { color: inherit !important; }
+#s-entreno .aviso-riesgos .ar-punto, #s-dashboard .aviso-riesgos .ar-punto { flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; background: #D9798A; }
+#s-entreno .aviso-riesgos .ar-flecha, #s-dashboard .aviso-riesgos .ar-flecha { flex: 0 0 auto; font-size: 17px; }
+#s-entreno .aviso-riesgos .ar-boton:active, #s-dashboard .aviso-riesgos .ar-boton:active { transform: translateY(1px); box-shadow: 0 1px 3px rgba(120,20,40,.18) !important; }
+#s-entreno .aviso-riesgos .ar-boton:focus-visible, #s-dashboard .aviso-riesgos .ar-boton:focus-visible { outline: 2px solid #A8142A; outline-offset: 2px; }
+/* «Para tu etapa»: tarjetas deslizables con el estilo de las tarjetas de aviso, en turquesa */
+.ep-carrusel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin: 12px 0 0; padding: 0 0 2px; }
+.ep-carrusel::-webkit-scrollbar { display: none; }
+.ep-card { position: relative; overflow: hidden; flex: 0 0 88%; scroll-snap-align: start; box-sizing: border-box; padding: 20px 20px 22px; border-radius: 28px; background: linear-gradient(135deg, #DCEEEC 0%, #A9D3CF 100%); color: #0d3b38; }
+.ep-card::after { content: ""; position: absolute; top: -60px; right: -60px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,.35); pointer-events: none; }
+.ep-card > * { position: relative; z-index: 1; }
+.ep-cab { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.ep-avatar { width: 36px; height: 36px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 17px; flex: 0 0 auto; }
+.ep-app { font-size: 14px; font-weight: 700; color: #0d3b38; }
+.ep-num { margin-left: auto; padding-right: 18px; font-size: 13px; color: #3f6663; }
+.ep-titulo { font-family: var(--display); font-weight: 400; font-size: 20px; line-height: 1.25; color: #0d3b38; margin-bottom: 8px; }
+.ep-texto { font-size: 14.5px; line-height: 1.55; color: #2c5a56; }
+.ep-puntos { display: flex; justify-content: center; gap: 7px; margin: 12px 0 4px; }
+.ep-punto { width: 7px; height: 7px; border-radius: 50%; background: #BCD8D5; transition: background .2s, width .2s; }
+.ep-punto.act { width: 20px; border-radius: 4px; background: #1F5C58; }
+/* Acciones de «Mi ciclo / Mi etapa»: filas planas con línea fina y un botón principal en verde oscuro */
+#s-ciclo .ona-acciones { border-top: 1px solid var(--linea, #C9D8D6); margin: 4px 0 14px; }
+#s-ciclo #ciclo-ultima-regla:not(:empty) + .ona-acciones { border-top: 0; margin-top: 0; }
+#s-ciclo .ona-accion { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; padding: 14px 2px; background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--linea, #C9D8D6) !important; border-radius: 0 !important; box-shadow: none !important; cursor: pointer; color: var(--n); font-family: inherit; }
+#s-ciclo .ona-accion:active { background: rgba(0,128,123,0.08) !important; }
+#s-ciclo .ona-accion:focus-visible, #s-ciclo .ona-accion-primaria:focus-visible { outline: 2px solid #2FE0D6; outline-offset: 2px; }
+#s-ciclo .ona-accion .oa-ico { flex: 0 0 auto; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; color: #00807B; }
+#s-ciclo .ona-accion.oa-patron .oa-ico { color: #A8142A; }
+#s-ciclo .ona-accion .oa-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+#s-ciclo .ona-accion .oa-t { font-size: 15px; font-weight: 700; color: var(--n); line-height: 1.3; }
+#s-ciclo .ona-accion .oa-s { font-size: 12.5px; color: var(--g); line-height: 1.4; }
+#s-ciclo .ona-accion .oa-flecha { flex: 0 0 auto; font-size: 18px; color: #00807B; }
+#s-ciclo .ona-accion.oa-patron .oa-flecha { color: #A8142A; }
+#s-ciclo .ona-accion-primaria { width: 100%; margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; background: #0B4F4B !important; color: #ffffff !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; text-align: left; }
+#s-ciclo .ona-accion-primaria:active { background: #083B38 !important; }
+#s-ciclo .ona-accion-primaria .oa-flecha { color: #2FE0D6; font-size: 18px; }
+/* Bienvenida de la visita guiada: mismo estilo plano que la tarjeta de los pasos */
+#tour-bienvenida-card { width: 100%; box-sizing: border-box; background: #0B4F4B; border-top: 4px solid #2FE0D6; border-radius: 0; padding: 22px 20px 26px; text-align: left; box-shadow: 0 -8px 28px rgba(0,0,0,0.4); }
+#tour-bienvenida-card .tb-tag { display: inline-block; background: #2FE0D6; color: #05302D; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 3px 8px; border-radius: 0; margin-bottom: 12px; }
+#tour-bienvenida-card .tb-titulo { font-size: 22px; font-weight: 800; color: #ffffff; line-height: 1.25; margin-bottom: 8px; }
+#tour-bienvenida-card .tb-texto { font-size: 14px; color: #D9F5F2; line-height: 1.6; margin-bottom: 20px; }
+#tour-bienvenida-card .tb-botones { display: flex; flex-direction: column; gap: 10px; }
+#tour-bienvenida-card button { width: 100%; padding: 14px 16px; font-size: 15px; border-radius: 0 !important; cursor: pointer; text-align: center !important; justify-content: center !important; white-space: normal; }
+#tour-bienvenida-card #tb-comenzar { background: #2FE0D6 !important; color: #05302D !important; border: 0 !important; font-weight: 800 !important; }
+#tour-bienvenida-card #tb-omitir { background: transparent !important; color: #ffffff !important; border: 1.5px solid rgba(255,255,255,0.7) !important; font-weight: 700 !important; font-size: 14px; }
+#tour-tooltip-card #tour-step-tag { background: #2FE0D6 !important; color: #05302D !important; border-radius: 0 !important; }
+#tour-tooltip-card #tour-step-title { color: #ffffff !important; }
+#tour-tooltip-card #tour-step-desc { color: #D9F5F2 !important; }
+#tour-tooltip-card #tour-step-count { color: #2FE0D6 !important; }
+#tour-tooltip-card .tour-saltar { color: #BFEAE6 !important; }
+#tour-tooltip-card .tour-pie { border-top: 1px solid rgba(255,255,255,0.22) !important; }
+#tour-tooltip-card #btn-tour-next { background: #2FE0D6 !important; color: #05302D !important; border: 0 !important; font-weight: 800 !important; }
+#tour-tooltip-card #btn-tour-prev { background: transparent !important; color: #ffffff !important; border: 1.5px solid rgba(255,255,255,0.7) !important; font-weight: 700 !important; }
+#tour-tooltip-card #btn-tour-prev:disabled { opacity: 0.35; }
 #tour-tooltip-card.tooltip-pos-bottom {
-  bottom: 24px;
+  bottom: 74px; /* deja visible la barra de abajo */
   top: auto;
 }
 #tour-tooltip-card.tooltip-pos-top {
-  top: 24px;
+  top: 70px; /* deja visible la cabecera */
   bottom: auto;
 }
 
@@ -1110,7 +1179,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
        <div style="flex:1;min-width:0">
         <div id="dash-dia" style="font-size:13px;font-weight:700;color:var(--t);text-transform:uppercase;letter-spacing:1px">Calculando ciclo…</div>
         <div id="dash-fase" style="font-size:20px;font-weight:800;color:var(--benTxtP);margin:6px 0 4px;line-height:1.25">Tu ciclo hoy</div>
-        <div id="dash-desc" style="font-size:14px;color:var(--benTxtS);line-height:1.5">La fase informa, no cambia tu rutina. Usa el check-in si hoy te notas diferente.</div>
+        <div id="dash-desc" style="font-size:14px;color:var(--benTxtS);line-height:1.5">La fase informa, no cambia tu rutina. Usa el registro de energía si hoy te notas diferente.</div>
         <div id="dash-ciclo-barra" style="margin-top:14px">
           <div class="ciclo-bar" style="background:rgba(255,255,255,.1)"><div class="ciclo-f" id="ciclo-fill" style="width:30%;background:var(--t)"></div></div>
           <div class="ciclo-lbl" style="color:rgba(255,255,255,.35);margin-top:4px"><span>Menstrual</span><span>Folicular</span><span>Ovulación</span><span>Lútea</span></div>
@@ -1172,7 +1241,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
 
 <!-- CHECK-IN DIARIO (M5 — 3 preguntas exclusivas) -->
 <div class="screen" id="s-checkin">
-  <div class="header"><button class="btn-back" onclick="goToNav('s-dashboard')" style="color:var(--g);font-size:20px;padding:0;border:none;background:none;cursor:pointer">← Volver</button><span class="logo" style="margin:0 auto">ONA</span><span class="hlabel">Check-in</span></div>
+  <div class="header"><button class="btn-back" onclick="goToNav('s-dashboard')" style="color:var(--g);font-size:20px;padding:0;border:none;background:none;cursor:pointer">← Volver</button><span class="logo" style="margin:0 auto">ONA</span><span class="hlabel">Registro de energía</span></div>
   <div class="scroll">
     <button class="ci-ayer" id="ci-ayer-btn" onclick="usarCheckinAyer()" style="display:none">
       ↩ Igual que ayer — sin cambios
@@ -1208,17 +1277,6 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     </div>
 
     <!-- Segundo bloque: causas (solo si cansada o mal) -->
-    <!-- Diario de síntomas — opcional, construye el historial personal -->
-    <button type="button" onclick="abrirDiarioSintomas()" style="
-      width:100%;display:flex;align-items:center;gap:10px;text-align:left;
-      padding:12px 14px;border-radius:14px;border:1.5px dashed var(--t);
-      background:var(--tl);cursor:pointer;margin-top:2px">
-      <span style="font-size:20px" aria-hidden="true">📝</span>
-      <span style="flex:1">
-        <div style="font-size:15px;font-weight:700;color:var(--n)">📝 Diario de hoy — cómo te sientes</div>
-        <div style="font-size:13px;color:var(--g);line-height:1.4">Un registro rápido de tus síntomas de hoy. ONA construye tu historial día a día para afinar el patrón de tu ciclo — es distinto de tu cuestionario de perfil.</div>
-      </span>
-    </button>
 
     <!-- Bloque síntomas fase lútea: aparece en los días 10-20 del ciclo si V3=3B -->
     <div id="ci-lutea-bloque" style="display:none">
@@ -1467,7 +1525,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div style="display:flex;flex-wrap:wrap;gap:8px" id="reporte-cat-chips">
         <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('visual', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--t);background:var(--tl);color:var(--t);font-size:13px;font-weight:600;cursor:pointer">🎨 Visual / Gráfico</button>
         <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('entreno', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:13px;font-weight:600;cursor:pointer">🏋️ Entreno / Pesos</button>
-        <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('ciclo', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:13px;font-weight:600;cursor:pointer">🌸 Ciclo / Check-in</button>
+        <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('ciclo', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:13px;font-weight:600;cursor:pointer">🌸 Ciclo / Registro de energía</button>
         <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('rendimiento', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:13px;font-weight:600;cursor:pointer">⚙️ Rendimiento / Cuelgue</button>
         <button type="button" class="reporte-cat-chip" onclick="seleccionarCategoriaReporte('otro', this)" style="padding:8px 12px;border-radius:20px;border:1.5px solid var(--linea);background:var(--b);color:var(--n);font-size:13px;font-weight:600;cursor:pointer">💡 Sugerencia / Otro</button>
       </div>
@@ -1481,7 +1539,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
         <option value="Mi Ciclo">Mi Ciclo (Flor o seguimiento menstrual)</option>
         <option value="Entrenamiento">Entrenamiento (Ejercicios, series, temporizador)</option>
         <option value="Mi Perfil">Mi Perfil / Configuración</option>
-        <option value="Check-in Diario">Check-in diario matutino</option>
+        <option value="Check-in Diario">Registro de energía diario</option>
         <option value="Tarjeta Compartir">Tarjeta para compartir en redes</option>
         <option value="General / Toda la app">General / Otra sección</option>
       </select>
@@ -1598,6 +1656,23 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
         </div>
     </div>
 
+    <!-- Recordatorio diario -->
+    <div class="card" id="perfil-recordatorio-card">
+      <div class="ctitle">Recordatorio diario</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">Avisarme para contarle a ONA cómo estoy</div>
+          <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-recordatorio-desc">Una notificación al día. Si ya lo has rellenado, no te avisa.</div>
+        </div>
+        <input type="checkbox" id="perfil-recordatorio-on" aria-label="Activar recordatorio diario" onchange="cambiarRecordatorioActivo(this.checked)" style="width:22px;height:22px;accent-color:var(--t);flex:none">
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--linea);margin-top:12px;padding-top:12px">
+        <label for="perfil-recordatorio-hora" style="font-size:15px;font-weight:600;color:var(--n)">Hora del aviso</label>
+        <input type="time" id="perfil-recordatorio-hora" value="20:00" onchange="cambiarHoraRecordatorio(this.value)" style="font-size:16px;padding:6px 10px;border:1px solid var(--linea);border-radius:10px;background:var(--b);color:var(--n)">
+      </div>
+      <div id="perfil-recordatorio-aviso" style="display:none;font-size:12px;color:var(--g);margin-top:10px;line-height:1.45"></div>
+    </div>
+
     <!-- Motor de Inteligencia Artificial -->
     <div class="card">
       <div class="ctitle">Motor de Inteligencia Artificial</div>
@@ -1607,6 +1682,13 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-modo-ia-desc">Respuestas inmediatas y memoria profunda</div>
         </div>
         <button class="btn-o" onclick="toggleModoIA()" style="width:auto;padding:6px 12px;font-size:13px">Cambiar</button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--linea);margin-top:12px;padding-top:12px">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">Permiso para la IA online</div>
+          <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-consent-ia-desc">Sin permiso: nada se envía a Google</div>
+        </div>
+        <button class="btn-o" id="perfil-consent-ia-btn" onclick="toggleConsentimientoDesdeAjustes(!ST.consentOnlineAI)" style="width:auto;padding:6px 12px;font-size:13px">Dar permiso</button>
       </div>
     </div>
 
@@ -1704,7 +1786,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div class="ctitle">🔄 Versión y Actualizaciones</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.10</span></div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.11</span></div>
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-version-subtxt">Canal oficial de GitHub</div>
         </div>
         <button class="btn-o" onclick="verificarActualizacionApp(true)" style="width:auto;padding:7px 12px;font-size:13px">Buscar actualización</button>
@@ -1720,7 +1802,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
   <div class="header">
     <button onclick="goToNav('s-dashboard')" style="color:var(--g);font-size:20px;padding:0;border:none;background:none;cursor:pointer">←</button>
     <span class="logo">ONA</span>
-    <span class="hlabel">Mi ciclo</span>
+    <span class="hlabel" id="ciclo-hlabel">Mi ciclo</span>
   </div>
   <div class="scroll">
     <div class="pg-seg pg-seg2" id="ciclo-tabs" style="--i:0" role="group" aria-label="Sección del ciclo">
@@ -1728,22 +1810,19 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <button type="button" id="ctab-energia" aria-pressed="false" onclick="cicloTab('energia')">Energía</button>
     </div>
     <div id="ciclo-tab-ciclo">
-    <button type="button" id="ciclo-btn-diario" onclick="abrirDiarioSintomas()" style="
-      width:100%;display:flex;align-items:center;gap:10px;text-align:left;
-      padding:12px 14px;border-radius:14px;border:1.5px dashed var(--t);
-      background:var(--tl);cursor:pointer;margin-bottom:10px">
-      <span style="font-size:18px" aria-hidden="true">📝</span>
-      <span style="flex:1;font-size:14px;font-weight:700;color:var(--n)">Diario de síntomas de hoy</span>
-      <span style="color:var(--t);font-size:16px" aria-hidden="true">→</span>
-    </button>
-    <button type="button" onclick="mostrarPatronCiclo()" style="
-      width:100%;display:flex;align-items:center;gap:10px;text-align:left;
-      padding:12px 14px;border-radius:14px;border:none;
-      background:linear-gradient(180deg,#FFF3EF 0%,#FBD9D0 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -2px 0 rgba(168,20,42,.14),0 3px 8px rgba(168,20,42,.2);cursor:pointer;margin-bottom:10px">
-      <span style="font-size:18px" aria-hidden="true">🌙</span>
-      <span style="flex:1;font-size:14px;font-weight:700;color:#8A1148">Tu patrón personal — basado en tu historial</span>
-      <span style="color:#A8142A;font-size:16px" aria-hidden="true">→</span>
-    </button>
+    <div id="ciclo-ultima-regla"></div>
+    <div class="ona-acciones">
+      <button type="button" id="ciclo-btn-diario" class="ona-accion" onclick="abrirDiarioSintomas()">
+        <span class="oa-ico" aria-hidden="true">📝</span>
+        <span class="oa-txt"><span class="oa-t">Cuéntame cómo te encuentras hoy</span><span class="oa-s">Esto le permite saber a ONA tus tendencias de energía de las últimas semanas</span></span>
+        <span class="oa-flecha" aria-hidden="true">→</span>
+      </button>
+      <button type="button" id="ciclo-btn-patron" class="ona-accion oa-patron" onclick="mostrarPatronCiclo()">
+        <span class="oa-ico" aria-hidden="true">🌙</span>
+        <span class="oa-txt"><span class="oa-t">Tu patrón personal</span><span class="oa-s">Basado en tu historial</span></span>
+        <span class="oa-flecha" aria-hidden="true">→</span>
+      </button>
+    </div>
     <!-- Rueda del ciclo: imagen de 28 pétalos con el día actual resaltado -->
     <div id="ciclo-flor-card" class="card" style="padding:14px 12px;background:#fff">
       <div id="ciclo-flor-wrap" style="position:relative;max-width:360px;margin:0 auto">
@@ -1804,6 +1883,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div id="ener-detalle" style="font-size:14px;color:var(--n);min-height:22px;text-align:center;margin:4px 0 8px" aria-live="polite"></div>
       <div id="ener-fases"></div>
       <div id="ciclo-energia-bloque" style="margin-top:18px"></div>
+      <div id="ener-etapa-info"></div>
     </div>
   </div>
   <nav class="nav" id="nav-ciclo"></nav>
@@ -1925,7 +2005,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <!-- Detalles de la versión -->
     <div style="background:#f8f9fa;border-radius:12px;padding:10px 14px;margin-bottom:16px;text-align:left;border:1px solid #eee;">
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--n)">
-        <span>Versión actual: <b id="act-ver-actual">v1.0.10</b></span>
+        <span>Versión actual: <b id="act-ver-actual">v1.0.11</b></span>
         <span style="color:var(--t)">Nueva: <b id="act-ver-nueva">--</b></span>
       </div>
       <div id="act-notas" style="font-size:12px;color:var(--g);margin-top:6px;max-height:80px;overflow-y:auto;line-height:1.4">
@@ -1975,35 +2055,29 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
 <div id="tour-tooltip-card" class="tooltip-pos-bottom" style="display:none">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
     <span id="tour-step-tag" style="background:var(--tl);color:var(--t);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:3px 8px;border-radius:10px">Inicio · 1 de 10</span>
-    <button onclick="finalizarVisitaGuiada(true)" style="background:none;border:none;color:var(--g);font-size:12px;font-weight:600;cursor:pointer;padding:4px">Saltar guía</button>
+    <button class="tour-saltar" onclick="finalizarVisitaGuiada(true)" style="background:none;border:none;color:var(--g);font-size:12px;font-weight:600;cursor:pointer;padding:4px">Saltar guía</button>
   </div>
   <div id="tour-step-title" style="font-size:16px;font-weight:800;color:var(--n);margin-bottom:6px;line-height:1.3">1. Saludo, Racha y Nivel de Hábito</div>
   <div id="tour-step-desc" style="font-size:13.5px;color:var(--g);line-height:1.55;margin-bottom:16px">Accede a tu saludo diario, racha de días constantes y tu nivel de hábito actual.</div>
-  <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f0f0f0;padding-top:12px">
+  <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f0f0f0;padding-top:12px" class="tour-pie">
     <span id="tour-step-count" style="font-size:12px;font-weight:700;color:var(--gt)">1 / 10</span>
     <div style="display:flex;gap:8px">
-      <button id="btn-tour-prev" class="btn-o" onclick="tourPasoAnterior()" style="padding:7px 14px;font-size:13px;border-radius:10px" disabled>← Anterior</button>
-      <button id="btn-tour-next" class="btn-t" onclick="tourPasoSiguiente()" style="padding:7px 18px;font-size:13px;border-radius:10px">Siguiente →</button>
+      <button id="btn-tour-prev" class="btn-o" onclick="tourPasoAnterior()" style="padding:8px 12px;font-size:13px;border-radius:0;white-space:nowrap" disabled>← Anterior</button>
+      <button id="btn-tour-next" class="btn-t" onclick="tourPasoSiguiente()" style="padding:8px 14px;font-size:13px;border-radius:0;white-space:nowrap">Siguiente →</button>
     </div>
   </div>
 </div>
 
-<div id="modal-bienvenida-tour" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:9990;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;">
-  <div style="background:var(--b);border-radius:24px;padding:26px 22px;max-width:360px;width:100%;box-shadow:0 16px 40px rgba(0,0,0,0.35);text-align:center;position:relative;border:1.5px solid var(--linea,#e0e0e0)">
-    <div style="width:58px;height:58px;border-radius:50%;background:rgba(0,168,163,0.12);color:var(--t);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:30px">
-      ✨
+<div id="modal-bienvenida-tour" style="display:none;position:absolute;inset:0;background:rgba(3,26,24,0.84);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:9990;align-items:flex-end;justify-content:center;padding:0;box-sizing:border-box;">
+  <div id="tour-bienvenida-card">
+    <span class="tb-tag">Visita guiada</span>
+    <div class="tb-titulo">Bienvenida a ONA Digital</div>
+    <div class="tb-texto">
+      Te enseñamos la app paso a paso y para qué sirve cada apartado: Inicio, Entreno, tu ciclo o tu etapa, el asistente y tu Perfil. Dura un par de minutos y puedes repetirla desde Perfil.
     </div>
-    <div style="font-size:19px;font-weight:800;color:var(--n);margin-bottom:8px">¡Bienvenida a ONA Digital!</div>
-    <div style="font-size:14px;color:var(--g);line-height:1.6;margin-bottom:18px">
-      Hemos preparado una visita rápida de 10 pasos para que conozcas todas las secciones: entrenamientos, fases del ciclo, energía y tu asistente inteligente.
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="btn-t" onclick="comenzarTourDesdeModal()" style="width:100%;padding:13px;font-size:15px;font-weight:700">
-        Comenzar visita guiada →
-      </button>
-      <button class="btn-o" onclick="omitirVisitaGuiadaInicial()" style="width:100%;padding:11px;font-size:13px;color:var(--g);border-color:#e0e0e0">
-        Explorar por mi cuenta
-      </button>
+    <div class="tb-botones">
+      <button type="button" id="tb-comenzar" onclick="comenzarTourDesdeModal()">Comenzar visita guiada</button>
+      <button type="button" id="tb-omitir" onclick="omitirVisitaGuiadaInicial()">Explorar por mi cuenta</button>
     </div>
   </div>
 </div>
@@ -2369,7 +2443,7 @@ const FASES_INFO = [
   {id:"lutea",      nombre:"Lútea",      dias:"Día 17–28",color:"#66bfe3", bg:"#e8f5fb", ico:"🌙",
    simbolo:"Tu cuerpo se prepara para la regla",
    hormonal:"Tu cuerpo se prepara para la próxima regla y puedes notar cambios.",
-   entreno:"Si el mismo esfuerzo te cuesta más, díselo al check-in y ajusto la sesión.",
+   entreno:"Si el mismo esfuerzo te cuesta más, díselo al registro de energía y ajusto la sesión.",
    animo:"Puedes estar más sensible o cansada, o no notar nada.",
    ona:"Tu rutina no cambia por la fase: se ajusta a tus necesidades."},
 ];
@@ -3798,6 +3872,8 @@ const ST = {
   bloqueActivacionHecho: { fecha: '', ids: [] }, // ejercicios del bloque de respiración y activación hechos hoy
   medidas: [],     // medidas corporales y fotos de progreso: { f, p, c, cad, cue, mus, pan, bus, bic, ant, foto }
   alturaCm: 0,
+  recordatorioDiario: { activo: true, hora: '20:00' }, // aviso diario para rellenar «Cuéntame cómo te encuentras hoy» (notificación local)
+  fuerzaPospartoFase: 0, // fase de posparto (2) en la que la usuaria ha confirmado «Entiendo los riesgos» para activar la fuerza
   riesgosAceptados: null, // { firma, fecha }: «Conozco los riesgos, quiero entrenar de manera normal»
   extrasHoy: { fecha: '', ids: [] }, // ejercicios que la usuaria ha añadido hoy desde la biblioteca (para no perderlos al reconstruir la rutina)
   planEntrenador: null, // plan que le ha dado su entrenador/a (ver abrirPlanEntrenador)
@@ -4118,6 +4194,8 @@ function goToNav(id){
     }
     if (id === 's-ciclo') {
       renderInfoEtapaMenopausia();
+      renderBloqueUltimaRegla();
+      aplicarModoEtapaCiclo();
       renderCicloGrafico();
       renderHormonasCurvas();
       try{ if(document.getElementById('ctab-energia').getAttribute('aria-pressed')==='true') renderEnergiaGrafico(); }catch(e){}
@@ -4131,6 +4209,7 @@ function goToNav(id){
       actualizarProgresionSesion();
     }
     if (id === 's-perfil') {
+      try{ actualizarUIRecordatorio(); }catch(e){}
       sincronizarFurPerfil();
       updStrikes();
       actualizarRacha();      // nivel + logros
@@ -4167,7 +4246,7 @@ function goToNav(id){
 function renderNav(el,active){
   const tabs=[
     {id:'s-dashboard',ic:'🏠',l:'Inicio'},
-    {id:'s-ciclo',ic:'🌸',l:'Ciclo'},
+    {id:'s-ciclo',ic:'🌸',l:(typeof modoMenopausia==='function' && (modoMenopausia()||modoPeri())) ? 'Mi etapa' : 'Ciclo'},
     {id:'s-entreno',ic:'🏋️',l:'Entreno'},
     {id:'s-perfil',ic:'👤',l:'Perfil'},
     {id:'s-reportar',ic:'🐞',l:'Reportar<br>fallo'}
@@ -5467,12 +5546,7 @@ function resolverSesion(perfil, biblioteca, overrideDiaIndice = null){
 
   // Configuración clínica activa (matriz de 8 grupos): prioridad máxima
   const configClinica = obtenerConfigClinica();
-  if(configClinica){
-    avisos.push(`🩺 Plan adaptado a: ${configClinica.nombre}. ${configClinica.nota || ''}`);
-    if(configClinica.evitar){
-      avisos.push(`⚠️ Evitamos en tu plan: ${configClinica.evitar}`);
-    }
-  }
+  // «Plan adaptado a…» y «Evitamos en tu plan…» ya se explican en el desplegable «Cómo se ha adaptado tu rutina» (mensajeAdaptacionRutina): no se repiten aquí.
 
   // La fase del ciclo es solo información: la rutina se ajusta por síntomas y energía (check-in), no por la fase.
 
@@ -5602,6 +5676,7 @@ function cargarRutinaHoy(){
   }
   // Posparto fase 1 (respirar y movilidad): no hay sesión de fuerza automática
   if(sesionSinFuerza()){ RUTINA_HOY = []; RUTINA_AVISOS = []; }
+  else if(fuerzaPospartoBloqueada()){ RUTINA_HOY = []; }
   añadirExtrasHoy();
   saveState();
 }
@@ -5634,6 +5709,28 @@ function añadirExtrasHoy(){
 /** Posparto fase 1: la sesión es de respiración, movilidad y caminar, no de fuerza */
 function sesionSinFuerza(){
   return ST.etapa === 'postparto' && faseParto() === 0;
+}
+/** Posparto fase 2 (caminar y activación): la fuerza no se recomienda todavía; solo se activa si la usuaria confirma que entiende los riesgos */
+function fuerzaPospartoBloqueada(){
+  return ST.etapa === 'postparto' && faseParto() === 1 && ST.fuerzaPospartoFase !== 2;
+}
+function confirmarFuerzaPosparto(){
+  ST.fuerzaPospartoFase = 2;
+  saveState();
+  cargarRutinaHoy();
+  if(typeof aplicarAjusteCheckin === 'function') aplicarAjusteCheckin();
+  renderEjercicios();
+  renderBloqueActivacion();
+  actualizarStickyBar();
+  toast_msg('Ejercicios de fuerza activados ✓');
+}
+function htmlAvisoFuerzaPosparto(){
+  return `<div class="card aviso-riesgos"><div class="ar-cab"><span class="ar-avatar" aria-hidden="true">🌸</span><span class="ar-app">ONA · Tu etapa</span></div>
+    <div class="ar-titulo">La fuerza aún no se recomienda en esta fase</div>
+    <div class="ar-texto">Estás en la fase 2, caminar y activación: tu cuerpo todavía se está recuperando, sobre todo el suelo pélvico y la zona abdominal. Lo recomendable ahora es la respiración y la activación de arriba.</div>
+    <div class="ar-texto ar-aparte">Si aun así quieres hacer ejercicios de fuerza, consúltalo antes con tu médico o tu fisioterapeuta de suelo pélvico y empieza con cargas ligeras.</div>
+    <button type="button" class="ar-boton" onclick="confirmarFuerzaPosparto()"><span>Entiendo los riesgos, activar ejercicios de fuerza</span><span class="ar-punto" aria-hidden="true"></span><span class="ar-flecha" aria-hidden="true">→</span></button>
+  </div>`;
 }
 
 // ── Alternative modal and strikes flow ──
@@ -6638,7 +6735,7 @@ function parsearPlanTexto(texto){
 /** Lee el plan con Gemini (necesita internet). archivo = {mime, b64} para PDF o foto */
 async function leerPlanConIA(texto, archivo){
   if(typeof navigator !== 'undefined' && navigator.onLine === false) throw new Error('Sin conexión a internet');
-  if(!ST.consentOnlineAI) throw new Error('Para leer el plan con IA debes aceptar antes el envío a Google (Ajustes → IA Online).');
+  if(!ST.consentOnlineAI) throw new Error('Para leer el plan con IA debes aceptar antes el envío a Google (Perfil › Motor de Inteligencia Artificial).');
   
   const workerUrl = ONA_PROXY_CONFIG.workerUrl || localStorage.getItem('ona_worker_url');
   if (!workerUrl) {
@@ -6733,7 +6830,7 @@ function _detPlan(e){
 function aplicarPlanEntrenadorHoy(){
   registrarEjerciciosPlan();
   const dia = planEntrenadorHoy();
-  if(!dia || sesionSinFuerza()) return;
+  if(!dia || sesionSinFuerza() || fuerzaPospartoBloqueada()) return;
   RUTINA_HOY = dia.ejercicios.map(e => {
     const ex = EJERCICIOS.find(x => x.id === e.id);
     if(!ex) return null;
@@ -6771,6 +6868,10 @@ function _vistaSubirPlan(msg){
     </label>
     <div id="plan-archivo-nombre" style="font-size:13px;color:var(--t);margin-top:6px;min-height:14px"></div>
     <div id="plan-estado" style="font-size:14px;color:var(--d);margin-top:6px;min-height:16px">${msg ? _escHtml(msg) : ''}</div>
+    ${ST.consentOnlineAI ? '' : `<div id="plan-consent" style="margin-top:10px;padding:12px 0;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)">
+      <div style="font-size:14px;color:var(--n);line-height:1.55">Para leer el plan con IA, el texto se envía a Google (Gemini). Necesitamos tu permiso, y puedes retirarlo cuando quieras en Perfil.</div>
+      <button type="button" class="btn-o" style="width:100%;margin-top:10px" onclick="planPedirPermisoIA()">Dar permiso para enviar a Google</button>
+    </div>`}
     <button class="btn-t" id="plan-btn-ia" onclick="planLeer('ia')" style="width:100%;margin-top:6px">Leer con IA (necesita internet)</button>
     <button class="btn-o" id="plan-btn-local" onclick="planLeer('local')" style="width:100%;margin-top:8px">Leer sin internet (solo texto)</button>
     <div style="font-size:12px;color:var(--g);line-height:1.6;margin-top:12px">Con IA, el plan se envía a Google (Gemini) para leerlo. Sin internet, se lee en tu móvil y no sale de él, pero solo entiende texto: si tienes un PDF o una foto, copia el texto o usa la IA.<br>ONA no revisa ni cambia el plan de tu entrenador/a: él o ella conoce tu caso. Solo te avisará si algún ejercicio está marcado como no recomendado en tu situación.</div>
@@ -6793,6 +6894,10 @@ function _leerArchivo(f, comoTexto){
     comoTexto ? r.readAsText(f) : r.readAsDataURL(f);
   });
 }
+function planPedirPermisoIA(){
+  _planUI.textoPendiente = (document.getElementById('plan-texto') || {}).value || '';
+  mostrarModalConsentimientoIA(null, 'plan');
+}
 async function planLeer(modo){
   const estado = document.getElementById('plan-estado');
   const setEstado = (t, ok) => { if(estado){ estado.style.color = ok ? 'var(--t)' : 'var(--d)'; estado.textContent = t; } };
@@ -6813,7 +6918,12 @@ async function planLeer(modo){
       plan.origen = 'local';
     } else {
       if(!texto.trim() && !f) throw new Error('Pega el texto del plan o sube un archivo.');
-      if(!ST.consentOnlineAI) throw new Error('Para leer el plan con IA debes aceptar antes el envío a Google (Ajustes → IA Online). Sin eso puedes leerlo en el móvil, pegando el texto del plan.');
+      if(!ST.consentOnlineAI){
+        // Se pide el permiso aquí mismo y, al aceptar, se vuelve a esta pantalla con el texto y el archivo
+        _planUI.textoPendiente = texto;
+        mostrarModalConsentimientoIA(null, 'plan');
+        return;
+      };
       setEstado('Leyendo el plan con IA… puede tardar unos segundos.', true);
       let archivo = null;
       if(f && !esTexto){
@@ -6901,12 +7011,13 @@ function planElegirEjercicio(i, j, ctx){
     });
     if(mejor) grupo = mejor.grupo;
   }
-  _planPick = { i, j, ctx, grupo, mat: 'todos', texto: '' };
+  const _sh0 = document.querySelector('#overlay .m-sheet');
+  _planPick = { i, j, ctx, grupo, mat: 'todos', texto: '', scroll: _sh0 ? _sh0.scrollTop : 0 };
   const grupos = [...new Set(EJERCICIOS.filter(x => !x.custom).map(x => x.grupo))];
   grupos.sort((a, b) => { const ia = GRUPOS_ORDEN_PICK.indexOf(a), ib = GRUPOS_ORDEN_PICK.indexOf(b); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
   const sel = 'width:100%;padding:10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:15px;background:#fff;box-sizing:border-box;margin-top:4px';
   abrirOv(`<div class="m-sheet" style="max-height:92%">
-    <div class="m-head"><div><div class="m-title">Ejercicio de ONA</div><div style="font-size:13px;color:var(--g)">Equivalente a «${_escHtml(e.n)}»</div></div><button class="m-x" onclick="planPickVolver()">✕</button></div>
+    <div class="m-head"><div><div class="m-title">Ejercicio de ONA</div><div style="font-size:13px;color:var(--g)">Sustituir «${_escHtml(e.nOrig || e.n)}» por uno de ONA</div></div><button class="m-x" onclick="planPickVolver()">✕</button></div>
     <label for="pick-grupo" style="font-size:13px;color:var(--g)">Músculo</label>
     <select id="pick-grupo" onchange="planPickCambiar()" style="${sel}"><option value="todos">Todos los músculos</option>${grupos.map(g => `<option value="${_escHtml(g)}"${g === grupo ? ' selected' : ''}>${_escHtml(g)}</option>`).join('')}</select>
     <label for="pick-mat" style="font-size:13px;color:var(--g);display:block;margin-top:8px">Material</label>
@@ -6915,7 +7026,7 @@ function planElegirEjercicio(i, j, ctx){
     <input id="pick-texto" type="search" oninput="planPickCambiar()" placeholder="Ej.: press, remo, curl…" style="${sel}">
     <div id="pick-contador" style="font-size:13px;color:var(--g);margin:10px 0 6px"></div>
     <div id="pick-lista"></div>
-    <button class="btn-o" onclick="planPickElegir('')" style="width:100%;margin-top:8px">Dejar como ejercicio propio de mi plan</button>
+    <button class="btn-o" onclick="planPickElegir('')" style="width:100%;margin-top:8px">Volver al ejercicio de mi plan</button>
     <button class="btn-o" onclick="planPickVolver()" style="width:100%;margin-top:8px">Volver</button>
   </div>`);
   planPickCambiar();
@@ -6950,21 +7061,46 @@ function planPickElegir(exId){
   if(!p) return;
   const e = _ejercicioDelPlan(p.i, p.j, p.ctx);
   if(!e) return planPickVolver();
-  e.matchId = exId || null;
+  // El ejercicio del plan se sustituye por el de ONA elegido (se mantienen series, repeticiones y notas del plan).
+  // Se guarda el nombre original para poder volver a él con «Dejar como ejercicio propio».
+  const ref = exId ? EJERCICIOS.find(x => x.id === exId && !x.custom) : null;
+  const idAnt = e.id;
+  if(ref){
+    if(!e.nOrig) e.nOrig = e.n;
+    e.n = nombreComun(ref);
+    e.id = ref.id;
+    e.matchId = ref.id;
+  } else {
+    if(e.nOrig){ e.n = e.nOrig; delete e.nOrig; }
+    e.id = 'pl_' + _hashPlan(_normTxt(e.n));
+    e.matchId = null;
+  }
   if(p.ctx === 'guardado'){
-    // El ejercicio del plan se vuelve a crear con la técnica, los músculos y las etiquetas del elegido
-    const k = EJERCICIOS.findIndex(x => x.id === e.id);
+    // Se retira el ejercicio propio anterior del plan (nunca uno de la biblioteca) y se vuelve a registrar
+    const k = EJERCICIOS.findIndex(x => x.id === idAnt && x.custom);
     if(k >= 0) EJERCICIOS.splice(k, 1);
     registrarEjerciciosPlan();
     saveState();
     _planPick = null;
     _vistaPlanEntrenador();
+    _planRestaurarScroll(p.scroll);
     if(planEntrenadorHoy()) _refrescarRutinaTrasPlan();
-    toast_msg(exId ? 'Ejercicio enlazado con ONA ✓' : 'Queda como ejercicio propio');
+    _planAvisoCambio(exId);
     return;
   }
   _planPick = null;
   _vistaRevisarPlan();
+  _planRestaurarScroll(p.scroll);
+  _planAvisoCambio(exId);
+}
+/** Al volver del selector la pantalla se pinta de nuevo: se deja en el mismo punto para que se vea el cambio */
+function _planRestaurarScroll(y){
+  const sh = document.querySelector('#overlay .m-sheet');
+  if(sh && y) sh.scrollTop = y;
+}
+function _planAvisoCambio(exId){
+  const ref = exId ? EJERCICIOS.find(x => x.id === exId) : null;
+  toast_msg(ref ? 'Sustituido por: ' + nombreComun(ref) + ' ✓' : 'Vuelve el ejercicio de tu plan');
 }
 function planPickVolver(){
   const p = _planPick;
@@ -7251,6 +7387,14 @@ function renderEjercicios(){
 
   // Filtrar strikes >= 3
   const ejs = RUTINA_HOY.filter(ex => (ST.strikes[ex.id]||0) < 3);
+  if(ejs.length === 0 && fuerzaPospartoBloqueada()){
+    listEl.innerHTML = htmlAvisoFuerzaPosparto();
+    if (finishBtn) finishBtn.style.display = 'none';
+    renderAvisosRutina();
+    actualizarProgresionSesion();
+    actualizarStickyBar();
+    return;
+  }
   if(ejs.length === 0 && sesionSinFuerza()){
     listEl.innerHTML = `<div class="card" style="text-align:center;padding:20px 16px;border-color:var(--t)">
       <div style="font-size:30px;margin-bottom:6px" aria-hidden="true">🌬️</div>
@@ -8059,6 +8203,9 @@ async function callChatAI(systemPrompt, userPrompt, messagesHistory = []) {
 }
 
 function actualizarPerfilModoIA() {
+  const cd = document.getElementById('perfil-consent-ia-desc'), cb = document.getElementById('perfil-consent-ia-btn');
+  if(cd) cd.textContent = ST.consentOnlineAI ? 'Das permiso para enviar lo que escribas o subas a Google (Gemini)' : 'Sin permiso: nada se envía a Google';
+  if(cb) cb.textContent = ST.consentOnlineAI ? 'Retirar permiso' : 'Dar permiso';
   const lbl = document.getElementById('perfil-modo-ia');
   const desc = document.getElementById('perfil-modo-ia-desc');
   const modo = ST.modoIA || 'gemini';
@@ -8324,13 +8471,13 @@ function generarRespuestaChatSimulada(texto) {
     topicFound = true;
     topicResponse = `Como estás en tu fase ${phaseNames[fase] || fase} (día ${dia} del ciclo), tu cuerpo está bajo la influencia de esta fase hormonal. `;
     if (fase === 'menstrual') {
-      topicResponse += `Algunas mujeres se notan con menos energía estos días y otras no notan nada. Tu rutina no cambia por la fase: si hoy te cuesta más o tienes molestias, cuéntalo en el check-in y la ajusto.`;
+      topicResponse += `Algunas mujeres se notan con menos energía estos días y otras no notan nada. Tu rutina no cambia por la fase: si hoy te cuesta más o tienes molestias, cuéntalo en el registro de energía y la ajusto.`;
     } else if (fase === 'folicular') {
       topicResponse += `Los estudios no muestran que entrenar mejor o peor dependa de la fase. Entrena según cómo te sientas hoy.`;
     } else if (fase === 'ovulacion') {
       topicResponse += `Algunas mujeres se notan con más energía en estos días, otras no. No hace falta cambiar la intensidad: guíate por cómo te sientes y cuida la técnica.`;
     } else {
-      topicResponse += `La progesterona está presente en esta fase. Si hoy te notas con menos energía, usa el check-in y la app ajusta el día.`;
+      topicResponse += `La progesterona está presente en esta fase. Si hoy te notas con menos energía, usa el registro de energía y la app ajusta el día.`;
     }
   }
   
@@ -8380,7 +8527,7 @@ function generarRespuestaChatSimulada(texto) {
     if (mol) {
       topicResponse = `Veo que reportaste una molestia física: "${mol}". La app ha adaptado tu rutina de hoy quitando o ajustando ejercicios para proteger esa zona. Durante tu sesión, mantén un esfuerzo moderado, concéntrate en la respiración y detente de inmediato ante cualquier pinchazo o dolor agudo.`;
     } else {
-      topicResponse = `Si sientes algún dolor o molestia en las articulaciones, lo ideal es detener el ejercicio de inmediato. Adaptaremos tus entrenamientos posteriores si nos indicas qué zona te molesta en el check-in diario.`;
+      topicResponse = `Si sientes algún dolor o molestia en las articulaciones, lo ideal es detener el ejercicio de inmediato. Adaptaremos tus entrenamientos posteriores si nos indicas qué zona te molesta en el registro de energía diario.`;
     }
   }
   
@@ -9017,6 +9164,17 @@ const ENERGIA_BAJA_UMBRAL_DIAS = 3;
 const ENERGIA_BAJA_VENTANA_DIAS = 7;
 const CHEQUEO_ENERGIA_REPETIR_DIAS = 30;   // tras hacerlo
 const CHEQUEO_ENERGIA_POSPONER_DIAS = 14;  // tras «Ahora no»
+// Energía baja PROLONGADA (todas las etapas): días distintos con registro «Mal» o «Cansada» en los últimos 30 días
+const ENERGIA_PROLONGADA_DIAS = 16;   // más de la mitad de los últimos 30 días
+const ENERGIA_PROLONGADA_VENTANA = 30;
+function diasEnergiaBajaProlongada(){
+  const desde = Date.now() - ENERGIA_PROLONGADA_VENTANA * 86400000;
+  const dias = new Set();
+  (Array.isArray(ST.energiaHist) ? ST.energiaHist : []).forEach(r => {
+    if(r && r.f && r.v <= 2 && new Date(r.f + 'T00:00:00').getTime() >= desde) dias.add(r.f);
+  });
+  return dias.size;
+}
 function registrarEnergiaBaja(hoyStr){
   const c = ST.checkin || {};
   if(!(c.causas || []).includes('energia')) return;
@@ -9034,7 +9192,7 @@ function diasEnergiaBajaRecientes(){
 // Solo informa: no cambia cargas ni la rutina. Si el ciclo no es predecible (anticonceptivos,
 // SOP, perimenopausia, amenorrea…) se guarda la energía pero no se relaciona con la fase.
 // ═════════════════════════════════════════════════════════════════
-const ENERGIA_MIN_POR_FASE = 4;       // check-ins en una fase para mostrar su media
+const ENERGIA_MIN_POR_FASE = 4;       // registros en una fase para mostrar su media
 const ENERGIA_DIF_TENDENCIA = 0.6;    // diferencia (en la escala 1-4) para hablar de tendencia
 // Historial de energía: una escala de 4 niveles = las 4 opciones del check-in (antes de esta versión se guardaba genial=5)
 const ENERGIA_HIST_VAL = { mal: 1, cansada: 2, normal: 3, genial: 4 };
@@ -9081,7 +9239,7 @@ function renderEnergiaCiclo(faseHoy){
   const total = a.hist.length;
   const titulo = `<div style="font-size:13px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:1px">Tu energía y tu ciclo</div>`;
   if(!total){
-    el.innerHTML = titulo + `<div style="font-size:15px;color:var(--n);line-height:1.55;margin-top:8px;padding-bottom:14px;border-bottom:1px solid var(--linea)">Cada vez que haces tu check-in antes de entrenar, ONA guarda cómo te sientes. Con unas semanas de registros verás aquí si tu energía cambia según la fase.</div>`;
+    el.innerHTML = titulo + `<div style="font-size:15px;color:var(--n);line-height:1.55;margin-top:8px;padding-bottom:14px;border-bottom:1px solid var(--linea)">Aún no hay registros de energía. Cada vez que registras cómo estás antes de entrenar, ONA lo guarda; con al menos ${ENERGIA_MIN_POR_FASE} registros en dos fases distintas verás aquí si tu energía cambia según la fase.</div>`;
     return;
   }
   // Solo la conclusión (las medias y la línea ya se ven en el gráfico)
@@ -9096,7 +9254,8 @@ function renderEnergiaCiclo(faseHoy){
     } else if(a.conDatos.length >= 2){
       frase = 'Por ahora no se ve una diferencia clara de energía entre fases en tus registros. Es normal: cada cuerpo responde distinto. Seguimos aprendiendo contigo.';
     } else {
-      frase = `ONA va aprendiendo con cada check-in. Necesita al menos ${ENERGIA_MIN_POR_FASE} registros en dos fases para compararlas.`;
+      const falta = a.fases.map(f => Math.max(0, ENERGIA_MIN_POR_FASE - f.n)).sort((x, y) => x - y).slice(0, 2).reduce((t, x) => t + x, 0);
+      frase = `Aún no hay datos suficientes para comparar tus fases: necesitas al menos ${ENERGIA_MIN_POR_FASE} registros de energía en dos fases distintas y te ${falta === 1 ? 'falta 1 registro' : 'faltan ' + falta + ' registros'}.`;
     }
     cuerpo = `<div style="font-size:15px;color:var(--n);line-height:1.6;margin-top:8px">${frase}</div>`;
   }
@@ -9137,7 +9296,8 @@ function _energiaPorDiaCiclo(len){
 }
 /** ¿La energía se muestra por semanas? Sin ciclo (menopausia, embarazo, posparto) o con ciclos irregulares (perimenopausia). */
 function energiaModoSemanal(){
-  return !cicloAplica() || condicionesClinicas().includes('perimenopausia');
+  // Patrones por fase solo con ciclo regular sin anticonceptivos, SOP ni amenorrea; en el resto se sigue la tendencia semanal
+  return !puedeAprenderPatronSintomas().puede;
 }
 const ENERGIA_SEMANAS = 12;
 /** Media de energía por semana (lunes a domingo) de las últimas ENERGIA_SEMANAS: [{ini:Date, m:number|null, n}] */
@@ -9176,21 +9336,34 @@ function renderEnergiaSemanal(cont, el){
   let linea = '';
   for(let k = 0; k < pts.length - 1; k++){
     const a = pts[k], b = pts[k + 1], seguido = (b.i - a.i === 1);
-    linea += `<line x1="${X(a.i).toFixed(1)}" y1="${Yv(a.m).toFixed(1)}" x2="${X(b.i).toFixed(1)}" y2="${Yv(b.m).toFixed(1)}" style="stroke:#1F5C58" stroke-width="2.2" stroke-linecap="round" ${seguido ? '' : 'stroke-dasharray="3 4" stroke-opacity=".6"' }/>`;
+    linea += `<line x1="${X(a.i).toFixed(1)}" y1="${Yv(a.m).toFixed(1)}" x2="${X(b.i).toFixed(1)}" y2="${Yv(b.m).toFixed(1)}" style="stroke:#1F5C58" stroke-width="2.2" stroke-linecap="round" ${seguido ? '' : 'stroke-dasharray="3 4" stroke-opacity=".6"'}/>`;
   }
   const dots = pts.map(p => `<circle cx="${X(p.i).toFixed(1)}" cy="${Yv(p.m).toFixed(1)}" r="4" fill="#fff" style="stroke:#1F5C58" stroke-width="2"/>`).join('');
-  const vacio = pts.length ? '' : `<text x="${(x0 + x1) / 2}" y="${(yT + yB) / 2}" text-anchor="middle" font-size="14" fill="#3f5f5c">Aún no hay check-ins</text>`;
+  const vacio = pts.length ? '' : `<text x="${(x0 + x1) / 2}" y="${(yT + yB) / 2}" text-anchor="middle" font-size="14" fill="#3f5f5c">Aún no hay registros</text>`;
   cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="display:block;width:100%;height:auto" role="img" aria-label="Gráfico de tu energía media por semana">${grid}${linea}${dots}${ejeX}${vacio}</svg>`;
   document.getElementById('ener-detalle').textContent = '';
   // Conclusión: últimas 4 semanas frente a las 4 anteriores (necesita datos en las dos mitades)
   const media = arr => { const v = arr.filter(w => w.m != null); return v.length >= 2 ? v.reduce((a,w)=>a+w.m,0) / v.length : null; };
   const rec = media(sem.slice(-4)), prev = media(sem.slice(-8, -4));
   let frase;
-  if(rec == null || prev == null) frase = 'ONA va aprendiendo con cada check-in. Con unas semanas de registros verás aquí cómo evoluciona tu energía.';
-  else if(rec - prev >= ENERGIA_DIF_TENDENCIA) frase = 'Según tus registros, tu energía de las últimas semanas es <strong>más alta</strong> que la de las anteriores.';
-  else if(prev - rec >= ENERGIA_DIF_TENDENCIA) frase = 'Según tus registros, tu energía de las últimas semanas es <strong>más baja</strong> que la de las anteriores.';
-  else frase = 'Según tus registros, tu energía se mantiene <strong>estable</strong> en las últimas semanas.';
-  el.innerHTML = `<div style="font-size:12px;color:var(--g);margin:4px 0 6px;line-height:1.5">Cada punto es la media de una semana. Sin ciclo regular no se compara con las fases, sino contigo misma a lo largo del tiempo.</div><div style="font-size:15px;color:var(--n);line-height:1.6;margin-top:10px">${frase}</div>`;
+  // Desde 2 registros ya se muestra la media de la última semana; la tendencia solo se añade cuando hay datos de varias semanas
+  const desde = new Date(); desde.setHours(0,0,0,0); desde.setDate(desde.getDate() - 6);
+  const hist = Array.isArray(ST.energiaHist) ? ST.energiaHist : [];
+  const ult7 = hist.filter(r => r && r.f && new Date(r.f + 'T00:00:00') >= desde);
+  if(!hist.length){
+    frase = 'Aún no hay registros de energía. Cada vez que registres cómo estás antes de entrenar, aquí verás tu media de la última semana.';
+  } else if(ult7.length < 2){
+    frase = 'En los últimos 7 días tienes ' + (ult7.length === 1 ? '1 registro' : ult7.length + ' registros') + ' de energía. Con 2 registros ya te mostramos tu media de la última semana.';
+  } else {
+    const mSem = ult7.reduce((t, r) => t + r.v, 0) / ult7.length;
+    frase = 'Tu energía media de la última semana: <strong>' + ENERGIA_NOMBRE_ESTADO[Math.min(4, Math.max(1, Math.round(mSem)))] + '</strong> (' + mSem.toFixed(1).replace('.', ',') + ' de 4, con ' + ult7.length + ' registros).';
+    if(rec != null && prev != null){
+      if(rec - prev >= ENERGIA_DIF_TENDENCIA) frase += ' Es <strong>más alta</strong> que en las semanas anteriores.';
+      else if(prev - rec >= ENERGIA_DIF_TENDENCIA) frase += ' Es <strong>más baja</strong> que en las semanas anteriores.';
+      else frase += ' Se mantiene <strong>estable</strong> respecto a las semanas anteriores.';
+    }
+  }
+  el.innerHTML = `<div style="font-size:12px;color:var(--g);margin:4px 0 6px;line-height:1.5">Cada punto es la media de una semana. En tu caso no se compara con las fases del ciclo, sino contigo misma a lo largo del tiempo.</div><div style="font-size:15px;color:var(--n);line-height:1.6;margin-top:10px">${frase}</div>`;
 }
 function renderEnergiaGrafico(){
   const cont = document.getElementById('ener-grafico');
@@ -9281,7 +9454,7 @@ function renderEnergiaGrafico(){
     dots = `<g id="ener-flor" data-x="${X(hoyDia).toFixed(2)}" transform="translate(${X(hoyDia).toFixed(2)} ${yHoy.toFixed(2)}) scale(1.3)">${pet}<circle r="3.6" fill="#fff" stroke="#7a1030" stroke-width="1.6"/></g>`;
   }
   const marcaHoy = hoyDia ? `<line x1="${X(hoyDia).toFixed(2)}" x2="${X(hoyDia).toFixed(2)}" y1="${yT - 6}" y2="${yB + 6}" stroke="#7a1030" stroke-width="1" stroke-dasharray="2 3"/>` : '';
-  const vacio = puntos.length ? '' : `<text x="${(x0 + x1) / 2}" y="${(yT + yB) / 2}" text-anchor="middle" font-size="14" fill="#3f5f5c">Aún no hay check-ins</text>`;
+  const vacio = puntos.length ? '' : `<text x="${(x0 + x1) / 2}" y="${(yT + yB) / 2}" text-anchor="middle" font-size="14" fill="#3f5f5c">Aún no hay registros</text>`;
   cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="display:block;width:100%;height:auto" role="img" aria-label="Gráfico de tu energía media por día del ciclo, con las fases detrás">
     ${bandas}${grid}${marcaHoy}${linea}${sueltos}${dots}${hojas}${ejeX}${vacio}${hit}</svg>`;
   document.getElementById('ener-detalle').textContent = '';
@@ -9316,7 +9489,7 @@ function energiaDetalle(dia){
   if(v.length){
     const m = v.reduce((a, x) => a + x, 0) / v.length;
     t += ` · Energía media: ${m.toFixed(1).replace('.', ',')} (${v.length} reg.)`;
-  } else t += ' · sin check-in';
+  } else t += ' · sin registro';
   el.textContent = t;
 }
 
@@ -9691,7 +9864,7 @@ function abrirHormonaInfo(faseId) {
       ico: "🔴",
       hormonas: "Es el momento del mes en el que tienes menos energía hormonal. Tu cuerpo está soltando el revestimiento del útero.",
       fisiologia: "Puedes notar cansancio, dolor de barriga o sentirte más sensible. Es normal.",
-      fuerza: "Tu fuerza sigue ahí. Si el esfuerzo se te hace más duro, cuéntalo en el check-in y ajusto la sesión.",
+      fuerza: "Tu fuerza sigue ahí. Si el esfuerzo se te hace más duro, cuéntalo en el registro de energía y ajusto la sesión.",
       recuperacion: "Descansa más entre series, bebe agua y duerme bien. Si te encuentras mal, hoy puedes hacer menos."
     },
     folicular: {
@@ -9718,7 +9891,7 @@ function abrirHormonaInfo(faseId) {
       ico: "🌙",
       hormonas: "Tu cuerpo se prepara para la próxima regla. Algunas mujeres notan menos energía estos días; varía mucho entre mujeres.",
       fisiologia: "Puedes tener más calor, más hambre, más sueño o notarte más hinchada o sensible. Es normal.",
-      fuerza: "Si el mismo peso te cuesta más, puedes bajarlo hoy desde el check-in. Los estudios no muestran una pérdida real de fuerza por la fase.",
+      fuerza: "Si el mismo peso te cuesta más, puedes bajarlo hoy desde el registro de energía. Los estudios no muestran una pérdida real de fuerza por la fase.",
       recuperacion: "La recuperación depende sobre todo del sueño, la comida y el estrés. Descansa entre series lo que necesites."
     }
   };
@@ -10207,7 +10380,8 @@ function renderCicloGrafico() {
     const florCard = document.getElementById('ciclo-flor-card');
     if (florCard) florCard.style.display = 'none';
     const fasesEl = document.getElementById('fases-cards');
-    if (fasesEl) fasesEl.innerHTML = `<div class="card" style="background:#f7f7f5; border:1.5px solid #e0e0e0; text-align:center; padding:24px 16px">
+    if (fasesEl && (modoPeri() || modoMenopausia())) { fasesEl.innerHTML = ''; }
+    else if (fasesEl) fasesEl.innerHTML = `<div class="card" style="background:#f7f7f5; border:1.5px solid #e0e0e0; text-align:center; padding:24px 16px">
       <div style="font-size:32px; margin-bottom:12px">${msg ? msg.ico : '🌿'}</div>
       <div style="font-size:16px; font-weight:700; color:var(--n); margin-bottom:8px">${msg ? msg.texto : 'Etapa sin ciclo menstrual activo'}</div>
       <div style="font-size:14px; color:var(--g); line-height:1.6">El seguimiento del ciclo menstrual no aplica en esta etapa. Tu rutina ya está adaptada a tus necesidades específicas.</div>
@@ -10394,12 +10568,12 @@ const INFO_FASES = {
   menstrual: {
     title: "Fase Menstrual 🩸 (Días 1 - 5)",
     hormonas: "Estrógenos y progesterona en niveles mínimos.",
-    body: "Desprendimiento del endometrio. La fase no obliga a cambiar tu entrenamiento: algunas mujeres se encuentran con menos energía y otras no. Si hoy te sientes mal, usa el check-in."
+    body: "Desprendimiento del endometrio. La fase no obliga a cambiar tu entrenamiento: algunas mujeres se encuentran con menos energía y otras no. Si hoy te sientes mal, usa el registro de energía."
   },
   folicular: {
     title: "Fase Folicular 🥚 (Días 6 - 13)",
     hormonas: "Los estrógenos suben progresivamente.",
-    body: "Muchas mujeres notan aumento gradual de energía y fuerza, aunque varía entre mujeres y ciclos. Guíate por tus sensaciones y el check-in diario."
+    body: "Muchas mujeres notan aumento gradual de energía y fuerza, aunque varía entre mujeres y ciclos. Guíate por tus sensaciones y el registro de energía diario."
   },
   ovulacion: {
     title: "Fase de Ovulación ✨ (Días 14 - 16)",
@@ -10409,7 +10583,7 @@ const INFO_FASES = {
   lutea: {
     title: "Fase Lútea 🟡 (Días 17 - 28)",
     hormonas: "Dominancia de progesterona. Estrógenos caen y luego tienen un pico menor.",
-    body: "El cuerpo lúteo produce progesterona. El esfuerzo percibido puede sentirse mayor en algunas mujeres. Si hoy te notas con menos energía, usa el check-in y la app ajusta el día sin necesidad de bajar cargas por defecto."
+    body: "El cuerpo lúteo produce progesterona. El esfuerzo percibido puede sentirse mayor en algunas mujeres. Si hoy te notas con menos energía, usa el registro de energía y la app ajusta el día sin necesidad de bajar cargas por defecto."
   }
 };
 
@@ -11544,6 +11718,15 @@ function calcularAlertas(){
 
   // Menopausia / perimenopausia: sin regla no hay señal de alarma de baja energía disponible.
   // Se avisa cuando lleva varios días con poca energía (mismo criterio que el chequeo de energía).
+  if(diasEnergiaBajaProlongada() >= ENERGIA_PROLONGADA_DIAS){
+    alertas.push({
+      tipo: 'warn',
+      ico: '🔋',
+      titulo: 'Energía baja',
+      desc: 'Más de la mitad de los días del último mes has señalado tener baja energía. ONA te recomienda consultar a tu médico sobre esta circunstancia.',
+      prioridad: 1,
+    });
+  }
   if(etapaMenopausiaOPeri() && diasEnergiaBajaRecientes() >= 2){
     alertas.push({
       tipo: 'info',
@@ -11733,7 +11916,7 @@ function calcularAlertas(){
       tipo: 'ciclo',
       ico: _petaloAviso('#C8102E'),
       titulo: 'Tu regla se espera ' + cuando,
-      desc: 'Es solo una estimación. Si te notas con menos energía, usa el check-in.',
+      desc: 'Es solo una estimación. Si te notas con menos energía, usa el registro de energía.',
       prioridad: 1,
     } : {
       tipo: 'ciclo',
@@ -12226,25 +12409,109 @@ function riesgosPendientes(){
   return !(ST.riesgosAceptados && ST.riesgosAceptados.firma === firmaRiesgos());
 }
 
-/** Etapa de menopausia o condición de perimenopausia (con o sin otras patologías). */
-function etapaMenopausiaOPeri(){
-  return (typeof ST !== 'undefined' && ST.etapa === 'menopausia') || (typeof condicionesClinicas === 'function' && condicionesClinicas().includes('perimenopausia'));
+/** Menopausia ya marcada como etapa (en el selector de etapa, fase «Menopausia»). */
+function modoMenopausia(){
+  return ST.etapa === 'menopausia' && ST.menopausiaInfo && ST.menopausiaInfo.fase === 'menopausia';
+}
+/** Perimenopausia: condición marcada, o etapa «Menopausia / Perimenopausia» con la fase perimenopausia (la de por defecto). */
+function modoPeri(){
+  if(modoMenopausia()) return false;
+  return ST.etapa === 'menopausia' || condicionesClinicas().includes('perimenopausia');
+}
+function _fmtFechaISO(iso){ const d = new Date(iso + 'T00:00:00'); return d.toLocaleDateString('es-ES', { day:'numeric', month:'long', year:'numeric' }); }
+function _fechaUltimaReglaPeri(){ return ST.etapa === 'menopausia' ? (ST.menopausiaInfo && ST.menopausiaInfo.ultimaRegla) : ST.fur; }
+/** Bloque «Tu última regla» (solo perimenopausia): fecha, cuánto hace y qué se considera menopausia. */
+function renderBloqueUltimaRegla(){
+  const el = document.getElementById('ciclo-ultima-regla');
+  if(!el) return;
+  if(!modoPeri()){ el.innerHTML = ''; return; }
+  const f = _fechaUltimaReglaPeri();
+  let linea = 'Sin fecha. Márcala para llevar la cuenta de cuánto hace.', extra = '';
+  if(f){
+    const dias = Math.floor((Date.now() - new Date(f + 'T00:00:00').getTime()) / 86400000);
+    const meses = Math.floor(dias / 30.44);
+    const hace = dias < 45 ? `hace ${dias} día${dias === 1 ? '' : 's'}` : `hace ${meses} meses`;
+    linea = `Fue el <strong>${_fmtFechaISO(f)}</strong> · ${hace}`;
+    if(meses >= 12) extra = `<div style="font-size:14px;color:var(--n);line-height:1.6;margin-top:8px"><strong>Llevas 12 meses o más sin regla.</strong> Coméntalo con tu médica para confirmar si ya estás en menopausia. Si lo confirma, cambia tu etapa a menopausia en el perfil.</div>`;
+  }
+  el.innerHTML = `<div style="padding:4px 0 14px;border-bottom:1px solid var(--linea);margin-bottom:12px">
+    <div style="font-size:13px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:1px">Tu última regla</div>
+    <div style="font-size:15px;color:var(--n);line-height:1.5;margin-top:6px">${linea}</div>
+    <div style="font-size:13px;color:var(--g);line-height:1.55;margin-top:6px">Se considera menopausia cuando pasan 12 meses seguidos sin regla.</div>${extra}
+    <button type="button" class="ona-accion-primaria" onclick="abrirUltimaReglaPeri()"><span>${f ? 'Cambiar la fecha' : 'Marcar mi última regla'}</span><span class="oa-flecha" aria-hidden="true">→</span></button>
+  </div>`;
+}
+function abrirUltimaReglaPeri(){
+  const hoy = new Date().toISOString().slice(0,10);
+  abrirOv(`<div class="m-sheet">
+    <div class="m-head"><div class="m-title">📅 Tu última regla</div><button class="m-x" onclick="cerrarOv()">✕</button></div>
+    <div style="font-size:15px;color:var(--g);margin-bottom:16px">¿Cuándo empezó tu última regla?</div>
+    <input type="date" id="peri-regla-input" value="${_fechaUltimaReglaPeri() || hoy}" max="${hoy}" style="width:100%;padding:12px;border:1.5px solid #e0e0e0;border-radius:12px;font-size:16px;box-sizing:border-box">
+    <button class="btn-t" style="width:100%;margin-top:16px" onclick="guardarUltimaReglaPeri()">Guardar</button>
+  </div>`);
+}
+function guardarUltimaReglaPeri(){
+  const inp = document.getElementById('peri-regla-input');
+  if(!inp || !inp.value) return;
+  if(ST.etapa === 'menopausia'){
+    if(ST.menopausiaInfo.ultimaRegla && ST.menopausiaInfo.ultimaRegla !== inp.value) ST.menopausiaInfo.penultimaRegla = ST.menopausiaInfo.ultimaRegla;
+    ST.menopausiaInfo.ultimaRegla = inp.value;
+  } else {
+    if(!ST._historialInicioCiclo) ST._historialInicioCiclo = [];
+    ST._historialInicioCiclo.push(inp.value);
+    ST.fur = inp.value;
+    try{ recalibrarDurCiclo(); }catch(e){}
+  }
+  saveState();
+  cerrarOv();
+  renderBloqueUltimaRegla();
+  toast_msg('Última regla guardada ✓');
+}
+/** Nombres de la pantalla según la etapa («Mi etapa» en perimenopausia y menopausia) y, en menopausia, solo Energía + «Para tu etapa». */
+function aplicarModoEtapaCiclo(){
+  // «Tu patrón personal» solo existe con ciclo regular sin anticonceptivos, SOP ni amenorrea; en el resto no hay patrón que mostrar
+  const bp = document.getElementById('ciclo-btn-patron'); if(bp) bp.style.display = puedeAprenderPatronSintomas().puede ? '' : 'none';
+  const etapa = modoMenopausia() || modoPeri();
+  const h = document.getElementById('ciclo-hlabel'); if(h) h.textContent = etapa ? 'Mi etapa' : 'Mi ciclo';
+  const t = document.getElementById('ctab-ciclo'); if(t) t.textContent = etapa ? 'Mi etapa' : 'Mi ciclo';
+  const tabs = document.getElementById('ciclo-tabs'); if(tabs){ if(modoMenopausia()) tabs.style.setProperty('display','none','important'); else tabs.style.removeProperty('display'); }
+  if(modoMenopausia()) cicloTab('energia');
 }
 
-const TEXTO_ENERGIA_SUFICIENTE = 'En esta etapa, entrenar la fuerza sin comer suficiente desgasta más de lo que suma. Si llevas varios días con la energía baja, asegúrate de que tus platos incluyan suficiente energía (carbohidratos y grasas saludables) y proteína.';
+/** Etapa de menopausia o condición de perimenopausia (con o sin otras patologías). */
+function etapaMenopausiaOPeri(){
+  return ST.etapa === 'menopausia' || condicionesClinicas().includes('perimenopausia');
+}
+/** Textos aprobados por Moni (31 oct 2026). Basados en los apuntes de Fisiología de la mujer; no son consejo médico. */
+const TEXTO_ENERGIA_SUFICIENTE = 'Sin la regla, tu cuerpo ya no te avisa cuando no comes lo suficiente para lo que entrenas. Si haces dieta o notas un cansancio que no se va, consúltalo con tu médica o nutricionista antes de recortar calorías.';
 const TEXTOS_MENOPAUSIA = [
-  { t:'Fuerza',   d:'Mantiene la masa muscular y la densidad ósea que los estrógenos protegían. Es la base para seguir encontrándote fuerte y ágil con los años.' },
-  { t:'Hueso',    d:'La bajada de estrógenos acelera la pérdida de masa ósea, y la fuerza es clave para el hueso. El ejercicio con carga, como pesas o saltos suaves, ayuda a protegerlo. Adáptalo siempre a tu situación.' },
+  { t:'Come lo suficiente para lo que entrenas', d: TEXTO_ENERGIA_SUFICIENTE },
+  { t:'Dieta y ejercicio', d:'Una dieta baja en calorías sin ejercicio puede hacerte perder músculo y hueso, no solo grasa. La fuerza ayuda a mantener los dos.' },
+  { t:'Cuida tu hueso', d:'Los primeros años tras la menopausia son clave para el hueso. El ejercicio con carga, como pesas o saltos suaves, ayuda a protegerlo. Adáptalo siempre a tu situación.' },
   { t:'Proteína', d:'Con la menopausia el músculo responde peor al entrenamiento y a la proteína. Repartir bien la proteína a lo largo del día ayuda.' },
 ];
 const TEXTO_SUENO_ACTIVIDAD = 'Dormir mal y entrenar menos se alimentan entre sí. Moverte con regularidad suele mejorar el sueño.';
+/** Marca el punto de la tarjeta visible en el carrusel «Para tu etapa» */
+function epCarruselScroll(c){
+  const cards = c.querySelectorAll('.ep-card'); if(!cards.length) return;
+  const i = Math.max(0, Math.min(cards.length - 1, Math.round(c.scrollLeft / (cards[0].offsetWidth + 12))));
+  const pts = c.nextElementSibling && c.nextElementSibling.querySelectorAll('.ep-punto');
+  if(pts) pts.forEach((p, n) => p.classList.toggle('act', n === i));
+}
 /** Bloque «Para tu etapa» en Ciclo › Mi ciclo (solo menopausia / perimenopausia) */
 function renderInfoEtapaMenopausia(){
   const el = document.getElementById('ciclo-etapa-info');
-  if(!el) return;
-  if(!etapaMenopausiaOPeri()){ el.innerHTML = ''; return; }
-  el.innerHTML = `<div style="font-size:13px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:1px;margin-top:18px">Para tu etapa</div>` +
-    TEXTOS_MENOPAUSIA.map(x => `<div style="padding:12px 0;border-bottom:1px solid var(--linea)"><div style="font-size:15px;font-weight:700;color:var(--n)">${x.t}</div><div style="font-size:14px;color:var(--n);line-height:1.6;margin-top:3px">${x.d}</div></div>`).join('');
+  const el2 = document.getElementById('ener-etapa-info');
+  const ICOS_EP = ['🍽️', '⚖️', '🦴', '💪'];
+  const html = etapaMenopausiaOPeri()
+    ? `<div style="font-size:13px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:1px;margin-top:18px">Para tu etapa</div>` +
+      `<div class="ep-carrusel" onscroll="epCarruselScroll(this)" tabindex="0" role="region" aria-label="Para tu etapa: desliza para ver más">` +
+      TEXTOS_MENOPAUSIA.map((x, i) => `<div class="ep-card"><div class="ep-cab"><span class="ep-avatar" aria-hidden="true">${ICOS_EP[i % ICOS_EP.length]}</span><span class="ep-app">ONA · Tu etapa</span><span class="ep-num">${i + 1}/${TEXTOS_MENOPAUSIA.length}</span></div><div class="ep-titulo">${x.t}</div><div class="ep-texto">${x.d}</div></div>`).join('') +
+      `</div><div class="ep-puntos" aria-hidden="true">${TEXTOS_MENOPAUSIA.map((x, i) => `<span class="ep-punto${i === 0 ? ' act' : ''}"></span>`).join('')}</div>`
+    : '';
+  // En menopausia la pestaña de ciclo no se muestra: el bloque va en Energía. En perimenopausia, en Mi etapa.
+  if(el) el.innerHTML = modoMenopausia() ? '' : html;
+  if(el2) el2.innerHTML = modoMenopausia() ? html : '';
 }
 /** En el diario: si marca sofocos, sudores o despertares nocturnos, o dice que durmió mal, se muestra el texto del sueño */
 const _SINTOMAS_SUENO = ['sofocos','sudores_noct','sueno_cortado'];
@@ -12283,7 +12550,7 @@ function mensajeAdaptacionRutina(){
     const excl = Object.values(ETIQUETAS_CLINICAS).filter(e => e[2][idx] !== 'S').length;
     li.push((c === 'lumbar' ? '🔹 Zona lumbar' : '🔹 Rodilla') + ': se han dejado fuera de tu rutina ' + excl + ' ejercicios de la biblioteca que no son recomendables para esa zona (los marcados «Adaptar» solo aparecen si los buscas tú).');
   });
-  li.push('⚡ Cada día, según la energía que marques en el check-in, ajustamos series e intensidad.');
+  li.push('⚡ Cada día, según la energía que marques en el registro de energía, ajustamos series e intensidad.');
   const sinAdaptacion = circunstanciasRiesgo().filter(c => !['embarazo','postparto','menopausia','osteoporosis','perimenopausia','lumbar','rodilla','parq'].includes(c.id));
   if(sinAdaptacion.length){
     li.push('ℹ️ Tu rutina no se ha modificado por: ' + sinAdaptacion.map(c => c.label.replace(/\s*\(.*$/, '')).join(', ') + '. Es la normal para tu etapa y tu energía del día. Comenta tu plan con tu profesional de la salud.');
@@ -12294,15 +12561,34 @@ function mensajeAdaptacionRutina(){
 function htmlTarjetaRiesgos(){
   const circ = circunstanciasRiesgo();
   const alertas = circ.map(c => RECORDATORIOS_HORMONALES[c.id]).filter(r => r && r.alerta);
-  return `<div class="card" style="border-color:#E65100;background:#FFF8F0">
-    <div class="ctitle" style="color:#E65100">⚠️ Antes de entrenar</div>
-    <div style="font-size:14px;color:var(--n);line-height:1.6;margin-bottom:8px">
-      Consulta a tu médico o profesional de la salud antes de entrenar. ONA no sustituye su valoración. Has indicado:
-    </div>
-    <ul style="margin:0 0 10px 18px;padding:0;font-size:14px;color:var(--n);line-height:1.6">${circ.map(c => `<li>${c.label}</li>`).join('')}</ul>
-    ${alertas.length ? `<details style="margin-bottom:10px"><summary style="font-size:14px;font-weight:700;color:#E65100;cursor:pointer">Señales de alarma: para y consulta</summary>
-      ${alertas.map(a => `<div style="font-size:13px;color:var(--n);line-height:1.6;margin-top:6px"><strong>${a.titulo}:</strong> ${a.alerta}</div>`).join('')}</details>` : ''}
-    <button type="button" class="btn-t" onclick="aceptarRiesgos()">Conozco los riesgos, quiero entrenar de manera normal</button>
+  const tiene = id => circ.some(c => c.id === id);
+  let app = 'ONA · Tu etapa', titulo, texto, aparte;
+  if(tiene('embarazo')){
+    titulo = 'Entrena acompañando a tu embarazo';
+    texto = 'Tu cuerpo está haciendo un trabajo enorme. El entrenamiento de fuerza adaptado te sienta bien: avanza escuchando tus sensaciones y baja el ritmo cuando lo necesites.';
+    aparte = 'Consulta a tu médico o matrona antes de entrenar, sobre todo si tu embarazo requiere algún cuidado especial.';
+  } else if(tiene('postparto')){
+    titulo = 'Vuelve a entrenar a tu ritmo';
+    texto = 'Tu cuerpo se está recuperando del parto, también el suelo pélvico y la zona abdominal. La fuerza te ayuda a recuperarte, siempre con progresión suave y sin prisa.';
+    aparte = 'Consulta a tu médico o a tu fisioterapeuta de suelo pélvico antes de volver a entrenar con normalidad.';
+  } else if(tiene('menopausia') || tiene('perimenopausia')){
+    titulo = 'Tu etapa pide un poco más de esfuerzo';
+    texto = 'En esta etapa a tu cuerpo le cuesta más hacer crecer el músculo y empieza a perder densidad ósea. Por eso el entrenamiento de fuerza es tu mejor aliado, y merece algo más de constancia.';
+    aparte = 'Si tienes algún problema relacionado con esta etapa (osteoporosis, roturas de huesos o similar), consulta a tu médico antes de entrenar.';
+  } else {
+    app = 'ONA · Tu salud';
+    titulo = 'Entrena adaptando a tu salud';
+    texto = 'Has indicado: ' + circ.map(c => c.label).join(', ') + '. Puedes entrenar ajustando la intensidad a cómo te sientes.';
+    aparte = 'Si tu médico te ha dado alguna indicación sobre esto, consúltala antes de entrenar.';
+  }
+  return `<div class="card aviso-riesgos">
+    <div class="ar-cab"><span class="ar-avatar" aria-hidden="true">🌸</span><span class="ar-app">${app}</span></div>
+    <div class="ar-titulo">${titulo}</div>
+    <div class="ar-texto">${texto}</div>
+    <div class="ar-texto ar-aparte">${aparte}</div>
+    ${alertas.length ? `<details class="ar-det"><summary class="ar-alarma">Cuándo parar y consultar</summary>
+      ${alertas.map(a => `<div class="ar-texto" style="margin-top:8px"><strong>${a.titulo}:</strong> ${a.alerta}</div>`).join('')}</details>` : ''}
+    <button type="button" class="ar-boton" onclick="aceptarRiesgos()"><span>Entendido, quiero entrenar</span><span class="ar-punto" aria-hidden="true"></span><span class="ar-flecha" aria-hidden="true">→</span></button>
   </div>`;
 }
 
@@ -12934,7 +13220,7 @@ function abrirDiarioSintomas(){
 
   abrirOv(`<div class="m-sheet" style="max-height:88%">
     <div class="m-head">
-      <div><div class="m-title">📝 Cuéntame más sobre ti</div><div class="m-sub">Tarda menos de un minuto</div></div>
+      <div><div class="m-title">📝 Cuéntame cómo te encuentras hoy</div><div class="m-sub">Tarda menos de un minuto</div></div>
       <button class="m-x" onclick="cerrarOv()">✕</button>
     </div>
     ${avisoGate}
@@ -13003,6 +13289,84 @@ function calcularCambiosCargaHoy(){
   return { entreno:true, checkinEstado: ST.checkin.estado||null, cambios, resumen };
 }
 
+
+// ═══════════════════════════════════════════════════════════
+// RECORDATORIO DIARIO — notificación local (plugin @capacitor/local-notifications)
+// Programa los próximos días con la hora elegida; se reprograma al abrir la app y al guardar el diario.
+// Si hoy ya está rellenado, hoy no se avisa. Sin el plugin (navegador o build sin él) no hace nada.
+// ═══════════════════════════════════════════════════════════
+const RECORDATORIO_ID_BASE = 7000;
+const RECORDATORIO_DIAS = 14;
+function recordatorioPlugin(){ return window.Capacitor?.Plugins?.LocalNotifications || null; }
+function recordatorioCfg(){
+  if(!ST.recordatorioDiario || typeof ST.recordatorioDiario !== 'object') ST.recordatorioDiario = { activo:true, hora:'20:00' };
+  if(!/^\d{2}:\d{2}$/.test(ST.recordatorioDiario.hora || '')) ST.recordatorioDiario.hora = '20:00';
+  return ST.recordatorioDiario;
+}
+function diarioRellenadoHoy(){
+  const hoy = new Date().toLocaleDateString('es-ES');
+  return (ST.diarioSintomas || []).some(d => d.fecha === hoy);
+}
+async function sincronizarRecordatorioDiario(){
+  const LN = recordatorioPlugin();
+  if(!LN) return;
+  try{
+    const cfg = recordatorioCfg();
+    const pend = await LN.getPending();
+    const mios = (pend.notifications || []).filter(n => n.id >= RECORDATORIO_ID_BASE && n.id < RECORDATORIO_ID_BASE + RECORDATORIO_DIAS);
+    if(mios.length) await LN.cancel({ notifications: mios.map(n => ({ id: n.id })) });
+    if(!cfg.activo) return;
+    let perm = await LN.checkPermissions();
+    if(perm.display === 'prompt' || perm.display === 'prompt-with-rationale') perm = await LN.requestPermissions();
+    if(perm.display !== 'granted') return;
+    const [h, m] = cfg.hora.split(':').map(Number);
+    const ahora = new Date();
+    const lista = [];
+    for(let i = 0; i < RECORDATORIO_DIAS; i++){
+      const d = new Date(); d.setDate(d.getDate() + i); d.setHours(h, m, 0, 0);
+      if(d <= ahora) continue;
+      if(i === 0 && diarioRellenadoHoy()) continue;
+      lista.push({ id: RECORDATORIO_ID_BASE + i, title: 'ONA', body: 'Cuéntame cómo te encuentras hoy 🌸', schedule: { at: d, allowWhileIdle: true }, extra: { accion: 'diario' } });
+    }
+    if(lista.length) await LN.schedule({ notifications: lista });
+  }catch(e){ console.warn('recordatorioDiario', e); }
+}
+let _recordatorioListener = false;
+function iniciarRecordatorioDiario(){
+  const LN = recordatorioPlugin();
+  if(!LN) return;
+  if(!_recordatorioListener){
+    _recordatorioListener = true;
+    try{ LN.addListener('localNotificationActionPerformed', ev => {
+      if(ev?.notification?.extra?.accion === 'diario') setTimeout(abrirDiarioSintomas, 400);
+    }); }catch(e){}
+  }
+  sincronizarRecordatorioDiario();
+}
+function actualizarUIRecordatorio(){
+  const cfg = recordatorioCfg();
+  const chk = document.getElementById('perfil-recordatorio-on');
+  const hora = document.getElementById('perfil-recordatorio-hora');
+  const aviso = document.getElementById('perfil-recordatorio-aviso');
+  if(chk) chk.checked = !!cfg.activo;
+  if(hora){ hora.value = cfg.hora; hora.disabled = !cfg.activo; hora.style.opacity = cfg.activo ? '1' : '.45'; }
+  if(aviso){
+    if(!recordatorioPlugin()){ aviso.style.display = 'block'; aviso.textContent = 'Los avisos solo suenan en la app instalada con las notificaciones activadas. En esta versión de prueba solo se guarda tu elección.'; }
+    else aviso.style.display = 'none';
+  }
+}
+function cambiarRecordatorioActivo(on){
+  recordatorioCfg().activo = !!on;
+  saveState(); actualizarUIRecordatorio(); sincronizarRecordatorioDiario();
+  toast_msg(on ? 'Te avisaremos a las ' + recordatorioCfg().hora : 'Recordatorio desactivado');
+}
+function cambiarHoraRecordatorio(v){
+  if(!/^\d{2}:\d{2}$/.test(v || '')) return;
+  recordatorioCfg().hora = v;
+  saveState(); sincronizarRecordatorioDiario();
+  toast_msg('Te avisaremos a las ' + v);
+}
+
 function guardarDiarioSintomas(){
   const hoyStr = new Date().toLocaleDateString('es-ES');
   const diaCiclo = cicloAplica() && ST.fur ? calcularCiclo().dia : null;
@@ -13028,6 +13392,7 @@ function guardarDiarioSintomas(){
 
   saveState();
   cerrarOv();
+  try{ sincronizarRecordatorioDiario(); }catch(e){}
   toast_msg('Gracias — tu historial está un poco más completo 🌿');
 }
 
@@ -14972,8 +15337,8 @@ function obtenerDiagnosticoTecnico(){
   const ciclo = typeof calcularCiclo === 'function' ? calcularCiclo() : { dia: 'N/A', fase: 'N/A' };
   
   return {
-    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.10',
-    build: '10',
+    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.11',
+    build: '11',
     plataforma: platform,
     userAgent: navigator.userAgent,
     resolucion: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight} (dpr: ${window.devicePixelRatio || 1})` : 'N/A',
@@ -15018,7 +15383,7 @@ async function enviarReporteFallo(){
   const catNombres = {
     visual: '🎨 Visual / Gráfico',
     entreno: '🏋️ Entreno / Pesos',
-    ciclo: '🌸 Ciclo / Check-in',
+    ciclo: '🌸 Ciclo / Registro de energía',
     rendimiento: '⚙️ Rendimiento / Cuelgue',
     otro: '💡 Sugerencia / Otro'
   };
@@ -15263,7 +15628,7 @@ function abrirPoliticaPrivacidad() {
         </div>
         <div>
           <strong>4. Qué se queda en tu móvil y qué sale:</strong><br>
-          <strong>Se queda en tu móvil:</strong> todo lo que introduces (perfil, ciclo, check-in, entrenos, medidas, fotos y notas). ONA no recibe estos datos.<br>
+          <strong>Se queda en tu móvil:</strong> todo lo que introduces (perfil, ciclo, registros de energía, entrenos, medidas, fotos y notas). ONA no recibe estos datos.<br>
           <strong>Sale del móvil, solo si lo aceptas:</strong> (a) en el asistente de IA, lo que escribas en el chat, tus últimos mensajes de esa conversación y tu objetivo, nivel y entorno; (b) al leer un plan con IA, el texto, PDF o foto que subas. Se envían a un servidor intermedio de ONA y de ahí a Google (Gemini). No se envían tu nombre, email ni los datos guardados en la app. Lo que tú escribas o subas se envía tal cual, así que evita incluir datos personales o de salud. Puedes retirar el permiso en Ajustes cuando quieras y la app sigue funcionando en local. [PENDIENTE de completar antes de publicar: región de procesamiento, contrato con Google, uso para entrenar modelos y plazo de conservación.]<br>
           <strong>Conexiones técnicas:</strong> al abrir la app se consulta si hay una versión nueva (GitHub o servidor de ONA) y, si descargas el modelo local, se descarga de Hugging Face. En ambos casos el servidor puede ver tu dirección IP.
         </div>
@@ -15448,7 +15813,7 @@ function evaluarLeafQ() {
         • <strong>Nutrición sin déficit:</strong> en ONA no promovemos ayunos ni restricciones calóricas cuando el cuerpo necesita energía.
       </div>`;
   } else {
-    res += `<div style="font-size:14px; color:var(--g); line-height:1.5; margin-bottom:16px;">Sigue escuchando a tu cuerpo con el check-in diario y nutriendo tus entrenamientos.</div>`;
+    res += `<div style="font-size:14px; color:var(--g); line-height:1.5; margin-bottom:16px;">Sigue escuchando a tu cuerpo con el registro de energía diario y nutriendo tus entrenamientos.</div>`;
   }
   res += `<button class="btn-n" onclick="cerrarOv()" style="width:100%; padding:12px; font-weight:700;">Entendido</button></div>`;
   abrirOv(res);
@@ -15487,17 +15852,17 @@ function exportarDatosUsuario() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ST, null, 2));
     const dlAnchor = document.createElement("a");
     dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.10.json");
+    dlAnchor.setAttribute("download", "ona_mis_datos_v1.0.11.json");
     document.body.appendChild(dlAnchor);
     dlAnchor.click();
     dlAnchor.remove();
-    toast_msg("Datos exportados en ona_mis_datos_v1.0.10.json");
+    toast_msg("Datos exportados en ona_mis_datos_v1.0.11.json");
   } catch(e) {
     toast_msg("No se pudo exportar los datos: " + e.message);
   }
 }
 
-function mostrarModalConsentimientoIA(preguntaPendiente = null) {
+function mostrarModalConsentimientoIA(preguntaPendiente = null, destino = '') {
   const pregStr = preguntaPendiente ? encodeURIComponent(preguntaPendiente) : "";
   const htmlConsent = `
     <div class="m-sheet" style="max-height:88%; overflow-y:auto;">
@@ -15516,7 +15881,7 @@ function mostrarModalConsentimientoIA(preguntaPendiente = null) {
         • <strong>Qué NO se envía:</strong> tu nombre, email, identificadores del dispositivo ni los datos guardados en la app (ciclo, etapa, molestias, medidas, fotos de progreso).<br>
         • <strong>Importante:</strong> lo que tú escribas o subas se envía tal cual. Evita incluir nombres u otros datos personales o de salud.<br>
         • <strong>Destinatario:</strong> Google (Gemini), a través de un servidor intermedio de ONA.<br>
-        • <strong>Revocación:</strong> Puedes desactivarlo en cualquier momento con un solo toque desde Ajustes.
+        • <strong>Revocación:</strong> Puedes retirarlo en cualquier momento con un solo toque desde Perfil › Motor de Inteligencia Artificial.
       </div>
       <div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:14px;">
         <input type="checkbox" id="chk-consent-ia" style="width:18px; height:18px; cursor:pointer; margin-top:2px; accent-color:var(--t);">
@@ -15525,7 +15890,7 @@ function mostrarModalConsentimientoIA(preguntaPendiente = null) {
         </label>
       </div>
       <div style="display:flex; flex-direction:column; gap:8px;">
-        <button class="btn-n" onclick="aceptarConsentimientoIA('${pregStr}')" style="flex:1; padding:12px; font-size:14px; font-weight:700; background:var(--t); color:white; border:none; border-radius:10px;">
+        <button class="btn-n" onclick="aceptarConsentimientoIA('${pregStr}','${destino}')" style="flex:1; padding:12px; font-size:14px; font-weight:700; background:var(--t); color:white; border:none; border-radius:10px;">
           Aceptar y continuar
         </button>
         <button class="btn-o" onclick="rechazarConsentimientoIA()" style="padding:12px 14px; font-size:14px;">
@@ -15537,7 +15902,7 @@ function mostrarModalConsentimientoIA(preguntaPendiente = null) {
   abrirOv(htmlConsent);
 }
 
-function aceptarConsentimientoIA(preguntaCodificada) {
+function aceptarConsentimientoIA(preguntaCodificada, destino) {
   const chk = document.getElementById("chk-consent-ia");
   if (!chk || !chk.checked) {
     toast_msg("Debes marcar la casilla para aceptar el consentimiento");
@@ -15550,6 +15915,15 @@ function aceptarConsentimientoIA(preguntaCodificada) {
   saveState();
   cerrarOv();
   toast_msg("Consentimiento registrado correctamente");
+  try{ actualizarPerfilModoIA(); }catch(e){}
+  if (destino === 'plan') {
+    // Vuelve a la pantalla del plan con lo que ya había escrito o subido
+    _vistaSubirPlan('Permiso guardado. Pulsa «Leer con IA».');
+    const t = document.getElementById('plan-texto'); if(t && _planUI.textoPendiente) t.value = _planUI.textoPendiente;
+    const nom = document.getElementById('plan-archivo-nombre'); if(nom && _planUI.archivo) nom.textContent = '📎 ' + _planUI.archivo.name;
+    const est = document.getElementById('plan-estado'); if(est) est.style.color = 'var(--t)';
+    return;
+  }
   if (preguntaCodificada) {
     const texto = decodeURIComponent(preguntaCodificada);
     procMsg(texto, true);
@@ -15562,6 +15936,7 @@ function rechazarConsentimientoIA() {
   saveState();
   cerrarOv();
   toast_msg("Modo local activo. Ningún dato saldrá de tu dispositivo.");
+  try{ actualizarPerfilModoIA(); }catch(e){}
 }
 
 function toggleConsentimientoDesdeAjustes(activo) {
@@ -15572,6 +15947,7 @@ function toggleConsentimientoDesdeAjustes(activo) {
     ST.modoIA = 'local';
     saveState();
     toast_msg("IA Online desactivada. Operando 100% en local.");
+    try{ actualizarPerfilModoIA(); }catch(e){}
   }
 }
 
@@ -15628,6 +16004,7 @@ async function continueStartApp() {
     cargarRutinaHoy();
     renderEjercicios();
     initCal();
+    try{ iniciarRecordatorioDiario(); }catch(e){}
     makeFabDraggable();
     iniciarBocadilloChat();
     
@@ -15674,7 +16051,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.10";
+const APP_VERSION_ACTUAL = "1.0.11";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;
@@ -15870,133 +16247,83 @@ async function descargarYInstalarActualizacion() {
 // ════════════════════════════════════════════════════════════════════
 // VISITA GUIADA (TOUR INTERACTIVO - SPOTLIGHT CON RECORTE Y DESENFOQUE)
 // ════════════════════════════════════════════════════════════════════
-const TOUR_PASOS = [
-  {
-    paso: 1,
-    screen: 's-dashboard',
-    targetId: 'dash-header-racha-wrap',
-    posTooltip: 'bottom',
-    isCircle: false,
-    pad: 6,
-    rx: 14,
-    tag: 'Inicio · Tu Ritmo',
-    title: '1. Saludo, Racha y Nivel de Hábito',
-    desc: 'Aquí ves tu constancia con el contador de racha y tu nivel de hábito. Con cada entreno o check-in tu hábito sigue creciendo.'
-  },
-  {
-    paso: 2,
-    screen: 's-dashboard',
-    targetId: 'dash-btn-entrenar-wrap',
-    posTooltip: 'top',
-    isCircle: false,
-    pad: 6,
-    rx: 16,
-    tag: 'Inicio · Acción',
-    title: '2. Vamos a Entrenar y Modo 20 min',
-    desc: 'Inicia tu sesión del día adaptada a ti. Si vas justa de tiempo o energía, pulsa «⚡ 20 min» para una versión express concentrada.'
-  },
-  {
-    paso: 3,
-    screen: 's-dashboard',
-    targetId: 'dash-bento-grid',
-    posTooltip: 'bottom',
-    isCircle: false,
-    pad: 6,
-    rx: 16,
-    tag: 'Inicio · Visión Global',
-    title: '3. Bento Grid: Ciclo, Hábitos y Alertas',
-    desc: 'Panel dinámico con tu fase hormonal, adherencia semanal, avisos fisiológicos y recomendaciones personalizadas en tiempo real.'
-  },
-  {
-    paso: 4,
-    screen: 's-entreno',
-    subtabEntreno: 'hoy',
-    targetId: 'ent-sub-hoy',
-    posTooltip: 'bottom',
-    isCircle: false,
-    pad: 6,
-    rx: 14,
-    tag: 'Entreno · Hoy',
-    title: '4. Subpestaña «Hoy» y Código Rojo',
-    desc: 'Tu sesión del día con series, RIR, pesos y descansos cronometrados. Además, incluye el Código Rojo con señales clínicas de parada segura.'
-  },
-  {
-    paso: 5,
-    screen: 's-entreno',
-    subtabEntreno: 'progreso',
-    targetId: 'ent-sub-progreso',
-    posTooltip: 'bottom',
-    isCircle: false,
-    pad: 6,
-    rx: 14,
-    tag: 'Entreno · Progreso',
-    title: '5. Subpestaña «Progreso»',
-    desc: 'Analiza tu volumen de fuerza acumulado, calendario de adherencia con fases hormonales y el mapa corporal de estímulo muscular.'
-  },
-  {
-    paso: 6,
-    screen: 's-entreno',
-    subtabEntreno: 'historial',
-    targetId: 'ent-sub-historial',
-    posTooltip: 'bottom',
-    isCircle: false,
-    pad: 6,
-    rx: 14,
-    tag: 'Entreno · Historial',
-    title: '6. Subpestaña «Historial»',
-    desc: 'Revisa todas tus sesiones completadas en detalle y genera tu tarjeta visual para celebrar y compartir tus logros en redes.'
-  },
-  {
-    paso: 7,
-    screen: 's-ciclo',
-    subtabCiclo: 'ciclo',
-    targetId: 'ciclo-flor-card',
-    posTooltip: 'bottom',
-    isCircle: false,
-    pad: 6,
-    rx: 16,
-    tag: 'Ciclo · Mi ciclo',
-    title: '7. Rueda Floral de 28 Días y Diario',
-    desc: 'Visualiza tu ciclo completo con la flor ONA de 28 pétalos. Toca en «Diario de síntomas» para registrar cómo te sientes hoy.'
-  },
-  {
-    paso: 8,
-    screen: 's-ciclo',
-    subtabCiclo: 'energia',
-    targetId: 'ciclo-tab-energia',
-    posTooltip: 'bottom',
-    isCircle: false,
-    pad: 6,
-    rx: 14,
-    tag: 'Ciclo · Energía',
-    title: '8. Curva de Energía a 12 Semanas',
-    desc: 'Seguimiento continuo de tu vitalidad a lo largo de las semanas, especialmente diseñado para perimenopausia, menopausia o ciclos irregulares.'
-  },
-  {
-    paso: 9,
-    screen: 's-dashboard',
-    targetId: 'chat-fab',
-    posTooltip: 'top',
-    isCircle: true,
-    pad: 4,
-    tag: 'Asistente · IA ONA',
-    title: '9. Tu Asistente Chat Cerebro',
-    desc: 'Tu aliada inteligente disponible 24h. Pulsa este botón flotante para resolver cualquier duda sobre técnica, nutrición, ciclo o adaptaciones.'
-  },
-  {
-    paso: 10,
-    screen: 's-perfil',
-    targetId: 'perfil-card-main',
-    posTooltip: 'bottom',
-    isCircle: false,
-    pad: 6,
-    rx: 16,
-    tag: 'Perfil · Configuración',
-    title: '10. Tu Perfil y Repetir Visita Guiada',
-    desc: 'Gestiona tu etapa vital, material disponible y chequeo LEAF-Q. Siempre que quieras recordar estas funciones, usa el botón «Repetir visita guiada».'
+/**
+ * Pasos de la visita guiada. Siguen el orden del manual: Inicio → Entreno → Ciclo / Mi etapa → Asistente → Perfil.
+ * Cada paso explica para qué sirve el apartado. Los de ciclo se adaptan a la etapa (regular, perimenopausia, menopausia).
+ * `target`: id, selector CSS o función que devuelve el elemento.
+ */
+function tourConstruirPasos(){
+  const meno = (typeof modoMenopausia === 'function') && modoMenopausia();
+  const peri = (typeof modoPeri === 'function') && modoPeri();
+  const etapa = meno || peri;
+  const P = [];
+  // ── 1. Inicio ──
+  P.push({ screen:'s-dashboard', target:'dash-header-racha-wrap', tag:'Inicio',
+    title:'Tu saludo, tu racha y tu nivel',
+    desc:'Aquí ves cuántos días seguidos llevas cuidándote (la racha) y tu nivel, que sube con cada entreno y cada registro de energía. Sirve para ver tu constancia de un vistazo.' });
+  P.push({ screen:'s-dashboard', target:'dash-bento-grid', tag:'Inicio',
+    title:'Tu resumen y tus avisos',
+    desc:'Aquí ves cómo vas hoy: tu fase o etapa, tu constancia de la semana y los avisos importantes, por ejemplo si se acerca tu próxima regla o llevas varios días con poca energía. Te informa, pero no cambia tus ejercicios: lo que adapta tu rutina es cómo te sientes cada día.' });
+  P.push({ screen:'s-dashboard', target:'dash-btn-entrenar-wrap', pos:'top', tag:'Inicio',
+    title:'Vamos a entrenar',
+    desc:'Abre el entreno de hoy. Antes te pregunta «¿Cómo estás hoy?» (10 segundos) y ajusta la rutina a tu energía. Si vas justa de tiempo, «20 min» te da una versión corta.' });
+  P.push({ screen:'s-dashboard', target:'#nav-dashboard', pos:'top', pad:0, tag:'Inicio',
+    title:'La barra de abajo',
+    desc: 'Desde aquí te mueves por la app: Inicio, ' + (etapa ? 'Mi etapa' : 'Ciclo') + ' (tu ciclo o tu etapa), Entreno, Perfil y Reportar fallo. Ahora vamos a verlas una a una.' });
+  // ── 2. Entreno ──
+  P.push({ screen:'s-entreno', entreno:'hoy', target:'ent-tab-hoy', tag:'Entreno · Hoy',
+    title:'Hoy: tu rutina del día',
+    desc:'Cada ejercicio muestra series y repeticiones. Marca cada serie al terminarla y anota el peso: la app te propondrá subir carga cuando toque. Puedes ver el vídeo, elegir una variante o descartar un ejercicio por hoy. Abajo del todo valoras el entreno. El apartado «Código Rojo» te avisa de las señales para parar y consultar a un profesional.' });
+  P.push({ screen:'s-entreno', entreno:'progreso', target:'ent-tab-progreso', tag:'Entreno · Progreso',
+    title:'Progreso: ver tu evolución',
+    desc:'Calendario de entrenos, medidas y fotos, mapa corporal con los músculos trabajados, volumen semanal y récords personales. Sirve para comprobar que vas mejorando aunque la báscula no se mueva.' });
+  P.push({ screen:'s-entreno', entreno:'historial', target:'ent-tab-historial', tag:'Entreno · Historial',
+    title:'Historial: tus sesiones',
+    desc:'Todos tus entrenos completados. Desde aquí creas la tarjeta de cada sesión para guardarla en tu móvil o compartirla.' });
+  // ── 3. Ciclo / Mi etapa ──
+  if(!etapa){
+    P.push({ screen:'s-ciclo', ciclo:'ciclo', target:'ciclo-flor-wrap', tag:'Mi ciclo',
+      title:'Mi ciclo: tu flor',
+      desc:'Cada pétalo es un día de tu ciclo. Ves el día y la fase de hoy. Registra la regla cuando te baje, o indica la fecha de la última, y la app afinará sus cálculos.' });
+  } else if(peri){
+    P.push({ screen:'s-ciclo', ciclo:'ciclo', target:'ciclo-ultima-regla', tag:'Mi etapa',
+      title:'Tu última regla',
+      desc:'Marca cuándo fue tu última regla para llevar la cuenta de cuánto hace. Se considera menopausia cuando pasan 12 meses seguidos sin regla. ONA no lo diagnostica: si llegas a los 12 meses, coméntalo con tu médica.' });
   }
-];
+  if(!meno){
+    P.push({ screen:'s-ciclo', ciclo:'ciclo', target:'ciclo-btn-diario', tag: etapa ? 'Mi etapa' : 'Mi ciclo',
+      title:'Cuéntame cómo te encuentras hoy',
+      desc:'Anota cómo te sientes hoy: síntomas físicos y emocionales, y cambios hormonales como sofocos, sudores nocturnos o sueño cortado. Esto le permite saber a ONA tus tendencias de energía de las últimas semanas.' + (puedeAprenderPatronSintomas().puede ? ' Con suficiente historial, también te enseña tu patrón personal.' : '') });
+  }
+  if(etapa){
+    P.push({ screen:'s-ciclo', ciclo: meno ? 'energia' : 'ciclo', target: meno ? 'ener-etapa-info' : 'ciclo-etapa-info', tag:'Mi etapa',
+      title:'Para tu etapa',
+      desc:'Información útil para esta etapa: comer lo suficiente para lo que entrenas, cuidar el hueso, la proteína, la fuerza y el sueño. Es orientativa y no sustituye a tu médica.' });
+  }
+  P.push({ screen:'s-ciclo', ciclo:'energia', target:'ener-grafico', tag: etapa ? 'Mi etapa · Energía' : 'Mi ciclo · Energía',
+    title:'Energía: cómo cambia tu vitalidad',
+    desc:'Una línea con la energía media que marcas en cada registro de energía, para ver cuándo tienes más o menos energía. Según tu etapa se muestra por día del ciclo o por semanas. Necesita varios registros para ser fiable.' });
+  // ── 4. Asistente ──
+  P.push({ screen:'s-dashboard', target:'chat-fab', circle:true, pos:'top', tag:'Asistente',
+    title:'Tu asistente de IA',
+    desc:'Pulsa el cerebro para preguntar por tu entreno, tu ciclo o tus dudas. Es una IA: sus respuestas son orientativas y no sustituyen a un profesional sanitario. Puede responder en línea o con un modelo guardado en tu móvil.' });
+  // ── 5. Perfil ──
+  P.push({ screen:'s-perfil', target:'perfil-card-main', tag:'Perfil',
+    title:'Tus datos',
+    desc:'Tu foto, tu nombre, tu nivel, tu racha y tus logros. Con «Editar» cambias tus datos, y también puedes revisar tu etapa vital y tu salud hormonal.' });
+  P.push({ screen:'s-perfil', target:() => { const e = document.getElementById('perfil-modo-ia'); return e ? (e.closest('.card') || e) : null; }, tag:'Perfil',
+    title:'Motor de Inteligencia Artificial',
+    desc:'Eliges si la IA responde en línea o con el modelo de tu móvil. Aquí también das o retiras el permiso para enviar datos a Google cuando usas la IA online. Es opcional y puedes cambiarlo cuando quieras.' });
+  P.push({ screen:'s-perfil', target:'perfil-plan-btn', tag:'Perfil',
+    title:'Plan de tu entrenador/a',
+    desc:'Si ya tienes un plan, súbelo o pégalo y ONA lo organiza por días. ONA no lo cambia: solo te avisa si algún ejercicio no es recomendable en tu situación.' });
+  P.push({ screen:'s-perfil', target:'#nav-perfil .nav-btn:last-child', pos:'top', pad:0, tag:'Perfil',
+    title:'Reportar fallo',
+    desc:'Si algo no funciona o tienes una idea para mejorar ONA, cuéntalo aquí. Puedes repetir esta visita cuando quieras desde Perfil. ¡Ya lo tienes todo!' });
+  return P.map((c, n) => Object.assign({ paso: n + 1, total: P.length }, c));
+}
 
+let TOUR_PASOS = [];
 let _tourPasoActual = 0;
 let _tourActivo = false;
 
@@ -16004,6 +16331,7 @@ function iniciarVisitaGuiada(forzar = false) {
   if (_tourActivo) return;
   _tourActivo = true;
   _tourPasoActual = 0;
+  TOUR_PASOS = tourConstruirPasos();
 
   // Ocultar bocadillo de bienvenida del chat para que no interfiera
   const bocadillo = document.getElementById('chat-bocadillo');
@@ -16019,73 +16347,78 @@ function iniciarVisitaGuiada(forzar = false) {
   renderPasoTour(0);
 }
 
+function _tourElemento(cfg){
+  const t = cfg.target;
+  if(typeof t === 'function') return t();
+  if(!t) return null;
+  return /^[#.\[]/.test(t) || t.includes(' ') ? document.querySelector(t) : document.getElementById(t);
+}
+/** Contenedor con scroll más cercano (cada pantalla se desplaza por dentro del teléfono) */
+function _tourScroller(el){
+  for(let n = el && el.parentElement; n; n = n.parentElement){
+    const o = getComputedStyle(n).overflowY;
+    if((o === 'auto' || o === 'scroll') && n.scrollHeight > n.clientHeight + 2) return n;
+  }
+  return null;
+}
+
 function renderPasoTour(idx) {
   if (idx < 0 || idx >= TOUR_PASOS.length) return;
   _tourPasoActual = idx;
   const cfg = TOUR_PASOS[idx];
 
-  // 1. Navegar a la pantalla correspondiente
-  if (cfg.screen) {
-    goToNav(cfg.screen);
-  }
+  // 1. Pantalla y pestaña de cada paso
+  if (cfg.screen) goToNav(cfg.screen);
+  if (cfg.entreno) cambiarSubTabEntreno(cfg.entreno);
+  if (cfg.ciclo) cicloTab(cfg.ciclo);
 
-  // 2. Subpestañas específicas
-  if (cfg.subtabEntreno) {
-    cambiarSubTabEntreno(cfg.subtabEntreno);
-  }
-  if (cfg.subtabCiclo) {
-    cicloTab(cfg.subtabCiclo);
-  }
-
-  // 3. Scroll suave al elemento si no es fijo ni circular
-  const targetEl = document.getElementById(cfg.targetId);
-  if (targetEl && !cfg.isCircle && cfg.targetId !== 'chat-fab') {
-    try {
-      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } catch (e) {
-      targetEl.scrollIntoView();
-    }
-  }
-
-  // 4. Actualizar máscara de corte exacto
-  setTimeout(() => {
-    const el = document.getElementById(cfg.targetId);
-    if (el) ajustarMascaraExacta(el, cfg.isCircle, cfg.pad, cfg.rx);
-  }, 60);
-  setTimeout(() => {
-    const el = document.getElementById(cfg.targetId);
-    if (el) ajustarMascaraExacta(el, cfg.isCircle, cfg.pad, cfg.rx);
-  }, 220);
-
-  // 5. Textos y posición del tooltip
+  // 2. Textos y botones
   const tagEl = document.getElementById('tour-step-tag');
   const titleEl = document.getElementById('tour-step-title');
   const descEl = document.getElementById('tour-step-desc');
   const countEl = document.getElementById('tour-step-count');
   const btnPrev = document.getElementById('btn-tour-prev');
   const btnNext = document.getElementById('btn-tour-next');
-
-  if (tagEl) tagEl.textContent = `${cfg.tag} · ${cfg.paso} de 10`;
+  if (tagEl) tagEl.textContent = cfg.tag;
   if (titleEl) titleEl.textContent = cfg.title;
   if (descEl) descEl.textContent = cfg.desc;
-  if (countEl) countEl.textContent = `${cfg.paso} / 10`;
+  if (countEl) countEl.textContent = `${cfg.paso} de ${cfg.total}`;
+  if (btnPrev) btnPrev.disabled = (idx === 0);
+  if (btnNext) btnNext.textContent = (idx === TOUR_PASOS.length - 1) ? 'Terminar' : 'Siguiente →';
 
-  if (btnPrev) btnPrev.disabled = (_tourPasoActual === 0);
-  if (btnNext) {
-    btnNext.textContent = (_tourPasoActual === TOUR_PASOS.length - 1) ? '¡Finalizar! 🚀' : 'Siguiente →';
-  }
-
+  // 3. La tarjeta va abajo (sobre la barra) o arriba; lo marcado se coloca en la parte libre
+  const pos = cfg.pos === 'top' ? 'top' : 'bottom';
   const tooltip = document.getElementById('tour-tooltip-card');
-  if (tooltip) {
-    if (cfg.posTooltip === 'top') {
-      tooltip.className = 'tooltip-pos-top';
-    } else {
-      tooltip.className = 'tooltip-pos-bottom';
+  if (tooltip) tooltip.className = pos === 'top' ? 'tooltip-pos-top' : 'tooltip-pos-bottom';
+
+  // 4. Desplazar para que lo marcado quede en la zona libre y ajustar el recorte
+  const colocar = (scroll) => {
+    const el = _tourElemento(cfg);
+    if (!el) return;
+    if (scroll && !cfg.circle) {
+      const sc = _tourScroller(el);
+      if (sc) {
+        const r = el.getBoundingClientRect(), r0 = sc.getBoundingClientRect();
+        if (pos === 'bottom') {
+          sc.scrollTop += (r.top - r0.top) - 24; // el elemento sube casi al borde de arriba
+        } else {
+          // Tarjeta arriba: lo marcado debe quedar entre la tarjeta y la barra de abajo
+          const ph = document.getElementById('phone').getBoundingClientRect();
+          const tr = document.getElementById('tour-tooltip-card').getBoundingClientRect();
+          const libreTop = tr.bottom + 10, libreBot = ph.bottom - 82;
+          if (r.bottom > libreBot) sc.scrollTop += r.bottom - libreBot;
+          else if (r.top < libreTop) sc.scrollTop -= libreTop - r.top;
+        }
+      }
     }
-  }
+    ajustarMascaraExacta(el, !!cfg.circle, cfg.pad == null ? 6 : cfg.pad, 4, pos);
+  };
+  setTimeout(() => colocar(true), 40);
+  setTimeout(() => colocar(false), 200);
+  setTimeout(() => colocar(false), 450);
 }
 
-function ajustarMascaraExacta(targetEl, isCircle = false, pad = 6, rx = 14) {
+function ajustarMascaraExacta(targetEl, isCircle = false, pad = 6, rx = 14, pos = 'bottom') {
   const phone = document.getElementById('phone') || document.querySelector('.phone');
   if (!phone || !targetEl) return;
   const phoneRect = phone.getBoundingClientRect();
@@ -16100,9 +16433,15 @@ function ajustarMascaraExacta(targetEl, isCircle = false, pad = 6, rx = 14) {
 
   const p = (typeof pad === 'number') ? pad : 6;
   const x = Math.round(targetRect.left - phoneRect.left - p);
-  const y = Math.round(targetRect.top - phoneRect.top - p);
-  const w = Math.round(targetRect.width + p * 2);
-  const h = Math.round(targetRect.height + p * 2);
+  let y = Math.round(targetRect.top - phoneRect.top - p);
+  let w = Math.round(targetRect.width + p * 2);
+  let h = Math.round(targetRect.height + p * 2);
+  // Lo marcado nunca queda tapado por la tarjeta de explicación
+  const tt = document.getElementById('tour-tooltip-card');
+  if (tt && tt.style.display !== 'none' && !isCircle) {
+    const tr = tt.getBoundingClientRect();
+    if (pos === 'bottom') { const lim = Math.round(tr.top - phoneRect.top) - 8; if (y + h > lim) h = Math.max(24, lim - y); }
+  }
 
   const maskRect = document.getElementById('tour-cutout-rect');
   const maskCircle = document.getElementById('tour-cutout-circle');
@@ -16209,16 +16548,16 @@ function omitirVisitaGuiadaInicial() {
 window.addEventListener('resize', () => {
   if (_tourActivo && TOUR_PASOS[_tourPasoActual]) {
     const cfg = TOUR_PASOS[_tourPasoActual];
-    const el = document.getElementById(cfg.targetId);
-    if (el) ajustarMascaraExacta(el, cfg.isCircle, cfg.pad, cfg.rx);
+    const el = _tourElemento(cfg);
+    if (el) ajustarMascaraExacta(el, !!cfg.circle, 6, 4, cfg.pos === 'top' ? 'top' : 'bottom');
   }
 });
 
 document.addEventListener('scroll', () => {
   if (_tourActivo && TOUR_PASOS[_tourPasoActual]) {
     const cfg = TOUR_PASOS[_tourPasoActual];
-    const el = document.getElementById(cfg.targetId);
-    if (el) ajustarMascaraExacta(el, cfg.isCircle, cfg.pad, cfg.rx);
+    const el = _tourElemento(cfg);
+    if (el) ajustarMascaraExacta(el, !!cfg.circle, 6, 4, cfg.pos === 'top' ? 'top' : 'bottom');
   }
 }, true);
 
