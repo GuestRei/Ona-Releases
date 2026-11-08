@@ -19,28 +19,40 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.13**
+## 🤖 Versión para Android (Instalador APK): **v1.0.14**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.13-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.13/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.14-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.14/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.13 (código 13)
-- **Tamaño:** ~29.8 MB
+- **Versión:** 1.0.14 (código 14)
+- **Tamaño:** ~28.3 MB (optimizado desde 29.8 MB)
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.13:
-- **Plugin Nativo de Nube `OnaNube` (Google Drive & iCloud):**
-  - **Android:** Integración nativa directa con Google Sign-In y Google Drive REST API v3 en el espacio privado y seguro de la usuaria (`appDataFolder`). Conserva de forma automática solo las 3 copias más recientes y renueva credenciales sin interrupciones.
-  - **iOS (Swift / Obj-C):** Implementación nativa con contenedor de iCloud Documents / Ubiquity (`Documents/ONA-copias/`), vinculada de forma silenciosa e instantánea al Apple ID del dispositivo sin requerir inicios de sesión manuales.
-  - **Gestión Automatizada:** Soporte para comprobación de estado de conexión (`estado`), inicio de sesión interactivo y consentimiento (`conectar`), desvinculación limpia (`desconectar`), subida programada de copias de seguridad cada 15 días (`subir`) y recuperación con previsualización (`ultimaCopia`).
-- **Prueba de Peso Suave la Primera Vez:** Al iniciar un ejercicio con carga por primera vez se ofrece «peso por definir» y prueba suave, estimando automáticamente los demás ejercicios del grupo.
-- **Pestaña «Mi plan» en Entreno:** Edición permanente del plan (sustituciones, exclusiones, reordenación y ejercicios personalizados).
-- **Lector de Plan de Entrenador/a con IA y ~230 Reglas:** Nuevo reconocedor tolerante y multi-formato.
-- **Pestaña «Registro» de Síntomas e Informe Objetivo:** Diario de salud femenino con exportación estructurada.
-- **Botón Atrás en Cascada y Área Segura:** Navegación estándar en Android y corrección visual `--sab`.
+## 🌟 Novedades v1.0.14:
+- **Evolución con IA en Registro de Síntomas:**
+  - En *Ciclo › Registro*, nuevo botón «Evolución con IA» que redacta un informe objetivo semana a semana a partir de las anotaciones acumuladas.
+  - Filtro clínico estricto (`REG_IA_PROHIBIDAS`): descarta cualquier diagnóstico, tratamiento o consejo médico, limitándose a describir patrones.
+  - Minimización de datos RGPD: solo viajan recuentos agregados de categorías neutras. No se envían notas personales, vida sexual, peso ni medicación.
+  - Consentimiento específico persistido en `ST.consentRegistroIA`.
+- **Mi Plan: Quitar Ejercicio Sin Sustitución Forzada:**
+  - Al quitar un ejercicio en «Mi plan», el hueco permanece vacío (`ST.planPersonal.vacios`) en vez de forzar un candidato sustituto.
+  - Salvaguarda clínica: el día no puede quedarse sin ejercicios.
+- **Detección Robusta del Plugin Nativo OnaNube:**
+  - Verificación mediante `Capacitor.isPluginAvailable('OnaNube')`, eliminando falsos positivos en entornos sin el plugin registrado.
+- **Reducción de Peso y Rendimiento Web (1.54 MB vs 2.95 MB):**
+  - Eliminación de imágenes data-URI redundantes en Base64 en el CSS de fondo de `#s-dashboard`.
+  - Depuración y borrado de `hero_bg.png` (522 KB) y de 25 funciones huérfanas en desuso.
+- **Pulido Visual y de Interfaz:**
+  - Botón de socias de «Centro ONA físico» desactivado con modal informativo y soporte para la futura URL de fundadoras (`ONA_WEB_URL`).
+  - Tarjeta de compartir en redes con columnas dinámicas: **RÉCORD**, **TRABAJADO** y **RACHA**.
+  - Tarjetas de «Etapa vital» y «Entorno» unificadas en un único bloque con fondo teal suave.
+  - Explicaciones de energía y copias transformadas en botones discretos desplegables `ⓘ`.
+  - Corrección de `padding-bottom` en el modal «Ya has entrenado hoy» para respetar el área segura en Android.
+- **Privacidad y RGPD en Reportes:**
+  - Casilla de diagnóstico técnico desmarcada por defecto para garantizar consentimiento explícito y voluntario.
 
 ---
 
