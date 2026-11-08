@@ -16843,8 +16843,8 @@ function obtenerDiagnosticoTecnico(){
   const ciclo = typeof calcularCiclo === 'function' ? calcularCiclo() : { dia: 'N/A', fase: 'N/A' };
   
   return {
-    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.12',
-    build: '12',
+    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.13',
+    build: '13',
     plataforma: platform,
     userAgent: navigator.userAgent,
     resolucion: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight} (dpr: ${window.devicePixelRatio || 1})` : 'N/A',
@@ -16862,7 +16862,7 @@ function actualizarPreviewDiagnostico(){
   const consentDiag = document.getElementById('reporte-consent-diag')?.checked ?? true;
   let diag = obtenerDiagnosticoTecnico();
   if (!consentDiag) {
-    diag = { version: APP_VERSION_ACTUAL, build: '12', plataforma: 'Anónima', userAgent: 'Omitido por privacidad', resolucion: 'Omitida', etapa: 'No compartida', diaCiclo: 'Omitido', faseCiclo: 'Omitida', fechaHora: new Date().toISOString() };
+    diag = { version: APP_VERSION_ACTUAL, build: '13', plataforma: 'Anónima', userAgent: 'Omitido por privacidad', resolucion: 'Omitida', etapa: 'No compartida', diaCiclo: 'Omitido', faseCiclo: 'Omitida', fechaHora: new Date().toISOString() };
   }
   el.textContent = `App: v${diag.version} (Build ${diag.build})
 Plataforma: ${diag.plataforma}
@@ -16904,7 +16904,7 @@ async function enviarReporteFallo(){
   const consentDiag = document.getElementById('reporte-consent-diag')?.checked ?? true;
   let diag = obtenerDiagnosticoTecnico();
   if (!consentDiag) {
-    diag = { version: APP_VERSION_ACTUAL, build: '12', plataforma: 'Anónima', userAgent: 'Omitido por privacidad', resolucion: 'Omitida', etapa: 'No compartida', diaCiclo: 'Omitido', faseCiclo: 'Omitida', fechaHora: new Date().toISOString() };
+    diag = { version: APP_VERSION_ACTUAL, build: '13', plataforma: 'Anónima', userAgent: 'Omitido por privacidad', resolucion: 'Omitida', etapa: 'No compartida', diaCiclo: 'Omitido', faseCiclo: 'Omitida', fechaHora: new Date().toISOString() };
   }
 
   if(btn){
@@ -17904,7 +17904,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.12";
+const APP_VERSION_ACTUAL = "1.0.13";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;

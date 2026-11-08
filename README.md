@@ -19,27 +19,28 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.12**
+## 🤖 Versión para Android (Instalador APK): **v1.0.13**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.12-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.12/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.13-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.13/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.12 (código 12)
-- **Tamaño:** ~29.60 MB
+- **Versión:** 1.0.13 (código 13)
+- **Tamaño:** ~29.8 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.12:
-- **Prueba de Peso Suave la Primera Vez:** Al iniciar un ejercicio con carga por primera vez se ofrece «peso por definir» y prueba suave (buena técnica con 2 repeticiones en recámara), estimando automáticamente los demás ejercicios del grupo con margen de seguridad.
-- **Pestaña «Mi plan» en Entreno:** Edición permanente del plan (cambiar por hasta 15 opciones aptas, excluir definitivamente, reordenar y añadir extras). Con plan de entrenador/a, se muestra con máxima prioridad permitiendo renombrar días y mover ejercicios.
-- **Lector de Plan de Entrenador/a con IA y ~230 Reglas:** Nuevo reconocedor con más de 230 reglas en español, inglés y nombres coloquiales, y parser JSON tolerante a respuestas cortadas.
-- **Creación de Ejercicios Propios y Notas:** Formulario para añadir ejercicios propios no catalogados. Nuevo campo de «Notas» por ejercicio con icono propio incrustado y punto rosa si hay notas.
-- **Copia de Seguridad y Restauración (Local y Privada):** Exportación de archivo `ONA-copia-AAAA-MM-DD.json` mediante el menú de compartir del sistema (Drive, iCloud, email). Restauración desde archivo o bienvenida, y recordatorio cada 15 días.
-- **Pestaña «Registro» de Síntomas e Informe Objetivo:** Diario libre por fecha (flujo, deseo, ánimo, digestión, medicación, peso, temperatura, notas) con generación de informes compartibles/copiables.
-- **Botón Atrás en Cascada y Área Segura:** Navegación hacia atrás estándar en Android y ajuste `--sab` para que la barra de navegación del teléfono no tape los botones inferiores.
-- **Seguridad y Privacidad:** Consentimiento explícito opcional para diagnóstico técnico en «Reportar fallo» (con respaldo prioritario en Cloudflare Worker) y casilla de mayoría de edad (+18) en Onboarding.
+## 🌟 Novedades v1.0.13:
+- **Plugin Nativo de Nube `OnaNube` (Google Drive & iCloud):**
+  - **Android:** Integración nativa directa con Google Sign-In y Google Drive REST API v3 en el espacio privado y seguro de la usuaria (`appDataFolder`). Conserva de forma automática solo las 3 copias más recientes y renueva credenciales sin interrupciones.
+  - **iOS (Swift / Obj-C):** Implementación nativa con contenedor de iCloud Documents / Ubiquity (`Documents/ONA-copias/`), vinculada de forma silenciosa e instantánea al Apple ID del dispositivo sin requerir inicios de sesión manuales.
+  - **Gestión Automatizada:** Soporte para comprobación de estado de conexión (`estado`), inicio de sesión interactivo y consentimiento (`conectar`), desvinculación limpia (`desconectar`), subida programada de copias de seguridad cada 15 días (`subir`) y recuperación con previsualización (`ultimaCopia`).
+- **Prueba de Peso Suave la Primera Vez:** Al iniciar un ejercicio con carga por primera vez se ofrece «peso por definir» y prueba suave, estimando automáticamente los demás ejercicios del grupo.
+- **Pestaña «Mi plan» en Entreno:** Edición permanente del plan (sustituciones, exclusiones, reordenación y ejercicios personalizados).
+- **Lector de Plan de Entrenador/a con IA y ~230 Reglas:** Nuevo reconocedor tolerante y multi-formato.
+- **Pestaña «Registro» de Síntomas e Informe Objetivo:** Diario de salud femenino con exportación estructurada.
+- **Botón Atrás en Cascada y Área Segura:** Navegación estándar en Android y corrección visual `--sab`.
 
 ---
 
