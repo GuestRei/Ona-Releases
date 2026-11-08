@@ -16918,10 +16918,6 @@ async function enviarReporteFallo(){
     statusEl.textContent = 'Conectando con el repositorio y registrando incidencia...';
   }
 
-  const _k = [77,67,94,66,95,72,117,90,75,94,117,27,27,107,121,121,28,97,102,115,26,93,64,105,68,90,93,75,78,91,126,25,72,117,64,97,122,78,72,115,127,108,82,114,75,103,102,98,24,71,78,76,69,78,93,83,107,73,122,91,79,88,103,78,112,104,88,94,30,99,104,103,114,71,25,94,25,31,124,28,126,110,111,126,108,120,91,78,107,90,103,105,120].map(c => String.fromCharCode(c ^ 42)).join('');
-  const repoOwner = 'GuestRei';
-  const repoName = 'Ona-Digital';
-
   const shortDesc = desc.length > 50 ? desc.slice(0, 47) + '...' : desc;
   const issueTitle = `[Reporte App] ${categoria}: ${shortDesc}`;
 
@@ -16945,38 +16941,16 @@ ${desc}
 `;
 
   try {
-    let response = null;
-    try {
-      // Intento prioritario por Worker de Cloudflare (seguridad: sin token en cliente)
-      response = await fetch('https://ona-gemini-proxy.guestrei.workers.dev/report-issue', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: issueTitle,
-          body: issueBody,
-          labels: ['bug', 'reporte-app', `v${diag.version}`]
-        })
-      });
-    } catch(workerErr) {
-      console.warn('Worker no disponible, recurriendo a conexión directa:', workerErr);
-    }
-
-    if (!response || !response.ok) {
-      // Respaldo directo a GitHub
-      response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${_k}`,
-          'Accept': 'application/vnd.github+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          title: issueTitle,
-          body: issueBody,
-          labels: ['bug', 'reporte-app', `v${diag.version}`]
-        })
-      });
-    }
+    // Envío seguro a través del Worker de Cloudflare (sin tokens en cliente)
+    const response = await fetch('https://ona-gemini-proxy.guestrei.workers.dev/report-issue', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: issueTitle,
+        body: issueBody,
+        labels: ['bug', 'reporte-app', `v${diag.version}`]
+      })
+    });
 
     if(!response.ok){
       const errData = await response.json().catch(() => ({}));
