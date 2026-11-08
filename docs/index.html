@@ -1829,7 +1829,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div class="ctitle">🔄 Versión y Actualizaciones</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.14</span></div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.15</span></div>
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-version-subtxt">Canal oficial de GitHub</div>
         </div>
         <button class="btn-o" onclick="verificarActualizacionApp(true)" style="width:auto;padding:7px 12px;font-size:13px">Buscar actualización</button>
@@ -2049,7 +2049,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <!-- Detalles de la versión -->
     <div style="background:#f8f9fa;border-radius:12px;padding:10px 14px;margin-bottom:16px;text-align:left;border:1px solid #eee;">
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--n)">
-        <span>Versión actual: <b id="act-ver-actual">v1.0.14</b></span>
+        <span>Versión actual: <b id="act-ver-actual">v1.0.15</b></span>
         <span style="color:var(--t)">Nueva: <b id="act-ver-nueva">--</b></span>
       </div>
       <div id="act-notas" style="font-size:12px;color:var(--g);margin-top:6px;max-height:80px;overflow-y:auto;line-height:1.4">
@@ -8427,6 +8427,55 @@ function elegirEntornoHoy(valor){
   try{ cargarRutinaHoy(); }catch(e){ console.warn('entornoHoy→rutina', e); }
   renderEjercicios();
 }
+function obtenerSesionFinalizadaHoy() {
+  if (!ST.historialSesiones || !ST.historialSesiones.length) return null;
+  const hoyStrES = new Date().toLocaleDateString('es-ES');
+  const hoyIso = new Date().toISOString().slice(0, 10);
+  const hoyDateStr = new Date().toDateString();
+
+  for (let i = ST.historialSesiones.length - 1; i >= 0; i--) {
+    const s = ST.historialSesiones[i];
+    if (!s || !s.ejercicios || !s.ejercicios.length) continue;
+    let esHoy = false;
+    if (s.fecha === hoyStrES || s.fecha === hoyIso) esHoy = true;
+    if (!esHoy && typeof convertToISODate === 'function') {
+      try {
+        if (convertToISODate(s.fecha) === hoyIso) esHoy = true;
+      } catch(e) {}
+    }
+    if (!esHoy && s.inicioSesion) {
+      try {
+        if (new Date(s.inicioSesion).toDateString() === hoyDateStr) esHoy = true;
+      } catch(e) {}
+    }
+    if (!esHoy && s.finSesion) {
+      try {
+        if (new Date(s.finSesion).toDateString() === hoyDateStr) esHoy = true;
+      } catch(e) {}
+    }
+    if (esHoy && (s.valoracion !== null && s.valoracion !== undefined || s.finalizada === true)) {
+      return s;
+    }
+  }
+  return null;
+}
+
+function iniciarSesionExtraDesdeEntreno() {
+  ST.sesionExtraActiva = true;
+  ST.inicioSesion = Date.now();
+  ST.hecho = {};
+  ST.seriesHechas = {};
+  saveState();
+  cargarRutinaHoy();
+  renderEjercicios();
+  initCal();
+  actualizarProgresionSesion();
+  actualizarStickyBar();
+  toast_msg('Sesión extra iniciada 💪 ¡A por ello!');
+  const sc = document.querySelector('#s-entreno .scroll');
+  if (sc) sc.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 function renderEntornoHoy(){
   const el = document.getElementById('entorno-hoy');
   if(!el) return;
@@ -8456,35 +8505,85 @@ function renderEjercicios(){
     cargarRutinaHoy();
   }
   
-  const historial = ST.historialEntrenos || [];
-  const ultimaSesionMal = historial.length > 0 && historial[historial.length - 1].rating === 'mal';
-  
-  const hoyStr = new Date().toISOString().split('T')[0];
-  const yaEntrenadoHoy = historial.some(log => log.fecha === hoyStr);
-  
+  const sesionCompletada = obtenerSesionFinalizadaHoy();
+  const yaEntrenadoHoy = !!(sesionCompletada && !ST.sesionExtraActiva);
+
+  const ultimaSesion = (ST.historialSesiones && ST.historialSesiones.length) ? ST.historialSesiones[ST.historialSesiones.length - 1] : null;
+  const ultimaSesionMal = (ultimaSesion && (ultimaSesion.valoracion === 'mal' || ultimaSesion.rating === 'mal')) || (ST.historialEntrenos && ST.historialEntrenos.length && ST.historialEntrenos[ST.historialEntrenos.length - 1].rating === 'mal');
+
   const finishBtn = document.querySelector('#s-entreno button[onclick="finalizarEntrenamiento()"]');
+  const cd = document.getElementById('btn-cambiar-dia');
+  const btnAnadir = document.querySelector('#ent-sub-hoy .btn-anadir');
+
   if (yaEntrenadoHoy) {
-    listEl.style.display = 'none';
+    if (sesionCompletada && sesionCompletada.ejercicios) {
+      if (!ST.hecho) ST.hecho = {};
+      if (!ST.seriesHechas) ST.seriesHechas = {};
+      sesionCompletada.ejercicios.forEach(e => {
+        ST.hecho[e.id] = true;
+        const numS = e.s || 3;
+        ST.seriesHechas[e.id] = Array(numS).fill(true);
+        if (!RUTINA_HOY.some(r => r.id === e.id)) {
+          const full = (typeof EJERCICIOS !== 'undefined' ? EJERCICIOS.find(ex => ex.id === e.id) : null);
+          if (full) RUTINA_HOY.push(full);
+          else RUTINA_HOY.push(e);
+        }
+      });
+    }
+
+    listEl.style.display = 'block';
     if (finishBtn) finishBtn.style.display = 'none';
-    { const cd = document.getElementById('btn-cambiar-dia'); if (cd) cd.style.display = 'none'; }
-    
+    if (cd) cd.style.display = 'none';
+    if (btnAnadir) btnAnadir.style.display = 'none';
+
+    const numEjs = (sesionCompletada && sesionCompletada.ejercicios ? sesionCompletada.ejercicios.length : 0);
+    const cardHTML = `<div class="card" id="entreno-completado-card" style="text-align:center; padding: 22px 16px; margin-bottom: 16px; background: linear-gradient(135deg, var(--tl), #eaf7f6); border: 1.5px solid var(--t); border-radius: 16px;">
+      <div style="font-size:36px; margin-bottom: 6px;">🏆</div>
+      <div style="font-size:17px; font-weight:700; color:var(--n); margin-bottom: 4px;">¡Entrenamiento de hoy completado!</div>
+      <div style="font-size:13.5px; color:var(--g); line-height: 1.5; margin-bottom: 14px;">Has completado tu sesión de hoy${numEjs ? ` (${numEjs} ejercicios)` : ''}. A continuación puedes consultar tus ejercicios realizados o realizar una sesión adicional.</div>
+      <div style="display:flex; flex-direction:column; gap:8px; max-width:320px; margin: 0 auto;">
+        <button type="button" class="btn-entrenar" onclick="iniciarSesionExtraDesdeEntreno()" style="width:100%; height:44px; font-size:14px; font-weight:700; background:linear-gradient(135deg, var(--t), #1b6a65); color:white; border:none; border-radius:12px; cursor:pointer; box-shadow:0 3px 10px rgba(42,127,122,0.3); display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>➕ Realizar una sesión extra</span>
+        </button>
+        <button type="button" class="btn-o" onclick="goTo('s-resumen')" style="width:100%; height:40px; font-size:13px; font-weight:600; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>📊 Ver resumen / Compartir</span>
+        </button>
+      </div>
+    </div>`;
     let cCard = document.getElementById('entreno-completado-card');
     if (!cCard) {
-      const completedCardHTML = `<div class="card" id="entreno-completado-card" style="text-align:center; padding: 24px 16px; background: linear-gradient(135deg, var(--tl), #eaf7f6); border-color: var(--t);">
-        <div style="font-size:36px; margin-bottom: 8px;">🏆</div>
-        <div style="font-size:16px; font-weight:700; color:var(--n)">¡Entrenamiento de hoy completado!</div>
-        <div style="font-size:14px; color:var(--g); margin-top:6px; margin-bottom:14px; line-height: 1.5;">Has registrado tu sesión exitosamente. Tu cuerpo necesita tiempo para recuperarse y asimilar el esfuerzo. ¡Buen descanso!</div>
-        <button class="btn-o" onclick="mostrarEjerciciosCompletados()" style="width:auto; padding:6px 12px; font-size:13px; margin: 0 auto;">Ver mi rutina de hoy</button>
-      </div>`;
-      listEl.insertAdjacentHTML('beforebegin', completedCardHTML);
+      listEl.insertAdjacentHTML('beforebegin', cardHTML);
     } else {
-      cCard.style.display = 'block';
+      cCard.outerHTML = cardHTML;
+    }
+
+    const bottomActionsHTML = `<div id="entreno-completado-extra-bottom" style="margin-top:18px; margin-bottom:24px;">
+      <button type="button" class="btn-entrenar" onclick="iniciarSesionExtraDesdeEntreno()" style="margin-bottom:10px; background:linear-gradient(135deg, var(--t), #1b6a65); color:white; box-shadow:0 4px 14px rgba(42,127,122,0.35);">
+        <span>➕ Realizar una sesión extra</span>
+      </button>
+      <button type="button" class="btn-o" onclick="goTo('s-resumen')" style="width:100%; padding:13px; font-size:14px; font-weight:700; border-radius:14px; text-align:center;">
+        <span>📊 Ver resumen de hoy / Compartir</span>
+      </button>
+    </div>`;
+    let bCard = document.getElementById('entreno-completado-extra-bottom');
+    if (!bCard) {
+      if (finishBtn && finishBtn.parentElement) {
+        finishBtn.parentElement.insertAdjacentHTML('beforeend', bottomActionsHTML);
+      } else {
+        listEl.insertAdjacentHTML('afterend', bottomActionsHTML);
+      }
+    } else {
+      bCard.style.display = 'block';
     }
   } else {
     listEl.style.display = 'block';
     if (finishBtn) finishBtn.style.display = 'block';
+    if (cd) cd.style.display = 'block';
+    if (btnAnadir) btnAnadir.style.display = 'block';
     let cCard = document.getElementById('entreno-completado-card');
     if (cCard) cCard.style.display = 'none';
+    let bCard = document.getElementById('entreno-completado-extra-bottom');
+    if (bCard) bCard.style.display = 'none';
   }
   
   // Bloque de respiración y activación (embarazo y posparto)
@@ -8532,6 +8631,7 @@ function renderEjercicios(){
       avMol.innerHTML = `<div class="alert-w" style="font-size:13px;line-height:1.55">⚠️ <strong>Molestia detectada:</strong> “${_escHtml(ST.checkin.molestiaText)}”. Hoy hemos quitado ${RUTINA_EXCLUIDOS_HOY.join(', ')} para proteger esa zona. Mañana vuelven a tu plan.</div>`;
     } else { avMol.style.display = 'none'; }
   }
+  if (yaEntrenadoHoy) { const sb = document.getElementById('sticky-entreno-bar'); if (sb) sb.style.display = 'none'; }
   actualizarStickyBar();
 }
 
@@ -8561,6 +8661,10 @@ function refreshCard(id){
 }
 
 function toggleHecho(id, i){
+  if (obtenerSesionFinalizadaHoy() && !ST.sesionExtraActiva) {
+    toast_msg('Entrenamiento ya completado. Pulsa «Realizar una sesión extra» para entrenar de nuevo 💪');
+    return;
+  }
   const exP = RUTINA_HOY.find(e => e.id === id);
   if(exP && !ST.hecho[id] && pesoPendientePrueba(exP)){ abrirPruebaPeso(id, 'prueba'); return; }
   ST.hecho[id] = !ST.hecho[id];
@@ -8593,6 +8697,10 @@ function toggleHecho(id, i){
 }
 
 function addStrike(id, nombre, i){
+  if (obtenerSesionFinalizadaHoy() && !ST.sesionExtraActiva) {
+    toast_msg('Entrenamiento ya completado. Pulsa «Realizar una sesión extra» para entrenar de nuevo 💪');
+    return;
+  }
   const todayStr = new Date().toISOString().slice(0, 10);
   ST.descartes = ST.descartes || {};
   if (ST.descartes[id] === todayStr && !ST.testModeBypassDescartes) {
@@ -12113,6 +12221,10 @@ function initSeriesEj(id, numSeries){
 }
 
 function toggleSerie(id, idx, total){
+  if (obtenerSesionFinalizadaHoy() && !ST.sesionExtraActiva) {
+    toast_msg('Entrenamiento ya completado. Pulsa «Realizar una sesión extra» para entrenar de nuevo 💪');
+    return;
+  }
   { const exP = RUTINA_HOY.find(e => e.id === id); if(exP && pesoPendientePrueba(exP)){ abrirPruebaPeso(id, 'prueba'); return; } }
   if(!ST.seriesHechas[id]) ST.seriesHechas[id] = Array(total).fill(false);
   const marcando = !ST.seriesHechas[id][idx];
@@ -12440,17 +12552,21 @@ function finalizarEntrenamiento(){
   // La sesión ya está guardada en tiempo real. Nos aseguramos de sincronizar el estado y check-in.
   if (!ST.historialSesiones) ST.historialSesiones = [];
   const hoyStr = new Date().toLocaleDateString('es-ES');
-  let sesion = ST.historialSesiones.find(s => s.inicioSesion === ST.inicioSesion || s.fecha === hoyStr);
+  let sesion = ST.historialSesiones.find(s => s.inicioSesion === ST.inicioSesion);
+  if (!sesion && !ST.sesionExtraActiva) {
+    sesion = ST.historialSesiones.find(s => s.fecha === hoyStr && !s.finalizada && (s.valoracion === null || s.valoracion === undefined));
+  }
   if (!sesion) {
     sesion = {
-      id: 'sesion_' + ST.inicioSesion,
-      inicioSesion: ST.inicioSesion,
+      id: 'sesion_' + (ST.inicioSesion || Date.now()),
+      inicioSesion: ST.inicioSesion || Date.now(),
       fecha: hoyStr,
       ejercicios: hechos.map(ex => {
         const p = getPesos(ex);
         return { id: ex.id, n: ex.n, s: p.s, r: p.r, p: p.p, patron: ex.patron };
       }),
       valoracion: null,
+      finalizada: false,
       checkinEstado: (ST.checkin && ST.checkin.estado) || null,
     };
     ST.historialSesiones.push(sesion);
@@ -13001,12 +13117,14 @@ function guardarValoracionYMostrarResumen(val) {
     }
   }catch(e){}
   if (ST.historialSesiones && ST.historialSesiones.length) {
-    ST.historialSesiones[ST.historialSesiones.length - 1].valoracion = val;
+    const ultS = ST.historialSesiones[ST.historialSesiones.length - 1];
+    ultS.valoracion = val;
+    ultS.finalizada = true;
+    ultS.finSesion = Date.now();
   }
   Object.keys(ST.hecho || {}).forEach(id => { if(ST.hecho[id]) sumarEleccion(id, 1); });
   toast_msg('Sesión guardada ' + (val === 'bien' ? '💪' : val === 'regular' ? '😐' : '😫'));
-  ST.hecho = {};
-  ST.seriesHechas = {};
+  ST.sesionExtraActiva = false;
   ST.modo20min = false;
   cerrarTimer();
   actualizarRacha();
@@ -13302,6 +13420,7 @@ function _alertaKey(a){ return a.tipo+'::'+a.titulo; }
 // SUB-PESTAÑAS DE "ENTRENO" — Hoy / Progreso / Historial
 // ════════════════════════════════════════════════════════════════════
 function cambiarSubTabEntreno(tab){
+  cerrarOv();
   ['hoy','progreso','historial','plan'].forEach(t => {
     const el  = document.getElementById('ent-sub-'+t);
     const btn = document.getElementById('ent-tab-'+t);
@@ -13317,6 +13436,7 @@ function cambiarSubTabEntreno(tab){
   if(tab === 'plan')      renderEntrenoPlan();
   if(tab === 'progreso')  renderEntrenoProgreso();
   if(tab === 'historial') renderEntrenoHistorial();
+  if(tab === 'hoy')       renderEjercicios();
   actualizarStickyBar();
 }
 
@@ -16607,7 +16727,7 @@ function obtenerDiagnosticoTecnico(){
   const ciclo = typeof calcularCiclo === 'function' ? calcularCiclo() : { dia: 'N/A', fase: 'N/A' };
   
   return {
-    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.14',
+    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.15',
     build: '14',
     plataforma: platform,
     userAgent: navigator.userAgent,
@@ -16626,7 +16746,7 @@ function actualizarPreviewDiagnostico(){
   const consentDiag = document.getElementById('reporte-consent-diag')?.checked ?? false;
   let diag = obtenerDiagnosticoTecnico();
   if (!consentDiag) {
-    diag = { version: APP_VERSION_ACTUAL, build: '14', plataforma: 'Anónima', userAgent: 'Omitido por privacidad', resolucion: 'Omitida', etapa: 'No compartida', diaCiclo: 'Omitido', faseCiclo: 'Omitida', fechaHora: new Date().toISOString() };
+    diag = { version: APP_VERSION_ACTUAL, build: '15', plataforma: 'Anónima', userAgent: 'Omitido por privacidad', resolucion: 'Omitida', etapa: 'No compartida', diaCiclo: 'Omitido', faseCiclo: 'Omitida', fechaHora: new Date().toISOString() };
   }
   el.textContent = `App: v${diag.version} (Build ${diag.build})
 Plataforma: ${diag.plataforma}
@@ -16668,7 +16788,7 @@ async function enviarReporteFallo(){
   const consentDiag = document.getElementById('reporte-consent-diag')?.checked ?? false;
   let diag = obtenerDiagnosticoTecnico();
   if (!consentDiag) {
-    diag = { version: APP_VERSION_ACTUAL, build: '14', plataforma: 'Anónima', userAgent: 'Omitido por privacidad', resolucion: 'Omitida', etapa: 'No compartida', diaCiclo: 'Omitido', faseCiclo: 'Omitida', fechaHora: new Date().toISOString() };
+    diag = { version: APP_VERSION_ACTUAL, build: '15', plataforma: 'Anónima', userAgent: 'Omitido por privacidad', resolucion: 'Omitida', etapa: 'No compartida', diaCiclo: 'Omitido', faseCiclo: 'Omitida', fechaHora: new Date().toISOString() };
   }
 
   if(btn){
@@ -17650,7 +17770,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.14";
+const APP_VERSION_ACTUAL = "1.0.15";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;
