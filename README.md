@@ -19,19 +19,31 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.15**
+## 🤖 Versión para Android (Instalador APK): **v1.0.16**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.15-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.15/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.16-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.16/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.15 (código 15)
+- **Versión:** 1.0.16 (código 16)
 - **Tamaño:** ~28.3 MB (optimizado desde 29.8 MB)
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.15:
+## 🌟 Novedades v1.0.16:
+- **Copia de Seguridad Automática en Google Drive Operativa:**
+  - Integración de credenciales oficiales de cliente OAuth 2.0 (Android y Web) en la configuración nativa `google-services.json`.
+  - Vinculación verificada con la huella digital SHA-1 de la aplicación.
+  - Autorización directa y privada mediante Google Sign-In con alcance `https://www.googleapis.com/auth/drive.appdata`.
+- **Diagnóstico y Transparencia de Conexión:**
+  - Los mensajes devueltos por Google Play Services y la interfaz de usuario muestran el detalle técnico exacto ante cualquier eventualidad.
+- **Mantenimiento de Mejoras Previas:**
+  - Persistencia de ejercicios completados en la rutina diaria al volver a la pestaña de entrenamiento.
+  - Soporte de sesiones extra («➕ Realizar una sesión extra») sin sobrescribir el historial existente.
+  - Navegación fluida y sin bloqueos entre las subpestañas Hoy, Progreso, Mi plan e Historial.
+
+### Versión anterior (v1.0.15):
 - **Persistencia de Ejercicios Completados en Pestaña Entreno:**
   - Al regresar a la pestaña de entrenamiento tras finalizar la sesión de hoy, la pantalla mantiene visibles todos los ejercicios completados con sus marcas en verde (✓), series realizadas y barra de progreso al 100%.
 - **Soporte Oficial para Sesión Extra:**
