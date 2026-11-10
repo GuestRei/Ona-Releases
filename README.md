@@ -19,29 +19,42 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.16**
+## 🤖 Versión para Android (Instalador APK): **v1.0.17**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.16-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.16/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.17-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.17/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.16 (código 16)
-- **Tamaño:** ~28.3 MB (optimizado desde 29.8 MB)
+- **Versión:** 1.0.17 (código 17)
+- **Tamaño:** ~29.7 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.16:
+## 🌟 Novedades v1.0.17:
+- **Pulsación Prolongada con Aceleración en Botones de Pesos y Repeticiones:**
+  - Mantener pulsado los botones «-» y «+» en el selector de pesos y repeticiones acelera progresivamente los incrementos (desde 320ms hasta 70ms tras 3 segundos con vibración táctil suave).
+  - Disponible tanto en el flujo principal de entrenamiento como en Código Verde (`_ajustarPesoVerde`).
+  - Cancelación instantánea y segura al levantar el dedo, salir del área táctil o abrir menús contextuales.
+- **Ajustes de Safe Area Inset en Android:**
+  - Integración de la variable CSS `--sab` en todas las hojas y modales emergentes (`.overlay`, `.modal-overlay`, `.m-sheet`, `#modal-bienvenida-tour` y `.chat-panel`).
+  - Previene que la barra de navegación del sistema operativo tape botones o campos de texto.
+- **Homogeneización Visual al Sistema de Diseño ONA:**
+  - Panel informativo de entrenamiento completado y botones de acción inferior adaptados a la estética sobria y limpia de ONA (fondo `#ECF8F8`, borde fino `1px solid #CAECEA`, esquinas de `2px`, botones estándar `.btn-s`, sin degradados pesados ni sombras artificiales).
+- **Limpieza de Burbujas de Chat:**
+  - Etiquetas distintivas (`.bbl-tag`) con estilo sobrio y separación natural de párrafos por doble salto de línea.
+- **Sesiones Extra:**
+  - Corrección de la activación de sesiones extra (`ST.sesionExtraActiva = true`) asegurando que los ejercicios se puedan registrar sin interferencias.
+- **Copia de Seguridad en Google Drive:**
+  - Mantenimiento íntegro de la arquitectura OAuth 2.0 y Google Sign-In configurada en v1.0.16.
+
+### Versión anterior (v1.0.16):
 - **Copia de Seguridad Automática en Google Drive Operativa:**
   - Integración de credenciales oficiales de cliente OAuth 2.0 (Android y Web) en la configuración nativa `google-services.json`.
   - Vinculación verificada con la huella digital SHA-1 de la aplicación.
   - Autorización directa y privada mediante Google Sign-In con alcance `https://www.googleapis.com/auth/drive.appdata`.
 - **Diagnóstico y Transparencia de Conexión:**
   - Los mensajes devueltos por Google Play Services y la interfaz de usuario muestran el detalle técnico exacto ante cualquier eventualidad.
-- **Mantenimiento de Mejoras Previas:**
-  - Persistencia de ejercicios completados en la rutina diaria al volver a la pestaña de entrenamiento.
-  - Soporte de sesiones extra («➕ Realizar una sesión extra») sin sobrescribir el historial existente.
-  - Navegación fluida y sin bloqueos entre las subpestañas Hoy, Progreso, Mi plan e Historial.
 
 ### Versión anterior (v1.0.15):
 - **Persistencia de Ejercicios Completados en Pestaña Entreno:**
@@ -50,31 +63,15 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
   - Se añade la opción destacada «➕ Realizar una sesión extra» tanto en la tarjeta de felicitación superior como al pie de la rutina, permitiendo iniciar y registrar entrenamientos adicionales en el mismo día.
 - **Navegación Fluida en Subpestañas:**
   - Las pestañas internas **Hoy**, **Progreso**, **Mi plan** e **Historial** permanecen completamente interactivas y accesibles sin ningún tipo de bloqueo visual o modal residual.
-- **Protección de Registro:**
-  - Se evita el desmarcado o sobreescritura accidental de los ejercicios de una sesión ya concluida.
 
 ### Versión anterior (v1.0.14):
 - **Evolución con IA en Registro de Síntomas:**
   - En *Ciclo › Registro*, nuevo botón «Evolución con IA» que redacta un informe objetivo semana a semana a partir de las anotaciones acumuladas.
   - Filtro clínico estricto (`REG_IA_PROHIBIDAS`): descarta cualquier diagnóstico, tratamiento o consejo médico, limitándose a describir patrones.
-  - Minimización de datos RGPD: solo viajan recuentos agregados de categorías neutras. No se envían notas personales, vida sexual, peso ni medicación.
-  - Consentimiento específico persistido en `ST.consentRegistroIA`.
 - **Mi Plan: Quitar Ejercicio Sin Sustitución Forzada:**
   - Al quitar un ejercicio en «Mi plan», el hueco permanece vacío (`ST.planPersonal.vacios`) en vez de forzar un candidato sustituto.
-  - Salvaguarda clínica: el día no puede quedarse sin ejercicios.
-- **Detección Robusta del Plugin Nativo OnaNube:**
-  - Verificación mediante `Capacitor.isPluginAvailable('OnaNube')`, eliminando falsos positivos en entornos sin el plugin registrado.
 - **Reducción de Peso y Rendimiento Web (1.54 MB vs 2.95 MB):**
-  - Eliminación de imágenes data-URI redundantes en Base64 en el CSS de fondo de `#s-dashboard`.
-  - Depuración y borrado de `hero_bg.png` (522 KB) y de 25 funciones huérfanas en desuso.
-- **Pulido Visual y de Interfaz:**
-  - Botón de socias de «Centro ONA físico» desactivado con modal informativo y soporte para la futura URL de fundadoras (`ONA_WEB_URL`).
-  - Tarjeta de compartir en redes con columnas dinámicas: **RÉCORD**, **TRABAJADO** y **RACHA**.
-  - Tarjetas de «Etapa vital» y «Entorno» unificadas en un único bloque con fondo teal suave.
-  - Explicaciones de energía y copias transformadas en botones discretos desplegables `ⓘ`.
-  - Corrección de `padding-bottom` en el modal «Ya has entrenado hoy» para respetar el área segura en Android.
-- **Privacidad y RGPD en Reportes:**
-  - Casilla de diagnóstico técnico desmarcada por defecto para garantizar consentimiento explícito y voluntario.
+  - Depuración de imágenes data-URI redundantes y funciones huérfanas en desuso.
 
 ---
 
