@@ -19,34 +19,28 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.17**
+## 🤖 Versión para Android (Instalador APK): **v1.0.18**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.17-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.17/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.18-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.18/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.17 (código 17)
+- **Versión:** 1.0.18 (código 18)
 - **Tamaño:** ~29.7 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.17:
-- **Pulsación Prolongada con Aceleración en Botones de Pesos y Repeticiones:**
-  - Mantener pulsado los botones «-» y «+» en el selector de pesos y repeticiones acelera progresivamente los incrementos (desde 320ms hasta 70ms tras 3 segundos con vibración táctil suave).
-  - Disponible tanto en el flujo principal de entrenamiento como en Código Verde (`_ajustarPesoVerde`).
-  - Cancelación instantánea y segura al levantar el dedo, salir del área táctil o abrir menús contextuales.
-- **Ajustes de Safe Area Inset en Android:**
-  - Integración de la variable CSS `--sab` en todas las hojas y modales emergentes (`.overlay`, `.modal-overlay`, `.m-sheet`, `#modal-bienvenida-tour` y `.chat-panel`).
-  - Previene que la barra de navegación del sistema operativo tape botones o campos de texto.
-- **Homogeneización Visual al Sistema de Diseño ONA:**
-  - Panel informativo de entrenamiento completado y botones de acción inferior adaptados a la estética sobria y limpia de ONA (fondo `#ECF8F8`, borde fino `1px solid #CAECEA`, esquinas de `2px`, botones estándar `.btn-s`, sin degradados pesados ni sombras artificiales).
-- **Limpieza de Burbujas de Chat:**
-  - Etiquetas distintivas (`.bbl-tag`) con estilo sobrio y separación natural de párrafos por doble salto de línea.
-- **Sesiones Extra:**
-  - Corrección de la activación de sesiones extra (`ST.sesionExtraActiva = true`) asegurando que los ejercicios se puedan registrar sin interferencias.
-- **Copia de Seguridad en Google Drive:**
-  - Mantenimiento íntegro de la arquitectura OAuth 2.0 y Google Sign-In configurada en v1.0.16.
+## 🌟 Novedades v1.0.18:
+- **Corrección de la Pulsación Prolongada en Pesos y Repeticiones:**
+  - Se eliminó la interrupción del evento táctil en Android provocada por el menú contextual o la selección de texto nativa del WebView (`touch-action: none`, `ev.preventDefault()`, `ev.stopPropagation()` y `setPointerCapture`).
+  - Ahora mantener pulsado suma o resta valores de peso y repeticiones de manera continua con aceleración progresiva automática tanto en la aplicación Android como en la versión Web/PWA.
+- **Unificación Total del Flujo de Entrenamiento entre Inicio y la Pestaña Entreno:**
+  - Si el entrenamiento del día ya ha sido completado, el botón del Dashboard muestra «Ver entrenamiento de hoy ✓» (ocultando el botón rápido de 20 min) y redirige directamente a la pestaña de entreno sin modales innecesarios.
+  - Se eliminó el modal redundante que ofrecía «Continuar la sesión de hoy» y que reiniciaba o duplicaba ejercicios completados en la rutina.
+  - En la pestaña de entrenamiento se visualizan claramente los ejercicios ya realizados con sus marcas completadas, junto con los accesos directos para «Iniciar sesión extra» y «Ver resumen de hoy».
+- **Sincronización de la Versión Web en GitHub Pages:**
+  - Actualización de todos los activos en `docs/` para que la versión web de ONA cuente exactamente con la misma lógica unificada y controles de ajuste rápido de pesos.
 
 ### Versión anterior (v1.0.16):
 - **Copia de Seguridad Automática en Google Drive Operativa:**
