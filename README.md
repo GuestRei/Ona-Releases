@@ -19,28 +19,35 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.18**
+## 🤖 Versión para Android (Instalador APK): **v1.0.19**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.18-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.18/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.19-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.19/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.18 (código 18)
+- **Versión:** 1.0.19 (código 19)
 - **Tamaño:** ~29.7 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.18:
-- **Corrección de la Pulsación Prolongada en Pesos y Repeticiones:**
-  - Se eliminó la interrupción del evento táctil en Android provocada por el menú contextual o la selección de texto nativa del WebView (`touch-action: none`, `ev.preventDefault()`, `ev.stopPropagation()` y `setPointerCapture`).
-  - Ahora mantener pulsado suma o resta valores de peso y repeticiones de manera continua con aceleración progresiva automática tanto en la aplicación Android como en la versión Web/PWA.
-- **Unificación Total del Flujo de Entrenamiento entre Inicio y la Pestaña Entreno:**
-  - Si el entrenamiento del día ya ha sido completado, el botón del Dashboard muestra «Ver entrenamiento de hoy ✓» (ocultando el botón rápido de 20 min) y redirige directamente a la pestaña de entreno sin modales innecesarios.
-  - Se eliminó el modal redundante que ofrecía «Continuar la sesión de hoy» y que reiniciaba o duplicaba ejercicios completados en la rutina.
-  - En la pestaña de entrenamiento se visualizan claramente los ejercicios ya realizados con sus marcas completadas, junto con los accesos directos para «Iniciar sesión extra» y «Ver resumen de hoy».
-- **Sincronización de la Versión Web en GitHub Pages:**
-  - Actualización de todos los activos en `docs/` para que la versión web de ONA cuente exactamente con la misma lógica unificada y controles de ajuste rápido de pesos.
+## 🌟 Novedades v1.0.19:
+- **15 Ejercicios Nuevos de Casa y Adaptación en Tres Niveles (`lb01` a `lb15`):**
+  - Incorporación a la biblioteca clínica de 15 ejercicios sin aparatos basados en el libro «Anatomía y musculación sin aparatos» y literatura para mayores/osteoporosis (flexiones con alza, aperturas con toallas, press militar con garrafas, elevaciones laterales, plancha lateral, puente de glúteo, sentadilla con garrafa, peso muerto con garrafas y sentarse/levantarse de la silla).
+  - En la ficha de técnica se incluye ahora un bloque interactivo con tres niveles de dificultad: **«Más fácil»**, **«Como está»** y **«Más difícil»**, permitiendo ajustar la exigencia sin salir de la rutina.
+  - Corrección clínica en fondos en silla (`ht02`): postura especificada como «apoyo en silla (manos detrás)» y advertencia para osteoporosis en «Adaptar».
+- **Orden Inteligente por Sinergias Musculares en la Sesión (`ordenarEjerciciosSesion`):**
+  - Cada grupo muscular se entrena de forma continua, evitando saltar de un músculo a otro y regresar al primero.
+  - Los músculos pequeños sinergistas se ubican tras el grupo grande (tríceps y hombro tras pecho; bíceps tras espalda) para evitar fatiga previa.
+  - Ejercicios compuestos primero y aislamiento después.
+  - Nota de calentamiento previa en el bloque principal recomendando 1-2 series ligeras. El orden manual del plan personal de la usuaria sigue teniendo prioridad absoluta si decide personalizarlo.
+- **Creación Directa y Conteo Muscular de Ejercicios Propios:**
+  - Botón de acceso directo en la pestaña Hoy: «+ Crear mi propio ejercicio» (se oculta al finalizar la sesión).
+  - Formulario ampliado con selección de entorno («Gimnasio o casa», «Solo gimnasio», «Solo casa») y selección de «Otros músculos que trabaja (opcional)».
+  - Conteo muscular preciso en el resumen de la sesión y el volumen semanal: 1.0 serie para el músculo principal y 0.5 series para cada músculo secundario seleccionado.
+- **Seguridad Clínica y Consejos de Progresión:**
+  - Sección desplegable «Cuándo parar y consultar» visible en la tarjeta previa al entrenamiento con señales de alarma claras (dolor agudo, mareo, opresión en pecho o pérdida de control; diferenciación entre agujetas normales de 24-72h y dolor lesivo).
+  - Consejos de progresión en el asistente adaptados: progresión de una sola variable a la vez (peso, reps o series), terminando con 1-2 RIR en cargas ligeras (bandas/garrafas).
 
 ### Versión anterior (v1.0.16):
 - **Copia de Seguridad Automática en Google Drive Operativa:**

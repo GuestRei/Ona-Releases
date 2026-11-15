@@ -1445,6 +1445,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       </div>
       <div id="bloque-activacion" style="display:none"></div>
       <div class="ctitle" style="margin-top:14px">Bloque principal</div>
+      <div style="font-size:11px;color:var(--g);line-height:1.5;margin-bottom:6px">Antes de cada músculo, haz 1 o 2 series ligeras (poco peso y muchas repeticiones) para calentarlo. Los ejercicios van ordenados para que un músculo no llegue cansado al siguiente.</div>
       <div id="entorno-hoy"></div>
       <div id="ejercicios-list"></div>
       <div id="molestia-aviso" style="display:none"></div>
@@ -1453,6 +1454,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <button type="button" class="btn-anadir" onclick="goTo('s-biblioteca')">
         ➕ Añadir ejercicio a la sesión
       </button>
+      <button type="button" id="btn-crear-propio-hoy" onclick="abrirCrearEjercicio('sesion',0,'')" style="display:block;width:100%;margin-top:6px;padding:12px 8px;background:none;border:none;color:var(--t);font-size:15px;font-weight:700;cursor:pointer">+ Crear mi propio ejercicio</button>
       <button type="button" class="btn-entrenar btn-finalizar" onclick="finalizarEntrenamiento()"><img src="logo_finalizar.png" alt="" aria-hidden="true"><span>Finalizar entrenamiento</span></button>
       <button type="button" id="btn-cambiar-dia" onclick="abrirCambiarDia()" style="display:block;width:100%;margin-top:6px;padding:14px 8px;background:none;border:none;color:var(--t);font-size:15px;font-weight:700;cursor:pointer">Cambiar el día de entreno</button>
     </div>
@@ -1841,7 +1843,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div class="ctitle">🔄 Versión y Actualizaciones</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.18</span></div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.19</span></div>
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-version-subtxt">Canal oficial de GitHub</div>
         </div>
         <button class="btn-o" onclick="verificarActualizacionApp(true)" style="width:auto;padding:7px 12px;font-size:13px">Buscar actualización</button>
@@ -2061,7 +2063,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <!-- Detalles de la versión -->
     <div style="background:#f8f9fa;border-radius:12px;padding:10px 14px;margin-bottom:16px;text-align:left;border:1px solid #eee;">
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--n)">
-        <span>Versión actual: <b id="act-ver-actual">v1.0.18</b></span>
+        <span>Versión actual: <b id="act-ver-actual">v1.0.19</b></span>
         <span style="color:var(--t)">Nueva: <b id="act-ver-nueva">--</b></span>
       </div>
       <div id="act-notas" style="font-size:12px;color:var(--g);margin-top:6px;max-height:80px;overflow-y:auto;line-height:1.4">
@@ -2468,6 +2470,16 @@ const EMG_EJERCICIO = {
 
 function getMusculosEjercicio(exNombre, patron){
   if(exNombre && EMG_EJERCICIO[exNombre]) return EMG_EJERCICIO[exNombre];
+  // Ejercicio propio o del plan del entrenador/a: cuenta para el músculo que eligió (1) y los otros que marcó (0,5)
+  if(!MUSCULOS_PATRON[patron] && exNombre && typeof EJERCICIOS !== 'undefined'){
+    const prop = EJERCICIOS.find(e => e.custom && e.n === exNombre && e.grupoReal);
+    if(prop){
+      const r = {};
+      if(GRUPOS_ORDEN_PICK.indexOf(prop.grupoReal) !== -1) r[prop.grupoReal] = 1.0;
+      (prop.secundarios || []).forEach(g => { if(GRUPOS_ORDEN_PICK.indexOf(g) !== -1 && !r[g]) r[g] = 0.5; });
+      return r;
+    }
+  }
   const grupos = MUSCULOS_PATRON[patron] || [];
   const result = {};
   grupos.forEach(g => { result[g] = 1.0; });
@@ -3773,6 +3785,81 @@ const EJERCICIOS = [
    desc:"De pie, sujetas un disco o una mancuerna entre las palmas y lo estiras hacia delante apretando. Trabajo de pecho sin banco y con poca carga.",
    tips:["Aprieta las palmas contra el disco","Codos a la altura del pecho","Espalda erguida y abdomen activo"],
    tags_v1:{nivel:["principiante", "intermedio", "avanzado"],objetivo:["recomp", "hipertrofia"],impacto:"bajo",tecnica:["aislamiento", "bilateral"],seguro_embarazo:true,seguro_postparto:true,fase_ciclo:["folicular", "ovulacion", "lutea", "menstrual"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb01",n:"Flexiones en suelo",det:"3×8-12 · RIR 2 · Empuje",s:3,r:10,p:0,patron:"empuje",grupo:"Pectoral",entorno:"casa",
+   desc:"Empuje clásico del pecho con el peso de tu cuerpo. Se adapta a tu nivel cambiando el apoyo.",
+   tips:["Cuerpo recto de cabeza a rodillas o pies","Baja el pecho sin hundir la zona lumbar","Si cuesta, apoya las rodillas o las manos en una pared o silla"],
+   niveles:{menor:"Rodillas apoyadas en el suelo, o manos en una pared o en el respaldo de una silla estable.",base:"Apoyo en manos y puntas de los pies, cuerpo recto; baja hasta casi tocar el suelo.",mayor:"A una mano con los pies separados. Solo con buena técnica."},
+   tags_v1:{nivel:["principiante","intermedio","avanzado"],objetivo:["recomp","hipertrofia","rendimiento"],impacto:"bajo",tecnica:["compuesto","bilateral"],seguro_embarazo:false,seguro_postparto:true,fase_ciclo:["folicular","ovulacion","lutea","menstrual"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb02",n:"Flexiones profundas con alza",det:"3×8-10 · RIR 2 · Empuje",s:3,r:8,p:0,patron:"empuje",grupo:"Pectoral",entorno:"casa",
+   desc:"Flexión con las manos sobre dos libros gruesos o tacos para bajar más el pecho y ganar recorrido.",
+   tips:["Apoyos firmes que no se muevan","Baja el pecho por debajo del nivel de las manos sin forzar el hombro","Codos a unos 45º del cuerpo"],
+   niveles:{menor:"Manos sobre apoyos más altos (respaldos de dos sillas estables): el cuerpo queda más vertical.",base:"Manos sobre dos libros gruesos, pies en el suelo.",mayor:"Pies apoyados en la pared o en un escalón."},
+   tags_v1:{nivel:["intermedio","avanzado"],objetivo:["recomp","hipertrofia","rendimiento"],impacto:"bajo",tecnica:["compuesto","bilateral"],seguro_embarazo:false,seguro_postparto:true,fase_ciclo:["folicular","ovulacion","lutea","menstrual"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb03",n:"Aperturas con toallas",det:"3×8-12 · RIR 2 · Empuje",s:3,r:10,p:0,patron:"empuje",grupo:"Pectoral",entorno:"casa",
+   desc:"Apertura de pecho sin material: las manos se deslizan sobre una toalla en suelo liso, o sobre la pared.",
+   tips:["Desliza despacio, sin que se te abran de golpe los brazos","No bajes más de lo que controlas","Si notas el hombro delicado, abre menos"],av:"Si tienes molestias de hombro, reduce el recorrido.",
+   niveles:{menor:"De pie frente a la pared con una toalla bajo las manos, inclinación mínima.",base:"En el suelo con las manos sobre toallas, abre y cierra deslizando.",mayor:"Con los pies elevados sobre un escalón."},
+   tags_v1:{nivel:["principiante","intermedio","avanzado"],objetivo:["recomp","hipertrofia","rendimiento"],impacto:"bajo",tecnica:["compuesto","bilateral"],seguro_embarazo:false,seguro_postparto:true,fase_ciclo:["folicular","ovulacion","lutea","menstrual"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb04",n:"Press de hombros con garrafas",det:"3×10-12 · RIR 2 · Empuje",s:3,r:10,p:0,patron:"empuje",grupo:"Hombro",entorno:"casa",
+   desc:"Sube dos garrafas de agua desde los hombros hasta arriba, con los brazos paralelos.",
+   tips:["Costillas recogidas, sin arquear la zona lumbar","Codos casi extendidos al final, sin bloquearlos","Garrafas de 1,5 a 5 litros según tu fuerza"],
+   niveles:{menor:"Una sola garrafa ligera, o la banda elástica pisada con los pies.",base:"Dos garrafas, de pie o sentada con la espalda apoyada.",mayor:"Garrafas más llenas o a una mano alternando, sin arquear la espalda."},
+   tags_v1:{nivel:["principiante","intermedio"],objetivo:["recomp","hipertrofia"],impacto:"bajo",tecnica:["compuesto","bilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb05",n:"Elevaciones laterales con garrafas",det:"3×12-15 · RIR 1 · Empuje",s:3,r:12,p:0,patron:"empuje",grupo:"Hombro",entorno:"casa",
+   desc:"Levanta los brazos hacia los lados con una garrafa en cada mano hasta la altura de los hombros.",
+   tips:["Codos ligeramente flexionados","Sube hasta los hombros, no más","Baja despacio, sin balanceo"],
+   niveles:{menor:"Sin peso, o con botellas pequeñas.",base:"Una garrafa pequeña en cada mano.",mayor:"Garrafas más llenas, o con una pausa de 2 s arriba."},
+   tags_v1:{nivel:["principiante","intermedio"],objetivo:["recomp","hipertrofia"],impacto:"bajo",tecnica:["aislamiento","bilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea","menstrual"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb06",n:"Encogimientos con garrafas",det:"3×12-15 · RIR 2 · Empuje",s:3,r:12,p:0,patron:"empuje",grupo:"Hombro",entorno:"casa",
+   desc:"De pie con una garrafa en cada mano, sube los hombros hacia las orejas y baja con control.",
+   tips:["Brazos estirados y relajados","No gires los hombros, solo súbelos","Cuello largo, mirada al frente"],
+   niveles:{menor:"Sin peso, solo el movimiento de hombros.",base:"Dos garrafas a los lados del cuerpo.",mayor:"Garrafas más llenas con 2 s de pausa arriba."},
+   tags_v1:{nivel:["principiante","intermedio"],objetivo:["recomp","hipertrofia"],impacto:"bajo",tecnica:["aislamiento","bilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea","menstrual"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb07",n:"Press de hombros en V",det:"3×6-10 · RIR 2 · Empuje",s:3,r:8,p:0,patron:"empuje",grupo:"Hombro",entorno:"casa",
+   desc:"Con las caderas en alto formando una V, baja la cabeza hacia el suelo y empuja para subir. Versión asequible de la flexión invertida.",
+   tips:["Manos al ancho de los hombros, caderas altas","Baja la cabeza entre las manos, sin hundir la espalda","Respira sin aguantar el aire"],av:"No recomendada con tensión alta, problemas de ojos (glaucoma) o embarazo.",
+   niveles:{menor:"Manos sobre una silla estable, caderas altas.",base:"Manos en el suelo formando una V.",mayor:"Pies elevados sobre un escalón (más vertical)."},
+   tags_v1:{nivel:["intermedio","avanzado"],objetivo:["recomp","hipertrofia","rendimiento"],impacto:"bajo",tecnica:["compuesto","bilateral"],seguro_embarazo:false,seguro_postparto:true,fase_ciclo:["folicular","ovulacion","lutea","menstrual"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb08",n:"Extensión de tríceps tras nuca con garrafa",det:"3×10-12 · RIR 2 · Empuje",s:3,r:10,p:0,patron:"empuje",grupo:"Tríceps",entorno:"casa",
+   desc:"Con una garrafa sujeta con las dos manos detrás de la cabeza, extiende los codos hacia arriba.",
+   tips:["Codos apuntando al techo y cerca de la cabeza","Costillas recogidas, sin arquear la espalda","Baja despacio hasta que sientas el estiramiento"],
+   niveles:{menor:"Sin peso, o con la banda elástica.",base:"Garrafa a dos manos tras la nuca.",mayor:"Garrafa más llena, o a una mano alternando."},
+   tags_v1:{nivel:["principiante","intermedio"],objetivo:["recomp","hipertrofia"],impacto:"bajo",tecnica:["aislamiento","bilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb09",n:"Plancha lateral",det:"3×20-30 s por lado · RIR 2 · Core",s:3,r:20,p:0,patron:"empuje",grupo:"Abdomen",entorno:"casa",
+   desc:"Apoyada de lado sobre el antebrazo y los pies, mantén el cuerpo alineado. Trabaja los laterales del abdomen.",
+   tips:["Cuerpo en línea recta de cabeza a pies","Codo justo bajo el hombro","Respira con normalidad, sin aguantar el aire"],
+   niveles:{menor:"De pie, inclinada de lado contra un poste o la pared, o con las rodillas apoyadas.",base:"Plancha lateral sobre el antebrazo con los pies apilados.",mayor:"Desde la plancha lateral, baja y sube la cadera de forma controlada."},
+   tags_v1:{nivel:["principiante","intermedio","avanzado"],objetivo:["recomp","hipertrofia","rendimiento"],impacto:"bajo",tecnica:["isometrico","unilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb10",n:"Elevación de piernas tumbada",det:"3×8-10 · RIR 2 · Core",s:3,r:8,p:0,patron:"empuje",grupo:"Abdomen",entorno:"casa",
+   desc:"Tumbada boca arriba, sube la pelvis llevando los pies hacia el techo con las piernas verticales. Trabaja el abdomen inferior.",
+   tips:["Zona lumbar pegada al suelo todo el rato","Si se despega, baja menos o flexiona las rodillas","Sin aguantar la respiración"],av:"Si hay diástasis, suelo pélvico delicado o dolor lumbar, elige otro abdominal.",
+   niveles:{menor:"Piernas flexionadas y rango corto, subiendo solo la pelvis unos centímetros.",base:"Piernas verticales, subir la pelvis con control.",mayor:"Con un balón o cojín entre los pies."},
+   tags_v1:{nivel:["intermedio","avanzado"],objetivo:["recomp","hipertrofia","rendimiento"],impacto:"bajo",tecnica:["aislamiento","bilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb11",n:"Puente de glúteo",det:"3×12-15 · RIR 2 · Cadera",s:3,r:12,p:0,patron:"cadera",grupo:"Glúteo",entorno:"casa",
+   desc:"Tumbada boca arriba con las rodillas dobladas, sube la pelvis apretando los glúteos y baja con control.",
+   tips:["Pies a la anchura de las caderas","Sube hasta que hombros, cadera y rodillas queden alineados","Aprieta glúteos arriba, sin arquear la zona lumbar"],
+   niveles:{menor:"Puente sin peso, con los pies más cerca de los glúteos.",base:"Con una garrafa o mochila sobre la pelvis.",mayor:"Puente a una pierna con la otra elevada."},
+   tags_v1:{nivel:["principiante","intermedio","avanzado"],objetivo:["recomp","hipertrofia"],impacto:"bajo",tecnica:["compuesto","bilateral"],seguro_embarazo:true,seguro_postparto:true,fase_ciclo:["folicular","ovulacion","lutea","menstrual"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb12",n:"Sentadilla con garrafa al pecho",det:"3×10-12 · RIR 2 · Rodilla",s:3,r:10,p:0,patron:"rodilla",grupo:"Cuádriceps",entorno:"casa",
+   desc:"Sentadilla sujetando una garrafa de agua contra el pecho. El peso al frente ayuda a mantener el tronco erguido.",
+   tips:["Rodillas en la dirección de los pies","Baja hasta donde mantengas la espalda neutra","Empuja el suelo con todo el pie"],
+   niveles:{menor:"Sentadilla sin peso, con un rango cómodo.",base:"Garrafa al pecho, bajando con control.",mayor:"Sentadilla a una pierna con apoyo de mano, solo con buena rodilla."},
+   tags_v1:{nivel:["principiante","intermedio","avanzado"],objetivo:["recomp","hipertrofia"],impacto:"bajo",tecnica:["compuesto","bilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb13",n:"Zancada con garrafas",det:"3×8-10 por pierna · RIR 2 · Rodilla",s:3,r:8,p:0,patron:"rodilla",grupo:"Cuádriceps",entorno:"casa",
+   desc:"Da un paso largo al frente y baja con control hasta que las dos rodillas queden a unos 90º; empuja para volver.",
+   tips:["Tronco erguido, mirada al frente","Rodilla delantera en línea con el pie","Paso largo para que la rodilla no pase mucho la punta"],av:"En embarazo evita zancadas profundas o asimétricas y busca apoyo.",
+   niveles:{menor:"Zancada sin peso y con la mano apoyada en una pared o silla.",base:"Zancada con una garrafa en cada mano.",mayor:"Zancada búlgara: pie de atrás sobre una silla o banco."},
+   tags_v1:{nivel:["principiante","intermedio","avanzado"],objetivo:["recomp","hipertrofia"],impacto:"medio",tecnica:["compuesto","unilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb14",n:"Peso muerto rumano con garrafas",det:"3×10-12 · RIR 2 · Cadera",s:3,r:10,p:0,patron:"cadera",grupo:"Isquiosurales",entorno:"casa",
+   desc:"De pie con una garrafa en cada mano, lleva la cadera hacia atrás con las rodillas casi extendidas y vuelve apretando glúteos.",
+   tips:["Espalda recta durante todo el recorrido","Las garrafas rozan los muslos al bajar","Baja hasta sentir el estiramiento detrás del muslo"],
+   niveles:{menor:"Bisagra de cadera sin peso, o con la banda elástica.",base:"Dos garrafas a los lados de los muslos.",mayor:"A una pierna, con apoyo de mano si lo necesitas."},
+   tags_v1:{nivel:["principiante","intermedio","avanzado"],objetivo:["recomp","hipertrofia"],impacto:"bajo",tecnica:["compuesto","bilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea"],v3_especifica:false,funcional_50:true},seguro_50:true},
+  {id:"lb15",n:"Sentadilla a la silla",det:"3×10-12 · RIR 2 · Rodilla",s:3,r:10,p:0,patron:"rodilla",grupo:"Cuádriceps",entorno:"casa",
+   desc:"Siéntate sobre una silla estable y vuelve a levantarte con control. Es la base funcional de la sentadilla y sirve para ganar fuerza de piernas y confianza.",
+   tips:["Pies a la anchura de las caderas, rodillas en la dirección de los pies","Toca la silla sin dejarte caer; levántate empujando el suelo con todo el pie","Pon la silla contra una pared para que no se mueva"],
+   niveles:{menor:"Con una silla más alta o un cojín encima, y con las manos apoyadas en las rodillas o en una mesa estable.",base:"Silla normal, brazos cruzados o al frente, bajando y subiendo sin impulso.",mayor:"Con una garrafa al pecho, más despacio al bajar (3 s), o sin tocar del todo la silla."},
+   tags_v1:{nivel:["principiante","intermedio","avanzado"],objetivo:["recomp","hipertrofia"],impacto:"bajo",tecnica:["compuesto","bilateral"],seguro_embarazo:false,seguro_postparto:false,fase_ciclo:["folicular","ovulacion","lutea"],v3_especifica:false,funcional_50:true},seguro_50:true},
   {id:"hp06",n:"Flexiones diamante",det:"3×6-10 · RIR 2 · Empuje",s:3,r:8,p:0,patron:"empuje",grupo:"Pectoral",entorno:"casa",
    desc:"Flexión con las manos juntas, formando un rombo bajo el pecho. Trabaja más el tríceps que la flexión normal.",
    tips:["Si cuesta, apoya las rodillas o las manos en un banco","Codos cerca del cuerpo","Cuerpo recto de cabeza a rodillas"],
@@ -5670,8 +5757,42 @@ function resolverSesion(perfil, biblioteca, overrideDiaIndice = null){
     });
   }
 
+  // Orden por músculo; el orden que la usuaria haya fijado en su plan personal se aplica después y manda
+  const ordenados = ordenarEjerciciosSesion(ejercicios);
+  ejercicios.length = 0;
+  ordenados.forEach(it => ejercicios.push(it));
   aplicarPlanPersonalDia(ejercicios, overrideDiaIndice);
   return { ejercicios: ejercicios, avisos: avisos, bloqueMovilidad: bloqueMovilidad };
+}
+
+/**
+ * Orden de los ejercicios dentro de la sesión (criterios de programación):
+ * 1. Cada músculo se trabaja de una vez: no se empieza con uno, se pasa a otro y se vuelve al primero.
+ * 2. Un músculo pequeño que ayuda a uno grande va después de él: el tríceps y el hombro, tras el pecho; el bíceps, tras la espalda.
+ *    Si se fatiga antes, no rinde en los ejercicios del músculo grande.
+ * 3. Dentro de cada músculo, primero los ejercicios compuestos y después los de aislamiento.
+ */
+const MUSCULO_VA_DESPUES_DE = { 'Tríceps': ['Pectoral', 'Hombro'], 'Hombro': ['Pectoral'], 'Bíceps': ['Espalda (dorsal)'] };
+function ordenarEjerciciosSesion(lista){
+  const bloques = [], pos = {};
+  lista.forEach(it => {
+    const g = it.ejercicio.grupo;
+    if(!(g in pos)){ pos[g] = bloques.length; bloques.push({ g, items: [] }); }
+    bloques[pos[g]].items.push(it);
+  });
+  const esCompuesto = (it) => ((it.ejercicio.tags_v1 || {}).tecnica || []).indexOf('compuesto') !== -1;
+  bloques.forEach(b => { b.items = b.items.filter(esCompuesto).concat(b.items.filter(i => !esCompuesto(i))); });
+  const res = [], puestos = new Set();
+  let pend = bloques.slice();
+  while(pend.length){
+    // El primer bloque cuyo músculo «grande» ya está colocado (o no está hoy en la sesión)
+    let i = pend.findIndex(b => (MUSCULO_VA_DESPUES_DE[b.g] || []).every(r => puestos.has(r) || !pend.some(p => p.g === r)));
+    if(i < 0) i = 0;
+    const b = pend.splice(i, 1)[0];
+    puestos.add(b.g);
+    b.items.forEach(x => res.push(x));
+  }
+  return res;
 }
 
 /** «Mi plan»: añade los ejercicios que la usuaria puso a mano en ese día y aplica el orden que eligió */
@@ -8148,6 +8269,10 @@ function abrirCrearEjercicio(tipo, i, nombre){
     <input id="cre-n" class="reg-in" type="text" maxlength="80" value="${_escHtml(nombre || '')}" placeholder="Ej.: Press en máquina Technogym" style="width:100%">
     <label style="${lab}" for="cre-g">Músculo que trabaja *</label>
     <select id="cre-g" class="reg-in" style="width:100%"><option value="">Elige un músculo</option>${GRUPOS_ORDEN_PICK.map(g => `<option value="${_escHtml(g)}">${_escHtml(g)}</option>`).join('')}<option value="Cuerpo completo">Cuerpo completo</option></select>
+    <div style="${lab}">Otros músculos que trabaja (opcional)</div>
+    <div id="cre-sec" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${GRUPOS_ORDEN_PICK.map(g => `<label style="display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1.5px solid var(--linea);border-radius:999px;font-size:13px;color:var(--n);cursor:pointer"><input type="checkbox" value="${_escHtml(g)}" style="margin:0"> ${_escHtml(g)}</label>`).join('')}</div>
+    <label style="${lab}" for="cre-e">Dónde lo haces *</label>
+    <select id="cre-e" class="reg-in" style="width:100%"><option value="ambos">Gimnasio o casa</option><option value="gimnasio">Solo en el gimnasio</option><option value="casa">Solo en casa</option></select>
     <label style="${lab}" for="cre-m">Material *</label>
     <select id="cre-m" class="reg-in" style="width:100%">${_CREAR_MATERIALES.map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select>
     <div style="display:flex;gap:10px">
@@ -8176,7 +8301,9 @@ function _crearLeer(){
   if(!(s >= 1 && s <= 10)){ toast_msg('Las series deben ser entre 1 y 10'); return null; }
   if(!r){ toast_msg('Indica las repeticiones'); return null; }
   if(p != null && (p < 0 || p > 500)){ toast_msg('Revisa el peso'); return null; }
-  return { n, g, m, s, r, p: p || 0, rir: v('cre-rir'), descanso: v('cre-d'), notas: v('cre-notas').slice(0, 500) };
+  const e = v('cre-e') || 'ambos';
+  const sec = Array.from(document.querySelectorAll('#cre-sec input:checked')).map(x => x.value).filter(x => x && x !== g);
+  return { n, g, m, e, sec, s, r, p: p || 0, rir: v('cre-rir'), descanso: v('cre-d'), notas: v('cre-notas').slice(0, 500) };
 }
 function crearEjercicioDesdeForm(forzar){
   const d = _crearLeer(); if(!d) return;
@@ -8188,7 +8315,7 @@ function crearEjercicioDesdeForm(forzar){
       return;
     }
   }
-  const ex = crearEjercicioPropio(d.n, d.g, d.s, d.r, { material: d.m, p: d.p, rir: d.rir, descanso: d.descanso });
+  const ex = crearEjercicioPropio(d.n, d.g, d.s, d.r, { material: d.m, entorno: d.e, secundarios: d.sec, p: d.p, rir: d.rir, descanso: d.descanso });
   if(!ex) return;
   if(d.p > 0){ ST.pesos[ex.id] = { s: d.s, r: d.r, p: d.p }; }
   if(d.notas){ if(!ST.notasEj) ST.notasEj = {}; ST.notasEj[ex.id] = d.notas; }
@@ -8265,8 +8392,8 @@ function registrarEjerciciosPropios(){
   (ST.ejerciciosPropios || []).forEach(o => {
     if(EJERCICIOS.find(x => x.id === o.id)) return;
     EJERCICIOS.push({
-      id: o.id, n: o.n, det: o.s + '×' + o.r + (o.rir ? ' · RIR ' + o.rir : '') + (o.descanso ? ' · descanso ' + o.descanso : ''), s: o.s, r: o.r, p: 0, rir: o.rir || '', matPropio: o.material || '', patron: 'propio', grupo: o.grupo || 'Plan', grupoReal: o.grupo || '', entorno: 'ambos',
-      desc: 'Ejercicio creado por ti. ONA no puede comprobar si es adecuado para tu etapa.', tips: [], custom: true, propio: true,
+      id: o.id, n: o.n, det: o.s + '×' + o.r + (o.rir ? ' · RIR ' + o.rir : '') + (o.descanso ? ' · descanso ' + o.descanso : ''), s: o.s, r: o.r, p: 0, rir: o.rir || '', matPropio: o.material || '', patron: 'propio', grupo: o.grupo || 'Plan', grupoReal: o.grupo || '', entorno: (o.entorno === 'casa' || o.entorno === 'gimnasio') ? o.entorno : 'ambos', secundarios: o.secundarios || [],
+      desc: 'Ejercicio creado por ti.' + ((o.secundarios || []).length ? ' También trabaja: ' + o.secundarios.join(', ').toLowerCase() + '.' : '') + ' ONA no puede comprobar si es adecuado para tu etapa.', tips: [], custom: true, propio: true,
       tags_v1: { nivel: todos, objetivo: obj, impacto: 'medio', tecnica: [], seguro_embarazo: false, seguro_postparto: false, fase_ciclo: [], v3_especifica: false, funcional_50: false },
       seguro_50: false
     });
@@ -8305,6 +8432,7 @@ function renderExHTML(ex,i,forceTwoSeries = false){
   const tecHTML=`<div class="exp-body" id="body-tec${ex.id}">
     <div class="exp-desc">${ex.desc||''}</div>
     ${tips?`<div class="exp-tips">${tips}</div>`:''}
+    ${ex.niveles?`<div class="exp-tips" style="margin-top:8px"><div class="exp-tip"><span class="exp-tip-ico">−</span><span><b>Más fácil:</b> ${ex.niveles.menor}</span></div><div class="exp-tip"><span class="exp-tip-ico">=</span><span><b>Como está:</b> ${ex.niveles.base}</span></div><div class="exp-tip"><span class="exp-tip-ico">+</span><span><b>Más difícil:</b> ${ex.niveles.mayor}</span></div></div>`:''}
     ${ex.av?`<div class="exp-warn">⚠️ ${ex.av}</div>`:''}
     ${ex.fase?`<div class="exp-fase">🌿 ${ex.fase}</div>`:''}
   </div>`;
@@ -8544,6 +8672,7 @@ function renderEjercicios(){
     if (finishBtn) finishBtn.style.display = 'none';
     if (cd) cd.style.display = 'none';
     if (btnAnadir) btnAnadir.style.display = 'none';
+    const btnPropio = document.getElementById('btn-crear-propio-hoy'); if (btnPropio) btnPropio.style.display = 'none';
 
     const numEjs = (sesionCompletada && sesionCompletada.ejercicios ? sesionCompletada.ejercicios.length : 0);
     const cardHTML = `<div class="card" id="entreno-completado-card" style="text-align:center; padding:18px 16px; margin-bottom:16px; background:#ECF8F8; border:1px solid #CAECEA; border-radius:2px;">
@@ -8580,6 +8709,7 @@ function renderEjercicios(){
     if (finishBtn) finishBtn.style.display = 'block';
     if (cd) cd.style.display = 'block';
     if (btnAnadir) btnAnadir.style.display = 'block';
+    const btnPropio = document.getElementById('btn-crear-propio-hoy'); if (btnPropio) btnPropio.style.display = 'block';
     let cCard = document.getElementById('entreno-completado-card');
     if (cCard) cCard.style.display = 'none';
     let bCard = document.getElementById('entreno-completado-extra-bottom');
@@ -9717,9 +9847,9 @@ function generarRespuestaChatSimulada(texto) {
     topicResponse = `Para progresar con tus pesos de entrenamiento, la clave es la sobrecarga progresiva. `;
     const comp = ST.historialEntrenos ? ST.historialEntrenos.length : 0;
     if (comp > 0) {
-      topicResponse += `Hoy ya has marcado varios ejercicios como hechos o tienes historial de entrenamientos. Si en ellos sentiste un esfuerzo menor al planificado (RIR mayor a 2), en tu próxima sesión de fase folicular o de ovulación aumenta la carga entre un 2.5% y un 5%.`;
+      topicResponse += `Hoy ya has marcado varios ejercicios como hechos o tienes historial de entrenamientos. Si en ellos sentiste un esfuerzo menor al planificado (RIR mayor a 2), en tu próxima sesión aumenta la carga entre un 2.5% y un 5%. Cambia una sola cosa a la vez (peso, repeticiones o series) y observa cómo respondes antes de cambiar otra. Si usas bandas o garrafas, termina las series con 1 o 2 repeticiones en reserva para que la carga ligera sea suficiente. También es progreso hacer más repeticiones, moverte con mejor técnica o acabar con menos fatiga.`;
     } else {
-      topicResponse += `Te aconsejo evaluar tus series: si completas todas las repeticiones planificadas sintiendo que podías hacer 3 o más (RIR 3+), sube el peso un poco en tu próxima sesión, priorizando mantener una técnica impecable.`;
+      topicResponse += `Te aconsejo evaluar tus series: si completas todas las repeticiones planificadas sintiendo que podías hacer 3 o más (RIR 3+), sube el peso un poco en tu próxima sesión, priorizando mantener una técnica impecable. Cambia una sola cosa a la vez y, si tu carga es ligera (banda o garrafa), termina cada serie con 1 o 2 repeticiones en reserva.`;
     }
   }
   
@@ -13865,8 +13995,9 @@ function htmlTarjetaRiesgos(){
     <div class="ar-titulo">${titulo}</div>
     <div class="ar-texto">${texto}</div>
     <div class="ar-texto ar-aparte">${aparte}</div>
-    ${alertas.length ? `<details class="ar-det"><summary class="ar-alarma">Cuándo parar y consultar</summary>
-      ${alertas.map(a => `<div class="ar-texto" style="margin-top:8px"><strong>${a.titulo}:</strong> ${a.alerta}</div>`).join('')}</details>` : ''}
+    <details class="ar-det"><summary class="ar-alarma">Cuándo parar y consultar</summary>
+      ${alertas.map(a => `<div class="ar-texto" style="margin-top:8px"><strong>${a.titulo}:</strong> ${a.alerta}</div>`).join('')}
+      <div class="ar-texto" style="margin-top:8px"><strong>En cualquier entrenamiento:</strong> para y consulta si notas dolor agudo, mareo, dolor de pecho o pérdida de control del movimiento. Las agujetas son normales entre 24 y 72 horas después; si el dolor es intenso, dura más de unos días o hay hinchazón o calor en la zona, descansa y consúltalo.</div></details>
     <button type="button" class="ar-boton" onclick="aceptarRiesgos()"><span>Entendido, quiero entrenar</span><span class="ar-punto" aria-hidden="true"></span><span class="ar-flecha" aria-hidden="true">→</span></button>
   </div>`;
 }
@@ -16738,8 +16869,8 @@ function obtenerDiagnosticoTecnico(){
   const ciclo = typeof calcularCiclo === 'function' ? calcularCiclo() : { dia: 'N/A', fase: 'N/A' };
   
   return {
-    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.18',
-    build: '18',
+    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.19',
+    build: '19',
     plataforma: platform,
     userAgent: navigator.userAgent,
     resolucion: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight} (dpr: ${window.devicePixelRatio || 1})` : 'N/A',
@@ -17790,7 +17921,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.18";
+const APP_VERSION_ACTUAL = "1.0.19";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;
