@@ -1959,18 +1959,19 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <div class="card" id="tarjeta-entreno-card" style="display:none">
       <div class="ctitle">Tu tarjeta del entreno</div>
       <div style="font-size:13px;color:var(--g);line-height:1.5;margin-bottom:10px">Hazte una foto o sube una, y compártela en tus redes con los datos de hoy. La foto no se guarda en la app ni se envía a ningún sitio.</div>
-      <canvas id="tarjeta-canvas" width="1080" height="1350" style="width:100%;height:auto;border-radius:14px;display:block"></canvas>
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <label class="btn-t" style="flex:1;text-align:center;cursor:pointer;margin:0">Hacerme una foto
+      <canvas id="tarjeta-canvas" width="1080" height="1350" style="width:100%;height:auto;border-radius:0;display:block"></canvas>
+      <style>.tj-b{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;min-height:46px;padding:0 8px;margin:0;border-radius:2px;border:1px solid #1E5753;background:transparent;color:#1E5753;font:600 14px/1.2 inherit;font-family:inherit;text-align:center;cursor:pointer}.tj-b.pri{background:#1E5753;color:#fff}.tj-b:active{opacity:.8}.tj-b:focus-visible{outline:2px solid #00A8A3;outline-offset:2px}</style>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <label class="tj-b" style="flex:1">Hacerme una foto
           <input type="file" accept="image/*" capture="user" style="display:none" onchange="tarjetaFoto(this)">
         </label>
-        <label class="btn-o" style="flex:1;text-align:center;cursor:pointer;margin:0">Subir una foto
+        <label class="tj-b" style="flex:1">Subir una foto
           <input type="file" accept="image/*" style="display:none" onchange="tarjetaFoto(this)">
         </label>
       </div>
-      <button class="btn-o" id="tarjeta-quitar" onclick="tarjetaQuitarFoto()" style="display:none;width:100%;margin-top:8px">Quitar foto</button>
-      <button class="btn-t" onclick="tarjetaCompartir()" style="width:100%;margin-top:8px">Compartir en redes</button>
-      <button class="btn-o" onclick="tarjetaGuardar()" style="width:100%;margin-top:8px">Guardar imagen</button>
+      <button type="button" class="tj-b" id="tarjeta-quitar" onclick="tarjetaQuitarFoto()" style="display:none;margin-top:8px">Quitar foto</button>
+      <button type="button" class="tj-b pri" onclick="tarjetaCompartir()" style="margin-top:8px">Compartir en redes</button>
+      <button type="button" class="tj-b" onclick="tarjetaGuardar()" style="margin-top:8px">Guardar imagen</button>
       <div style="font-size:12px;color:var(--g);line-height:1.5;margin-top:8px">Al pulsar «Compartir en redes» se abre la lista de tus apps (Instagram, TikTok, WhatsApp…) para que elijas dónde subirla.</div>
     </div>
     <div class="card">
@@ -4046,7 +4047,7 @@ const CAMPOS_PERSISTIDOS_EXTRA = [
   'condicionesHormonales','anticonceptivosHormonales','_alertaTCA','_prescripcionMedica','_prescripcionMedicaConfirmada',
   '_arrancarDesdeNivelBajo','_alertasClinicas','diarioSintomas','registroSintomas','notasEj','copiaSeg','consentRegistroIA','energiaHist','_historialInicioCiclo','_ovulacionConfirmadaDia',
   '_ovulacionesRegistradas','_sintomasLuteos','_ultimoAviso','_ultimoAvisoDia1','_ultimoAvisoDia1Fecha',
-  'cuestionario','cuestionarioCompletado','_recomendacionesCuestionario','_cuestionarioPopupVisto','_modoEjercicio','posparto','bloqueActivacionHecho','riesgosAceptados','medidas','alturaCm','extrasHoy','_stickyEjercicioId','_recalibrarRespondidoFecha','visitaGuiadaDone',
+  'cuestionario','cuestionarioCompletado','_recomendacionesCuestionario','_cuestionarioPopupVisto','_modoEjercicio','posparto','bloqueActivacionHecho','riesgosAceptados','hechoFecha','medidas','alturaCm','extrasHoy','_stickyEjercicioId','_recalibrarRespondidoFecha','visitaGuiadaDone',
 ];
 
 /** Datos de la usuaria que se guardan en el móvil (y que entran en la copia de seguridad) */
@@ -4146,6 +4147,7 @@ async function loadState() {
     if (!raw) return false;
     const saved = JSON.parse(raw);
     Object.assign(ST, saved);
+    normalizarMarcasDelDia();
     // El atajo de pruebas de descartes solo existe en modo demo (partidas guardadas con él activo no lo conservan)
     if (typeof MODO_DEMO === 'undefined' || !MODO_DEMO) ST.testModeBypassDescartes = false;
     
@@ -4479,11 +4481,34 @@ function ajustarFabLimites() {
 function exEliminado(id){
   return (ST.strikes[id]||0) >= 3 || !!(ST.planPersonal && ST.planPersonal.excluidos && ST.planPersonal.excluidos.indexOf(id) !== -1);
 }
+/** Texto del peso de un ejercicio: «37.5 kg»; sin peso guardado ni de base, «peso corporal», «con banda» o «peso por definir» (nunca «0.0 kg») */
+function textoPeso(ex, p){
+  p = p || getPesos(ex);
+  const kg = Number(p.p);
+  if(kg > 0) return kg.toFixed(1) + ' kg' + (p.est ? ' (estimado)' : '');
+  if(ex && ST.pruebaOmitida && ST.pruebaOmitida[ex.id] && ST.pesos[ex.id]) return 'sin peso';
+  const n = (ex && (ex.n || '')) || '';
+  if(/banda/i.test(n)) return 'con banda';
+  const corporal = ex && (ex.entorno === 'casa'
+    || ['Abdomen','Diafragma y Core','Transverso y Suelo pélvico','Global'].indexOf(ex.grupo) !== -1
+    || /flexion|dominada|plancha|fondos|burpee|jump|pistol|sissy|nórdico|clamshell|walk|crunch|v-ups|l-ups|leg raise|raise|dead bug|bird dog|remo invertido|pino|isométric|frog|desplazamiento|copenhague|hollow|dragon|sit ups|marcha|respiraci/i.test(n));
+  return corporal ? 'peso corporal' : 'peso por definir';
+}
 function getPesos(ex){
   if(ST.pesos[ex.id]) return ST.pesos[ex.id];
   const est = pesoEstimadoPorGrupo(ex);
   if(est !== null) return {s:ex.s, r:ex.r, p:est, est:true};
-  return {s:ex.s,r:ex.r,p:ex.p};
+  // Sin peso de base: ningún ejercicio trae un peso inicial. Solo el último que ella usó, si lo hubo
+  return {s:ex.s,r:ex.r,p:ultimoPesoUsado(ex.id)};
+}
+/** Último peso (>0) con el que hizo el ejercicio en una sesión terminada; 0 si nunca lo ha hecho */
+function ultimoPesoUsado(id){
+  const h = ST.historialSesiones || [];
+  for(let i = h.length - 1; i >= 0; i--){
+    const e = (h[i].ejercicios || []).find(x => x.id === id && x.p > 0);
+    if(e) return Number(e.p);
+  }
+  return 0;
 }
 // ═══ PRUEBA DE PESO (primera vez en un ejercicio con peso) ═══
 // Antes se mostraba el peso fijo de la base (p. ej. 60 kg en sentadilla) a cualquier usuaria.
@@ -4501,9 +4526,10 @@ function pesoEstimadoPorGrupo(ex){
   return Math.max(1, e);
 }
 function pesoPendientePrueba(ex){
-  if(!ex || !(ex.p > 0) || ex.custom) return false;
+  // Todos los ejercicios de fuerza (con o sin peso en la base) piden el peso la primera vez que salen.
+  // No aplica al bloque de respiración/activación (ids n..) ni a los ejercicios propios.
+  if(!ex || ex.custom || ex.propio || /^n\d/.test(ex.id || '')) return false;
   if(ST.pesos[ex.id] || (ST.pruebaOmitida && ST.pruebaOmitida[ex.id])) return false;
-  if(pesoEstimadoPorGrupo(ex) !== null) return false;
   return !ejercicioHechoAntes(ex.id);
 }
 function htmlBloquePrueba(ex){
@@ -4512,6 +4538,7 @@ function htmlBloquePrueba(ex){
     <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;align-items:center">
       <button type="button" class="btn-s" style="padding:5px 10px;font-size:12px;white-space:nowrap" onclick="abrirPruebaPeso('${ex.id}','prueba')">Hacer la prueba</button>
       <button type="button" class="btn-s" style="padding:5px 10px;font-size:12px;white-space:nowrap" onclick="abrirPruebaPeso('${ex.id}','manual')">Pondré yo el peso</button>
+      <button type="button" class="btn-s" style="padding:5px 10px;font-size:12px;white-space:nowrap" onclick="guardarSinPeso('${ex.id}')">Sin peso</button>
     </div>
   </div>`;
 }
@@ -4535,10 +4562,22 @@ function abrirPruebaPeso(id, modo){
       <button class="m-x" onclick="cerrarOv()">✕</button>
     </div>
     ${cuerpo}
-    <input type="number" inputmode="decimal" step="0.5" min="0" id="prueba-kg" placeholder="0" style="width:100%;font-size:22px;font-weight:700;text-align:center;padding:10px;border:1.5px solid var(--linea);border-radius:12px;background:var(--b);color:var(--n);margin:6px 0 12px" aria-label="Peso en kilos">
+    <input type="number" inputmode="decimal" step="0.5" min="0" id="prueba-kg" placeholder="${p.est ? p.p : 0}" style="width:100%;font-size:22px;font-weight:700;text-align:center;padding:10px;border:1.5px solid var(--linea);border-radius:12px;background:var(--b);color:var(--n);margin:6px 0 12px" aria-label="Peso en kilos">
     <button class="save-btn" onclick="guardarPruebaPeso('${id}','${modo}')">Guardar peso</button>
     ${modo === 'prueba' ? `<button type="button" class="btn-o" style="margin-top:8px" onclick="abrirPruebaPeso('${id}','manual')">Ahora no, pondré yo el peso</button>` : ''}
   </div>`, false);
+}
+/** El ejercicio no lleva carga (peso corporal, banda…): queda fijado sin peso y no vuelve a pedirlo */
+function guardarSinPeso(id){
+  const ex = EJERCICIOS.find(e => e.id === id) || (typeof RUTINA_HOY !== 'undefined' && RUTINA_HOY.find(e => e.id === id));
+  if(!ex) return;
+  const p = getPesos(ex);
+  ST.pesos[id] = { s: p.s, r: p.r, p: 0 };
+  if(!ST.pruebaOmitida) ST.pruebaOmitida = {};
+  ST.pruebaOmitida[id] = true;
+  saveState();
+  toast_msg('Guardado · sin peso');
+  try{ renderEjercicios(); }catch(e){ refreshCard(id); }
 }
 function guardarPruebaPeso(id, modo){
   const ex = EJERCICIOS.find(e => e.id === id) || (typeof RUTINA_HOY !== 'undefined' && RUTINA_HOY.find(e => e.id === id));
@@ -5328,7 +5367,12 @@ function resolverSlot(slot, perfil, biblioteca, mesociclo, usadosHoy){
     if(!exEliminado(exId) && !repetidoHoy){
       const ex = biblioteca.find(e => e && e.id === exId);
       // Si la usuaria cambió de etapa o condición, un ejercicio cacheado puede dejar de ser apto
-      if(ex && ejercicioApto(ex) && _entornoOk(ex)) return ex;
+      // Los ids de hueco se comparten entre plantillas de 2/3/4/5 días con patrón/grupo distintos:
+      // la caché solo vale si el ejercicio encaja de verdad en ESTE hueco y en el entorno actual
+      const encaja = ex && ex.patron === slot.patron
+        && (slot.grupos_objetivo || []).indexOf(ex.grupo) !== -1
+        && entornoCoincide(ex, perfil.entorno);
+      if(encaja && ejercicioApto(ex) && _entornoOk(ex)) return ex;
     }
     delete mesociclo[slot.id];
   }
@@ -5875,7 +5919,17 @@ let RUTINA_BLOQUE_MOVILIDAD = null;
 let RUTINA_EXCLUIDOS_HOY = []; // ejercicios que hoy se han quitado por una molestia descrita en el check-in
 
 function _repsTxt(r){ const m = String(r == null ? '' : r).match(/^\s*(\d+)\s*-\s*(\d+)\s*$/); return (m && m[1] === m[2]) ? m[1] : r; }
+/** Las marcas de «hecho» y las series marcadas solo valen para el día en que se hicieron:
+ *  al empezar otro día se limpian (antes se arrastraban y salían ya marcadas al entrenar). */
+function normalizarMarcasDelDia(){
+  const hoy = new Date().toLocaleDateString('es-ES');
+  if(ST.hechoFecha === hoy) return;
+  ST.hecho = {};
+  ST.seriesHechas = {};
+  ST.hechoFecha = hoy;
+}
 function cargarRutinaHoy(){
+  normalizarMarcasDelDia();
   const perfil = construirPerfil();
   const resultado = resolverSesion(perfil, EJERCICIOS);
   RUTINA_AVISOS = resultado.avisos;
@@ -8426,7 +8480,7 @@ function renderExHTML(ex,i,forceTwoSeries = false){
 
   const numSeries = forceTwoSeries ? 2 : p.s;
   const pendientePrueba = pesoPendientePrueba(ex);
-  const pLabel = pendientePrueba ? `${numSeries}×${p.r} · peso por definir` : (ex.propio && !(p.p > 0) ? `${numSeries}×${p.r} · peso a tu elección` : `${numSeries}×${p.r} · ${Number(p.p).toFixed(1)} kg${p.est ? ' (estimado)' : ''}`);
+  const pLabel = pendientePrueba ? `${numSeries}×${p.r} · peso por definir` : (ex.propio && !(p.p > 0) ? `${numSeries}×${p.r} · peso a tu elección` : `${numSeries}×${p.r} · ${textoPeso(ex, p)}`);
   const estNota = (!pendientePrueba && p.est) ? `<div style="font-size:12px;color:var(--g);margin:6px 12px 0;line-height:1.4">Peso estimado a partir de tu prueba en ${(ST.pruebaPeso[ex.grupo] && nombreComun(EJERCICIOS.find(e=>e.id===ST.pruebaPeso[ex.grupo].id)||ex)) || 'otro ejercicio'}. Cámbialo si no te cuadra.</div>` : '';
   const tips=ex.tips?ex.tips.map(t=>`<div class="exp-tip"><span class="exp-tip-ico">→</span><span>${t}</span></div>`).join(''):'';
   const tecHTML=`<div class="exp-body" id="body-tec${ex.id}">
@@ -11283,70 +11337,62 @@ function toggleDescSummary(id) {
 
 function mostrarProximoDia() {
   const perfil = construirPerfil();
-  const diasPlan = ST.dias || 3;
-  const plantilla = PLANTILLA_SEMANAL[diasPlan] || PLANTILLA_SEMANAL[3];
-  const numDias = plantilla.length;
+  let titulo, ejerciciosProximos, subtitulo;
+  // Con un plan de entrenador/a en marcha, el siguiente entreno es el siguiente día de SU plan, no uno de ONA
+  const pe = ST.planEntrenador;
+  if(pe && pe.dias && pe.dias.length && planEntrenadorHoy()){
+    const n = pe.dias.length;
+    const hoy = new Date().toISOString().slice(0, 10);
+    const idx = (pe.hoy && pe.hoy.fecha === hoy) ? (pe.hoy.dia + 1) % n : ((pe.siguiente || 0) % n + n) % n;
+    const dia = pe.dias[idx];
+    titulo = 'Siguiente entrenamiento: ' + (dia.nombre || ('Día ' + (idx + 1)));
+    subtitulo = 'Plan de tu entrenador/a · ' + dia.ejercicios.length + ' ejercicios';
+    ejerciciosProximos = dia.ejercicios.map(e => {
+      const ref = EJERCICIOS.find(x => x.id === e.id) || {};
+      return Object.assign({}, ref, { id: e.id || ref.id, n: e.n || ref.n, det: _detPlan(e), _nombre: ref.id ? nombreComun(ref) : e.n });
+    });
+  } else {
+    const diasPlan = ST.dias || 3;
+    const plantilla = PLANTILLA_SEMANAL[diasPlan] || PLANTILLA_SEMANAL[3];
+    const { indiceDia } = calcularDiaSesionHoy();
+    const sigIndice = (indiceDia + 1) % plantilla.length;
+    const resultado = resolverSesion(perfil, EJERCICIOS, sigIndice);
+    ejerciciosProximos = resultado.ejercicios.map(item => {
+      const copia = Object.assign({}, item.ejercicio);
+      copia.s = item.series;
+      copia.r = _repsTxt(item.reps);
+      copia.det = `${item.series}×${_repsTxt(item.reps)} · RIR ${item.rir} · ${item.carga}`;
+      copia._nombre = nombreComun(item.ejercicio);
+      return copia;
+    });
+    const { fase } = calcularCiclo();
+    const fi = faseInfo(fase);
+    titulo = 'Siguiente entrenamiento (Día ' + String.fromCharCode(65 + sigIndice) + ')';
+    subtitulo = (cicloAplica() ? 'Fase ' + fi.nombre + ' · ' : '') + ejerciciosProximos.length + ' ejercicios programados';
+  }
 
-  const { indiceDia } = calcularDiaSesionHoy();
-  const sigIndice = (indiceDia + 1) % numDias;
-  
-  // Resolve the next session
-  const resultado = resolverSesion(perfil, EJERCICIOS, sigIndice);
-  const ejerciciosProximos = resultado.ejercicios.map(item => {
-    const ex = item.ejercicio;
-    const copia = Object.assign({}, ex);
-    copia.s = item.series;
-    copia.r = _repsTxt(item.reps);
-    copia.det = `${item.series}×${_repsTxt(item.reps)} · RIR ${item.rir} · ${item.carga}`;
-    return copia;
-  });
-
-  const { fase } = calcularCiclo();
-  const fi = faseInfo(fase);
-  
-  const labelDia = String.fromCharCode(65 + sigIndice); // 0 -> A, 1 -> B, 2 -> C...
-  
   const listHtml = ejerciciosProximos.map(ex => `
-    <div style="background:#f9f9f9; border-radius:12px; padding:12px; margin-bottom:8px; border:1.5px solid #e5e7eb; text-align:left;">
-      <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleDescSummary('${ex.id}')">
-        <div style="flex:1; padding-right:12px">
-          <div style="font-weight:700; font-size:15px; color:var(--n);">${nombreComun(ex)}</div>
-          <div style="font-size:13px; color:var(--g); margin-top:2px; font-weight:600">${ex.det}</div>
+    <div style="padding:12px 0;border-bottom:1px solid #CAECEA;text-align:left">
+      <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="toggleDescSummary('${ex.id}')">
+        <div style="flex:1;padding-right:12px">
+          <div style="font-weight:700;font-size:15px;color:var(--n)">${ex._nombre || ex.n}</div>
+          <div style="font-size:13px;color:#1E5753;margin-top:2px;font-weight:600">${ex.det || ''}</div>
         </div>
-        <div id="chevron-${ex.id}" style="font-size:12px; color:var(--g); transition:transform 0.2s;">▼</div>
+        <div id="chevron-${ex.id}" style="font-size:11px;color:#1E5753;transition:transform .2s" aria-hidden="true">▼</div>
       </div>
-      <div id="desc-${ex.id}" style="display:none; font-size:13px; color:#444; margin-top:8px; padding-top:8px; border-top:1px dashed #e5e7eb; line-height:1.4;">
-        <p style="margin:0 0 6px 0;">${ex.desc || 'Sin descripción disponible.'}</p>
-        ${ex.tips && ex.tips.length > 0 ? `
-          <div style="font-size:12px; color:#c2410c; background:#fff7ed; padding:8px; border-radius:8px; border:1px solid #ffedd5; margin-top:6px">
-            <strong style="display:block; margin-bottom:2px">💡 Tips:</strong>
-            <ul style="margin:0; padding-left:14px; line-height:1.3">
-              ${ex.tips.map(t => `<li>${t}</li>`).join('')}
-            </ul>
-          </div>
-        ` : ''}
+      <div id="desc-${ex.id}" style="display:none;font-size:13px;color:#444;margin-top:8px;line-height:1.5">
+        <p style="margin:0 0 6px 0">${ex.desc || 'Sin descripción disponible.'}</p>
+        ${ex.tips && ex.tips.length ? `<ul style="margin:0;padding-left:16px;line-height:1.4;color:#1E5753">${ex.tips.map(t => `<li>${t}</li>`).join('')}</ul>` : ''}
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 
-  const html = `
-    <div class="m-card" style="text-align: center; padding: 24px 20px; width: 100%; max-width: 100%; border-radius: 24px 24px 0 0; margin: 0; box-sizing: border-box; max-height:85vh; display:flex; flex-direction:column;">
-      <div style="font-size: 32px; margin-bottom: 8px;">📋</div>
-      <div style="font-size: 16px; font-weight: 700; color: var(--n); margin-bottom: 4px;">Siguiente entrenamiento (Día ${labelDia})</div>
-      <div style="font-size: 14px; color: var(--g); margin-bottom: 16px; font-weight: 600">
-        ${cicloAplica() ? `${fi.ico} Fase ${fi.nombre} · ` : ''}${ejerciciosProximos.length} ejercicios programados
-      </div>
-      
-      <div style="flex:1; overflow-y:auto; margin-bottom:16px; padding-right:4px;" class="scroll">
-        ${listHtml}
-      </div>
-
-      <button class="btn-t" onclick="cerrarOv();" style="width: 100%; padding: 14px; font-size: 15px; font-weight: 700; margin-bottom: 6px;">
-        Entendido
-      </button>
-    </div>
-  `;
-  abrirOv(html, false);
+  abrirOv(`<div role="dialog" aria-modal="true" style="background:var(--b);width:100%;box-sizing:border-box;padding:24px 20px 20px;max-height:85vh;display:flex;flex-direction:column;border-top:2px solid #00A8A3;border-radius:0">
+      <div style="font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#1E5753;margin-bottom:6px">Próximo entreno</div>
+      <div style="font-family:var(--display, inherit);font-size:20px;font-weight:700;color:var(--n);margin-bottom:4px">${titulo}</div>
+      <div style="font-size:13px;color:#1E5753;margin-bottom:8px">${subtitulo}</div>
+      <div style="flex:1;overflow-y:auto;margin-bottom:16px;border-top:1px solid #CAECEA" class="scroll">${listHtml}</div>
+      <button type="button" onclick="cerrarOv()" style="width:100%;min-height:48px;background:#1E5753;color:#fff;border:none;border-radius:2px;font:600 15px/1 inherit;font-family:inherit;cursor:pointer">Entendido</button>
+    </div>`, false);
 }
 
 let buscadorFiltroTexto = "";
@@ -12423,6 +12469,38 @@ let timerSecs = 90;
 let timerTarget = 90;
 let timerExpireTime = 0;
 
+// ── Aviso de fin de descanso con la app en segundo plano ─────────────────────────────
+// El reloj de la página se congela fuera de primer plano: al ocultarse la app se programa una
+// notificación local a la hora de fin; al volver (o al cerrar/terminar el descanso) se cancela.
+const DESCANSO_NOTIF_ID = 7100;
+async function permisoAvisoDescanso(){
+  const LN = recordatorioPlugin(); if(!LN) return;
+  try{
+    const perm = await LN.checkPermissions();
+    if(perm.display === 'prompt' || perm.display === 'prompt-with-rationale') await LN.requestPermissions();
+  }catch(e){}
+}
+async function programarAvisoDescanso(){
+  const LN = recordatorioPlugin();
+  if(!LN || !ST.timerActivo || !ST.timerExpireTime) return;
+  try{
+    const perm = await LN.checkPermissions();
+    if(perm.display !== 'granted') return;
+    const cuando = new Date(ST.timerExpireTime);
+    if(cuando <= new Date()) return;
+    await LN.cancel({ notifications: [{ id: DESCANSO_NOTIF_ID }] });
+    await LN.schedule({ notifications: [{ id: DESCANSO_NOTIF_ID, title: 'ONA', body: 'Descanso terminado. Siguiente serie.', schedule: { at: cuando, allowWhileIdle: true }, extra: { accion: 'descanso' } }] });
+  }catch(e){ console.warn('avisoDescanso', e); }
+}
+async function cancelarAvisoDescanso(){
+  const LN = recordatorioPlugin(); if(!LN) return;
+  try{ await LN.cancel({ notifications: [{ id: DESCANSO_NOTIF_ID }] }); }catch(e){}
+}
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'hidden') programarAvisoDescanso();
+  else cancelarAvisoDescanso();
+});
+
 function arrancarTimer(segs){
   timerTarget = segs || timerTarget;
   timerSecs   = timerTarget;
@@ -12437,6 +12515,7 @@ function arrancarTimer(segs){
   ST.timerActivo = true;
   ST.timerExpireTime = timerExpireTime;
   saveState();
+  permisoAvisoDescanso();
   
   actualizarDisplayTimer();
   timerInterval = setInterval(()=>{
@@ -12525,6 +12604,7 @@ function setTimer(segs){
 
 function cerrarTimer(){
   clearInterval(timerInterval);
+  cancelarAvisoDescanso();
   ST.timerActivo = false;
   delete ST.timerExpireTime;
   saveState();
@@ -12640,29 +12720,16 @@ function mostrarSubidaNivel(id){
   const i = NIVELES_ONA.findIndex(n => n.id === id);
   const nv = NIVELES_ONA[i];
   if(!nv) return;
-  const prev = NIVELES_ONA[Math.max(0, i - 1)];
-  // Partículas que salen en abanico desde el icono (pétalos/chispas en la gama de la app)
-  const cols = ['#00a8a3','#6FC0BA','#D12A1E','#F26A47','#A4D8D3','#A8142A'];
-  let parts = '';
-  for(let k = 0; k < 14; k++){
-    const ang = Math.round(k * (360 / 14) + (k % 2 ? 8 : 0));
-    const dist = 64 + (k % 3) * 14;
-    parts += `<i class="sn-p" style="--a:${ang}deg;--d:${dist}px;--c:${cols[k % cols.length]};--t:${(k % 4) * 0.05}s"></i>`;
-  }
-  abrirOv(`<div class="m-card" style="text-align:center;padding:26px 22px 24px;box-sizing:border-box;width:100%;overflow:hidden">
-    <div class="sn-stage" aria-hidden="true">
-      <span class="sn-halo"></span><span class="sn-ring"></span><span class="sn-ring sn-ring2"></span>
-      ${parts}
-      <span class="sn-old" data-sin-iconos>${prev.ico}</span>
-      <span class="sn-new" data-sin-iconos>${nv.ico}</span>
-    </div>
-    <div class="sn-txt">
-      <div style="font-size:18px;font-weight:700;color:var(--n);margin-bottom:6px">¡Eh! Has cambiado de fase</div>
-      <div style="font-size:16px;font-weight:700;color:var(--t);margin-bottom:12px">Ahora eres ${nv.nombre} · ¡enhorabuena!</div>
-      <div style="font-size:14px;color:var(--g);line-height:1.6;margin-bottom:20px">${FRASES_SUBIDA_NIVEL[id] || nv.desc}</div>
-      <button class="btn-n" onclick="cerrarOv()" style="width:100%;padding:12px;font-weight:700">¡Seguimos!</button>
-    </div>
-  </div>`);
+  // Aviso plano y centrado: sin iconos, sin tarjeta redondeada; una barra fina con las 6 fases
+  const fases = NIVELES_ONA.map((n, k) => `<span style="flex:1;height:3px;background:${k <= i ? '#00A8A3' : '#CAECEA'}"></span>`).join('');
+  abrirOv(`<div role="dialog" aria-modal="true" aria-label="Has cambiado de fase" style="background:var(--b);width:100%;max-width:340px;box-sizing:border-box;padding:28px 24px 24px;text-align:center;border-top:2px solid #00A8A3;border-radius:0">
+    <div style="font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#1E5753">Has cambiado de fase</div>
+    <div style="font-family:var(--display, inherit);font-size:34px;line-height:1.1;font-weight:700;color:var(--n);margin:14px 0 4px">${nv.nombre}</div>
+    <div style="font-size:13px;color:#1E5753;margin-bottom:16px">Fase ${i + 1} de ${NIVELES_ONA.length}</div>
+    <div style="display:flex;gap:4px;margin:0 0 18px" aria-hidden="true">${fases}</div>
+    <div style="font-size:14px;color:#4a4a4a;line-height:1.6;margin-bottom:22px">${FRASES_SUBIDA_NIVEL[id] || nv.desc}</div>
+    <button type="button" onclick="cerrarOv()" style="width:100%;min-height:48px;background:#1E5753;color:#fff;border:none;border-radius:2px;font:600 15px/1 inherit;font-family:inherit;cursor:pointer">Seguimos</button>
+  </div>`, true);
 }
 
 function finalizarEntrenamiento(){
@@ -12708,7 +12775,7 @@ function finalizarEntrenamiento(){
       const p = getPesos(ex);
       return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5">
         <span style="font-size:15px;font-weight:600;color:var(--n)">${nombreComun(ex)}</span>
-        <span style="font-size:14px;color:var(--t);font-weight:600">${p.s}×${p.r} · ${Number(p.p).toFixed(1)} kg</span>
+        <span style="font-size:14px;color:var(--t);font-weight:600">${p.s}×${p.r} · ${textoPeso(ex, p)}</span>
       </div>`;
     }).join('');
   }
@@ -13024,8 +13091,19 @@ function datosTarjetaEntreno(){
     totalEjercicios,
     racha,
     sesiones: ses.length,
-    grupos
+    grupos,
+    zonas: zonasTrabajadas(grupos)
   };
+}
+/** Zonas del cuerpo trabajadas, en este orden: tren superior, tren inferior, espalda y core */
+function zonasTrabajadas(grupos){
+  const mapa = {
+    'TREN SUPERIOR': ['Pectoral', 'Hombro', 'Tríceps', 'Bíceps'],
+    'TREN INFERIOR': ['Cuádriceps', 'Isquiosurales', 'Glúteo', 'Gemelos', 'Aductor'],
+    'ESPALDA': ['Espalda (dorsal)'],
+    'CORE': ['Abdomen', 'Diafragma y Core', 'Transverso y Suelo pélvico']
+  };
+  return Object.keys(mapa).filter(z => (grupos || []).some(g => mapa[z].indexOf(g) !== -1));
 }
 
 function _fmtMiles(n){ return Math.round(n).toLocaleString('es-ES'); }
@@ -13125,11 +13203,12 @@ function dibujarTarjeta(canvas, d, foto){
       lineasTxt((d.nombreRecord || '').toUpperCase(), 290, 26).forEach((l, k) => _texto(c, l, cx, H * 0.835 + 46 + k * 32, ARCH, 26, false, 1, 300));
     }});
   }
-  const gr = d.grupos || [];
+  const zn = d.zonas || [];
   cajas.push({ etiqueta: 'TRABAJADO', dibujar: (cx) => {
-    let ls = gr.length ? gr.slice(0, 3).map(x => x.toUpperCase()) : [d.totalEjercicios + (d.totalEjercicios === 1 ? ' EJERCICIO' : ' EJERCICIOS')];
-    if(gr.length > 3) ls[2] = '+' + (gr.length - 2) + ' MÁS';
-    ls.forEach((l, k) => _texto(c, l, cx, H * 0.775 + 18 + k * 50 + (ls.length === 1 ? 50 : (ls.length === 2 ? 14 : 0)), BEBAS, 46, true, 3, 300));
+    const ls = zn.length ? zn : [d.totalEjercicios + (d.totalEjercicios === 1 ? ' EJERCICIO' : ' EJERCICIOS')];
+    const tam = ls.length >= 4 ? 38 : 46, paso = ls.length >= 4 ? 40 : 50;
+    const y0 = H * 0.775 + (ls.length >= 4 ? 8 : 18) + (ls.length === 1 ? 50 : (ls.length === 2 ? 14 : 0));
+    ls.forEach((l, k) => _texto(c, l, cx, y0 + k * paso, BEBAS, tam, true, 3, 300));
   }});
   if(d.racha >= 2){
     cajas.push({ etiqueta: 'RACHA', dibujar: (cx) => {
@@ -13158,7 +13237,7 @@ async function renderTarjetaEntreno(reiniciarFoto){
   await _cargarFuentesTarjeta();
   dibujarTarjeta(canvas, d, _fotoTarjeta);
   const q = document.getElementById('tarjeta-quitar');
-  if(q) q.style.display = _fotoTarjeta ? 'block' : 'none';
+  if(q) q.style.display = _fotoTarjeta ? 'flex' : 'none';
 }
 function tarjetaFoto(inp){
   const f = inp.files && inp.files[0];
@@ -13381,12 +13460,17 @@ function calcularAlertas(){
   // ────────────────────────────────────────────────────────────────
   const gruposBajos = calcularGruposBajoVolumen();
   if(gruposBajos.length > 0){
-    const nombre = gruposBajos[0];
+    // Entre los grupos bajos, primero el que la rutina de hoy sí trabaja (así el aviso cuenta algo que va a ocurrir)
+    const nombre = gruposBajos.find(g => rutinaHoyIncluyeGrupo(g)) || gruposBajos[0];
     alertas.push({
       tipo: 'warn',
       ico: '📊',
       titulo: `${nombre} — menos de 10 series esta semana`,
-      desc: 'Este grupo muscular está por debajo del mínimo recomendado. Tu rutina de hoy lo incluye.',
+      // Solo promete «tu rutina de hoy lo incluye» si es verdad: hoy no sigue el plan de su entrenador/a (la rutina no se elige por volumen)
+      // y la rutina que va a ver (RUTINA_HOY, ya con modo 20 min, lesiones, ajustes de energía y ejercicios quitados) trabaja ese grupo.
+      desc: (!(ST.planEntrenador && planEntrenadorHoy()) && rutinaHoyIncluyeGrupo(nombre))
+        ? 'Este grupo muscular está por debajo del mínimo recomendado. Tu rutina de hoy lo incluye.'
+        : 'Este grupo muscular está por debajo del mínimo recomendado esta semana.',
       cta: 'Ver rutina',
       accion: "goToNav('s-entreno')",
       prioridad: 2,
@@ -13507,6 +13591,11 @@ function calcularAlertas(){
   }
 
   return alertas.sort((a,b) => a.prioridad - b.prioridad).slice(0, 3);
+}
+
+/** ¿La rutina que hay hoy en pantalla trabaja de verdad este grupo muscular? (agonista o sinergista, según getMusculosEjercicio) */
+function rutinaHoyIncluyeGrupo(grupo){
+  return (RUTINA_HOY || []).some(e => (getMusculosEjercicio(e.n, e.patron)[grupo] || 0) > 0);
 }
 
 function calcularGruposBajoVolumen(){
@@ -14212,7 +14301,7 @@ function actualizarDashboard() {
   } else {
     const barraCiclo = document.getElementById('dash-ciclo-barra');
     if(barraCiclo) barraCiclo.style.display = 'block';
-    document.getElementById('dash-dia').textContent   = `Día ${dia} de ${ST.durCiclo} · Fase ${fi.nombre}`;
+    document.getElementById('dash-dia').textContent   = `Día ${dia} de ${ST.durCiclo}`;
     document.getElementById('dash-fase').textContent  = `Tu ciclo está en ${fi.nombre}`;
     document.getElementById('dash-desc').textContent  = fi.ona;
     document.getElementById('ciclo-fill').style.width = pct + '%';
@@ -14854,7 +14943,7 @@ function mostrarPatronCiclo(){
     abrirOv(`<div class="m-sheet">
       <div class="m-head"><div><div class="m-title">🌙 Tu patrón personal</div></div><button class="m-x" onclick="cerrarOv()">✕</button></div>
       <div style="font-size:15px;color:var(--n);line-height:1.6;text-align:center;padding:20px 10px">${resultado.motivo}</div>
-      <button class="btn-regla btn-regla-si btn-regla-full" style="margin-top:8px" onclick="cerrarOv();goToNav('s-dashboard')">Registrar cómo me siento hoy</button>
+      <button class="btn-regla btn-regla-si btn-regla-full" style="margin-top:8px" onclick="abrirDiarioSintomas()">Registrar cómo me siento hoy</button>
     </div>`);
     return;
   }
@@ -16021,8 +16110,8 @@ function actualizarStickyBar(){
   const p = getPesos(pendiente);
   document.getElementById('sticky-ejercicio-nombre').innerHTML = nombreComun(pendiente) + ' <span style="font-weight:400;opacity:.6">▾</span>';
   document.getElementById('sticky-sub').textContent = ST.timerActivo
-    ? `⏱ Descansando · ${p.s}×${p.r} · ${Number(p.p).toFixed(1)} kg`
-    : `${p.s}×${p.r} · ${Number(p.p).toFixed(1)} kg`;
+    ? `⏱ Descansando · ${p.s}×${p.r} · ${textoPeso(pendiente, p)}`
+    : `${p.s}×${p.r} · ${textoPeso(pendiente, p)}`;
   bar._pendienteId = pendiente.id;
   bar._pendienteIdx = RUTINA_HOY.indexOf(pendiente);
 }
@@ -16050,7 +16139,7 @@ function abrirSelectorSticky(){
         return `<button onclick="_seleccionarEjercicioSticky('${ex.id}')"
           style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:14px;width:100%;text-align:left;border:1.5px solid ${activo?'var(--t)':'#e0e0e0'};background:${activo?'var(--tl)':'var(--b)'}">
           <span style="font-size:15px;font-weight:700;color:var(--n)">${nombreComun(ex)}</span>
-          <span style="font-size:13px;color:var(--g)">${p.s}×${p.r} · ${Number(p.p).toFixed(1)} kg</span>
+          <span style="font-size:13px;color:var(--g)">${p.s}×${p.r} · ${textoPeso(ex, p)}</span>
         </button>`;
       }).join('')}
     </div>
@@ -16172,7 +16261,7 @@ function _renderBiblioteca(){
           ${enRutina?'✅ ':''}${nombreComun(ex)}${ejercicioRequiereAdaptacion(ex) ? ' ⚠️' : ''}
         </div>
         <div style="font-size:13px;color:var(--g);margin-top:1px">
-          ${ex.grupo} · ${ex.patron} · ${p.s}×${p.r} · ${Number(p.p).toFixed(1)} kg
+          ${ex.grupo} · ${ex.patron} · ${p.s}×${p.r} · ${textoPeso(ex, p)}
         </div>
       </div>
       ${!enRutina
