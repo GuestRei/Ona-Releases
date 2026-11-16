@@ -63,8 +63,9 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#e5e5e5;display:flex;
 .alert-i{background:var(--tl);border:1px solid #b0e4e2;color:#006661;border-radius:14px;padding:14px;font-size:14px;line-height:1.6}
 .alert-w{background:var(--dl);border:1px solid #f0c940;color:#7a5900;border-radius:14px;padding:14px;font-size:14px;line-height:1.6}
 .alert-d{background:var(--rl);border:1px solid #fca5a5;color:#991b1b;border-radius:14px;padding:14px;font-size:14px;line-height:1.6}
-.btn-n{background:var(--n);color:white;border:none;border-radius:14px;padding:14px 20px;font-size:15px;font-weight:600;cursor:pointer;width:100%}
-.btn-n:disabled{background:#d0d0d0;color:#aaa;cursor:not-allowed}
+.btn-n{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;min-height:46px;padding:0 12px;margin:0;border-radius:2px;border:1px solid #1E5753;background:#1E5753;color:#fff;font:600 14px/1.2 inherit;font-family:inherit;text-align:center;cursor:pointer;box-shadow:none}
+.btn-n:active{opacity:.8}
+.btn-n:disabled,.btn-n[aria-disabled="true"]{background:#d0d0d0 !important;color:#6b6b6b !important;border-color:#d0d0d0 !important;cursor:not-allowed !important;opacity:1 !important;box-shadow:none !important}
 .btn-s{background:transparent;color:var(--ton,var(--n));border:1px solid var(--linea);border-radius:2px;padding:7px 12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;width:auto;margin:0}
 #perfil-contexto-card{background:#ECF8F8 !important;border:1px solid #CAECEA !important;border-radius:0 !important;padding:16px !important;margin-top:24px}
 .chat-panel .chat-hdr{padding-top:calc(14px + max(env(safe-area-inset-top,0px),30px))}
@@ -81,8 +82,12 @@ body #chat-msgs .bbl.bot{border-color:#CAECEA}
 .btn-s:first-child{border-color:var(--t)}
 .btn-s:focus-visible{outline:2px solid var(--t);outline-offset:2px}
 .info-i{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;margin-left:8px;vertical-align:middle;background:none;border:1px solid currentColor;border-radius:50%;color:var(--g);font:italic 700 11px Georgia,serif;line-height:1;cursor:pointer}
-.btn-t{background:var(--t);color:white;border:none;border-radius:14px;padding:16px 20px;font-size:16px;font-weight:700;cursor:pointer;width:100%}
-.btn-o{background:transparent;color:var(--n);border:1.5px solid #e0e0e0;border-radius:14px;padding:11px 16px;font-size:15px;font-weight:500;cursor:pointer;width:100%}
+.btn-t{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;min-height:46px;padding:0 12px;margin:0;border-radius:2px;border:1px solid #1E5753;background:#1E5753;color:#fff;font:600 14px/1.2 inherit;font-family:inherit;text-align:center;cursor:pointer;box-shadow:none}
+.btn-t:active{opacity:.8}
+.btn-t:disabled,.btn-t[disabled]{background:#d0d0d0 !important;color:#6b6b6b !important;border-color:#d0d0d0 !important;cursor:not-allowed !important;opacity:1 !important;box-shadow:none !important}
+.btn-o{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;min-height:46px;padding:0 12px;margin:0;border-radius:2px;border:1px solid #1E5753;background:transparent;color:#1E5753;font:600 14px/1.2 inherit;font-family:inherit;text-align:center;cursor:pointer;box-shadow:none}
+.btn-o:active{opacity:.8;background:#ecf8f8}
+.btn-o:disabled,.btn-o[disabled]{background:transparent !important;color:#aaa !important;border-color:#d0d0d0 !important;cursor:not-allowed !important;box-shadow:none !important}
 .prog{background:#e8e8e8;height:4px;border-radius:4px}
 .prog-f{height:4px;border-radius:4px;background:var(--t);transition:width .4s}
 .pill{display:inline-flex;align-items:center;gap:4px;background:var(--azl);color:#1a6a8a;border-radius:20px;padding:5px 10px;font-size:13px;font-weight:500;margin:3px 3px 3px 0}
@@ -122,7 +127,7 @@ label.opt{position:relative}
 label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:44px;text-align:center;position:relative}
 .opt:has(input:focus-visible),.pq-btn:has(input:focus-visible){outline:2px solid var(--t);outline-offset:2px}
 #s-entorno .e-btn{min-height:44px}
-#s-entorno .e-btn:focus-visible,.btn-n:focus-visible,.btn-t:focus-visible,.btn-back:focus-visible{outline:2px solid var(--t);outline-offset:2px}
+#s-entorno .e-btn:focus-visible,.btn-n:focus-visible,.btn-t:focus-visible,.btn-o:focus-visible,.btn-back:focus-visible{outline:2px solid #00A8A3;outline-offset:2px}
 .btn-n[aria-disabled="true"]{background:#d0d0d0;color:#6b6b6b;cursor:not-allowed}
 .onb-errores:not(:empty){background:var(--rl);border:1px solid #fca5a5;color:#991b1b;border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.6}
 [data-titulo-paso]:focus{outline:none}
@@ -703,21 +708,25 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
   color: var(--n);
 }
 #s-dashboard .card .btn-n, #s-dashboard .btn-n {
-  background: var(--t) !important;
+  background: #1E5753 !important;
   color: #ffffff !important;
-  border: none !important;
-  font-weight: 700 !important;
+  border: 1px solid #1E5753 !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
+  font-weight: 600 !important;
 }
 #s-dashboard .card .btn-o, #s-dashboard .btn-o, .btn-o {
-  background: var(--b, #ffffff) !important;
-  color: var(--ton, #1e5753) !important;
-  border: 1.5px solid var(--t, #00a8a3) !important;
-  box-shadow: inset 0 -3px 0 rgba(0, 168, 163, 0.30), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  background: transparent !important;
+  color: #1E5753 !important;
+  border: 1px solid #1E5753 !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
   font-weight: 600 !important;
 }
 #s-dashboard .card .btn-o:active, #s-dashboard .btn-o:active, .btn-o:active {
-  transform: translateY(2px) !important;
-  background: var(--teal-50, #ecf8f8) !important;
+  transform: none !important;
+  opacity: .8 !important;
+  background: #ecf8f8 !important;
 }
 .bfiltro {
   background: #f3f4f6;
@@ -737,7 +746,8 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
   border-color: var(--t);
 }
 /* ═══ Estilos traspasados de ONADigital.html (alertas apiladas, cuestionario, recuperación muscular) ═══ */
-.btn-r{background:var(--r);color:white;border:none;border-radius:14px;padding:14px 20px;font-size:15px;font-weight:600;cursor:pointer;width:100%}
+.btn-r{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;min-height:46px;padding:0 12px;margin:0;border-radius:2px;border:1px solid var(--r);background:var(--r);color:#fff;font:600 14px/1.2 inherit;font-family:inherit;text-align:center;cursor:pointer;box-shadow:none}
+.btn-r:active{opacity:.8}
 /* Tarjetas de inicio estilo notificación (WhatsApp), apiladas y deslizables como Google Wallet */
 .alerta-stack{position:relative;margin-bottom:10px;transition:height .32s cubic-bezier(.2,.8,.2,1)}
 .alerta-card{position:relative;display:flex;align-items:flex-start;gap:11px;background:var(--b);border-radius:18px;border:none;box-shadow:0 2px 16px rgba(13,13,13,.07);padding:12px 14px 12px 16px;overflow:hidden;margin-bottom:10px}
@@ -972,7 +982,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     </div>
     
     <div style="width: 100%; max-width: 320px; margin-top: 10px;">
-      <button class="btn-t" id="dl-start-btn" onclick="iniciarDescargaModelo()" style="background: #00beba; border-radius: 14px; box-shadow: 0 4px 15px rgba(0, 190, 186, 0.3); font-weight: 600;">Comenzar Descarga</button>
+      <button class="btn-t" id="dl-start-btn" onclick="iniciarDescargaModelo()" style="background: #1E5753; border: 1px solid #1E5753; border-radius: 2px; box-shadow: none; font-weight: 600;">Comenzar Descarga</button>
       <div id="dl-error-area" style="display: none; color: #fca5a5; font-size: 14px; margin-top: 10px; line-height: 1.4; padding: 10px; border-radius: 10px; background: rgba(220, 38, 38, 0.1); border: 1px solid rgba(252, 165, 165, 0.2);"></div>
     </div>
     
@@ -1671,7 +1681,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div id="zona-pruebas-dev" style="display:none">
         <div style="font-size:13px;color:var(--g);margin-bottom:12px;line-height:1.4">🛠 Zona de pruebas (solo en modo demo): probar el sistema de strikes al instante.</div>
         <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
-          <button class="btn-n" id="btn-demo-strike" onclick="simularTercerStrikeDemo()" style="font-size:14px;background:var(--t);color:white;border:none;padding:8px 12px;border-radius:8px;font-weight:700">
+          <button class="btn-n" id="btn-demo-strike" onclick="simularTercerStrikeDemo()" style="font-size:14px;background:#1E5753;color:white;border:1px solid #1E5753;padding:8px 12px;border-radius:2px;font-weight:600">
             ⚡ Simular 3er strike (Demo modal alternativa)
           </button>
           <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:1px solid rgba(220,38,38,0.15)">
@@ -6053,10 +6063,10 @@ function renderAlternativaModal(){
     <div style="font-size:14px;color:var(--g);text-align:center;margin-bottom:20px;line-height:1.6">Este es el tercer strike. Podrás reincorporarlo más tarde desde el Perfil.</div>
     ${altHTML}
     <div style="display:flex;gap:12px;margin-bottom:${alternativa&&slotId?'12px':'0'}">
-      <button class="btn-o" onclick="cerrarOv()" style="flex:1; height:48px; font-size:15px; font-weight:700; border-radius:14px;">Cancelar</button>
-      <button onclick="confirmarStrike()" style="flex:1; height:48px; font-size:15px; font-weight:700; border-radius:14px; background:var(--r); color:white; border:none; cursor:pointer; box-shadow:0 4px 12px rgba(220,38,38,0.2);">Eliminar${alternativa?' y sustituir':''}</button>
+      <button class="btn-o" onclick="cerrarOv()" style="flex:1; height:48px; font-size:15px; font-weight:600; border-radius:2px;">Cancelar</button>
+      <button onclick="confirmarStrike()" style="flex:1; height:48px; font-size:15px; font-weight:600; border-radius:2px; background:var(--r); color:white; border:1px solid var(--r); cursor:pointer; box-shadow:none;">Eliminar${alternativa?' y sustituir':''}</button>
     </div>
-    ${alternativa&&slotId?`<button onclick="otraAlternativa()" style="width:100%; height:48px; font-size:15px; font-weight:700; border-radius:14px; background:var(--tl); color:var(--t); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">🔄 Dame otra alternativa</button>`:''}
+    ${alternativa&&slotId?`<button onclick="otraAlternativa()" style="width:100%; height:48px; font-size:15px; font-weight:600; border-radius:2px; background:var(--tl); color:var(--t); border:1px solid var(--t); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:none;">🔄 Dame otra alternativa</button>`:''}
   </div>`, false);
 }
 
@@ -17261,7 +17271,7 @@ function abrirPoliticaPrivacidad() {
           <strong>6. Transparencia IA (Reglamento IA UE Art. 50):</strong> Las respuestas del chat son generadas automáticamente por modelos de inteligencia artificial y tienen carácter orientativo; no sustituyen el criterio de una profesional médica o fisioterapeuta.
         </div>
       </div>
-      <button class="btn-n" onclick="cerrarOv()" style="width:100%; padding:12px; font-weight:700; background:var(--t); color:white; border:none; border-radius:10px;">
+      <button class="btn-n" onclick="cerrarOv()" style="width:100%; min-height:46px; font-weight:600; background:#1E5753; color:white; border:1px solid #1E5753; border-radius:2px;">
         Entendido
       </button>
     </div>
@@ -17812,7 +17822,7 @@ function mostrarModalConsentimientoIA(preguntaPendiente = null, destino = '') {
         </label>
       </div>
       <div style="display:flex; flex-direction:column; gap:8px;">
-        <button class="btn-n" onclick="aceptarConsentimientoIA('${pregStr}','${destino}')" style="flex:1; padding:12px; font-size:14px; font-weight:700; background:var(--t); color:white; border:none; border-radius:10px;">
+        <button class="btn-n" onclick="aceptarConsentimientoIA('${pregStr}','${destino}')" style="flex:1; min-height:46px; font-size:14px; font-weight:600; background:#1E5753; color:white; border:1px solid #1E5753; border-radius:2px;">
           Aceptar y continuar
         </button>
         <button class="btn-o" onclick="rechazarConsentimientoIA()" style="padding:12px 14px; font-size:14px;">
