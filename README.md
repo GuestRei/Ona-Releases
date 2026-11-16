@@ -32,6 +32,15 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 ---
 
 ## 🌟 Novedades v1.0.19:
+- **Refinamiento UI y Correcciones de Estabilidad (Actualización v1.0.19+):**
+  - **Normalización Diaria de Marcas (
+ormalizarMarcasDelDia):** Se evita que los ejercicios completados en días anteriores amanezcan marcados al día siguiente, manteniendo el estado intacto en la misma fecha.
+  - **Aviso de Fin de Descanso en Segundo Plano:** Notificación local programada cuando la app pasa a segundo plano durante el descanso entre series.
+  - **Caché Biomecánica del Plan (
+esolverSlot):** Comprobación rigurosa de grupo muscular, patrón motor y entorno en ST.mesociclo al cambiar de esquema de entrenamiento.
+  - **Flujo de Pesos Limpio y Sin Cargas Artificiales:** Ningún ejercicio arrastra peso por defecto, se incorpora la opción «Sin peso» y se elimina definitivamente cualquier etiqueta de «0.0 kg».
+  - **Diseño Plano Unificado:** Rediseño completo de botones globales (.btn-t, .btn-n, .btn-o, .btn-r), aviso de cambio de fase centrado y tarjeta de entreno con radio de 2 px, borde de 1 px #1E5753 y sin sombras.
+  - **Próximo Entreno con Plan del Entrenador:** «Ver próximo entreno» despliega el siguiente día prescrito por el preparador en lugar de la rutina genérica.
 - **15 Ejercicios Nuevos de Casa y Adaptación en Tres Niveles (`lb01` a `lb15`):**
   - Incorporación a la biblioteca clínica de 15 ejercicios sin aparatos basados en el libro «Anatomía y musculación sin aparatos» y literatura para mayores/osteoporosis (flexiones con alza, aperturas con toallas, press militar con garrafas, elevaciones laterales, plancha lateral, puente de glúteo, sentadilla con garrafa, peso muerto con garrafas y sentarse/levantarse de la silla).
   - En la ficha de técnica se incluye ahora un bloque interactivo con tres niveles de dificultad: **«Más fácil»**, **«Como está»** y **«Más difícil»**, permitiendo ajustar la exigencia sin salir de la rutina.
