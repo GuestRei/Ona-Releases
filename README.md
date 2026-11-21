@@ -19,20 +19,34 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.20**
+## 🤖 Versión para Android (Instalador APK): **v1.0.21**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.20-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.20/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.21-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.21/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.20 (código 20)
+- **Versión:** 1.0.21 (código 21)
 - **Tamaño:** ~29.7 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.20:
-- **Refinamiento UI y Correcciones de Estabilidad (Actualización v1.0.20+):**
+## 🌟 Novedades v1.0.21:
+- **Nuevo Modelo Biomecánico de Estado Muscular / Recuperación (`calcularRecuperacionMuscular`):**
+  - Recuperación calculada a partir de los días de descanso necesarios por carga EMG acumulada (6 series efectivas = 1 día de descanso; +3 series = +1 día).
+  - Factor multiplicador de ×1.5 para tren inferior (48-72 h de descanso fisiológico vs ≤24 h en tren superior).
+  - Precisión por marcas de tiempo horarias reales y el grupo funcional muestra su músculo más fatigado.
+- **Corrección de Clic Fantasma en Asistente IA (FAB):**
+  - Supresión del `click` sintético accidental tras `touchend` en el botón flotante y guarda de 600 ms en sugerencias de chat.
+- **Feedback Visual en «Evaluar carga» («Sí, fluida / No, me costó»):**
+  - Selección visual nítida en el modal de valoración de carga con estética plana `.msel.on-v` y `.msel.on-r`.
+- **Contexto de la App en el Chat de IA con Privacidad Estricta (RGPD):**
+  - Asistente informado con datos de entrenamiento de hoy, adherencia semanal y fatiga muscular.
+  - Protección RGPD Art. 9: ciclo menstrual, energía y etapa vital solo se procesan en el modelo local on-device (nunca viajan a la nube de Gemini).
+- **Normalización Automática con la App en Memoria:**
+  - Si la app amanece abierta en segundo plano, detecta el cambio de día, limpia marcas anteriores y recarga la rutina.
+
+- **Refinamiento UI y Correcciones de Estabilidad (Actualización v1.0.21+):**
   - **Normalización Diaria de Marcas (
 ormalizarMarcasDelDia):** Se evita que los ejercicios completados en días anteriores amanezcan marcados al día siguiente, manteniendo el estado intacto en la misma fecha.
   - **Aviso de Fin de Descanso en Segundo Plano:** Notificación local programada cuando la app pasa a segundo plano durante el descanso entre series.

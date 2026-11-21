@@ -175,6 +175,9 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
 .msel.on{background:var(--t);border-color:var(--t);color:white}
 .msel.on-v{background:var(--gl);border-color:var(--ve);color:var(--ve)}
 .msel.on-r{background:var(--rl);border-color:var(--r);color:var(--r)}
+/* Fluida / me costó: ona_diseno.css fuerza .msel en blanco con !important, así que el estado elegido no se veía. Mismo lenguaje plano que .msel.on (borde y fondo turquesa), con el verde/rojo solo en el borde y el texto. */
+.m-sheet .msel.on-v{background:var(--tl) !important;border-color:var(--t) !important;color:var(--ton,#1E5753) !important;box-shadow:inset 0 0 0 1px var(--t) !important}
+.m-sheet .msel.on-r{background:var(--tl) !important;border-color:var(--t) !important;color:var(--ton,#1E5753) !important;box-shadow:inset 0 0 0 1px var(--t) !important}
 .peso-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .peso-pm{width:44px;height:44px;border-radius:10px;border:1.5px solid #e0e0e0;background:var(--b);font-size:22px;cursor:pointer;font-weight:700;color:var(--n)}
 .peso-val{flex:1;text-align:center;font-size:26px;font-weight:700;color:var(--n)}
@@ -1853,7 +1856,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
       <div class="ctitle">🔄 Versión y Actualizaciones</div>
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.20</span></div>
+          <div style="font-size:15px;font-weight:700;color:var(--n)">ONA Digital <span id="perfil-app-version" style="color:var(--t)">v1.0.21</span></div>
           <div style="font-size:13px;color:var(--g);margin-top:2px" id="perfil-version-subtxt">Canal oficial de GitHub</div>
         </div>
         <button class="btn-o" onclick="verificarActualizacionApp(true)" style="width:auto;padding:7px 12px;font-size:13px">Buscar actualización</button>
@@ -2074,7 +2077,7 @@ label.pq-btn{display:flex;align-items:center;justify-content:center;min-height:4
     <!-- Detalles de la versión -->
     <div style="background:#f8f9fa;border-radius:12px;padding:10px 14px;margin-bottom:16px;text-align:left;border:1px solid #eee;">
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--n)">
-        <span>Versión actual: <b id="act-ver-actual">v1.0.20</b></span>
+        <span>Versión actual: <b id="act-ver-actual">v1.0.21</b></span>
         <span style="color:var(--t)">Nueva: <b id="act-ver-nueva">--</b></span>
       </div>
       <div id="act-notas" style="font-size:12px;color:var(--g);margin-top:6px;max-height:80px;overflow-y:auto;line-height:1.4">
@@ -5933,10 +5936,11 @@ function _repsTxt(r){ const m = String(r == null ? '' : r).match(/^\s*(\d+)\s*-\
  *  al empezar otro día se limpian (antes se arrastraban y salían ya marcadas al entrenar). */
 function normalizarMarcasDelDia(){
   const hoy = new Date().toLocaleDateString('es-ES');
-  if(ST.hechoFecha === hoy) return;
+  if(ST.hechoFecha === hoy) return false;
   ST.hecho = {};
   ST.seriesHechas = {};
   ST.hechoFecha = hoy;
+  return true;
 }
 function cargarRutinaHoy(){
   normalizarMarcasDelDia();
@@ -8691,6 +8695,8 @@ function renderEntornoHoy(){
 function renderEjercicios(){
   const listEl = document.getElementById('ejercicios-list');
   if (!listEl) return;
+  // La app puede seguir abierta en memoria de un día para otro: si cambió el día, se limpian las marcas y se rehace la rutina
+  if (normalizarMarcasDelDia()) { try { saveState(); cargarRutinaHoy(); } catch(e) { console.warn('cambio de día', e); } }
   renderEntornoHoy();
   // Hasta confirmar el aviso de riesgos no se muestra la rutina
   if (renderTarjetaRiesgos()) {
@@ -9597,7 +9603,9 @@ async function callLocalAI(systemPrompt, userPrompt, messagesHistory = []) {
   throw new Error("El motor de IA local nativo (LlamaPlugin) no está disponible en este entorno.");
 }
 
-async function callChatAI(systemPrompt, userPrompt, messagesHistory = []) {
+async function callChatAI(systemPrompt, userPrompt, messagesHistory = [], systemPromptLocal = null) {
+  // systemPromptLocal solo se usa con el modelo del móvil: lleva datos que no deben salir del teléfono
+  const sysLocal = systemPromptLocal || systemPrompt;
   const modo = ST.modoIA || 'gemini';
   if (modo === 'gemini') {
     try {
@@ -9606,7 +9614,7 @@ async function callChatAI(systemPrompt, userPrompt, messagesHistory = []) {
     } catch (err) {
       console.warn("Fallo en Gemini online, intentando fallback a IA local:", err);
       try {
-        const localResp = await callLocalAI(systemPrompt, userPrompt, messagesHistory.slice(-4));
+        const localResp = await callLocalAI(sysLocal, userPrompt, messagesHistory.slice(-4));
         return { content: localResp, engine: 'local' };
       } catch (localErr) {
         throw err;
@@ -9614,7 +9622,7 @@ async function callChatAI(systemPrompt, userPrompt, messagesHistory = []) {
     }
   } else {
     try {
-      const localResp = await callLocalAI(systemPrompt, userPrompt, messagesHistory.slice(-4));
+      const localResp = await callLocalAI(sysLocal, userPrompt, messagesHistory.slice(-4));
       return { content: localResp, engine: 'local' };
     } catch (err) {
       console.warn("Fallo en IA local, intentando fallback a Gemini online:", err);
@@ -9691,10 +9699,10 @@ Acciones soportadas:
   7. Recuperación de molestia: {"type": "clear_molestia", "value": "recuperada"} (Si la usuaria te indica que ya no le duele nada o está recuperada).`;
 
 const chatHist=[];
-let chatAbierto=false, primerMsg=true;
+let chatAbierto=false, primerMsg=true, _chatAbiertoTs=0;
 
 function abrirChat(){
-  chatAbierto=true;
+  chatAbierto=true; _chatAbiertoTs=Date.now();
   actualizarBadgeModoIA();
   document.getElementById('chat-panel').classList.add('open');
   document.getElementById('chat-fab').style.display='none';
@@ -9761,7 +9769,11 @@ function showTyping(){
 }
 function rmTyping(){const t=document.getElementById('typ');if(t)t.remove();}
 function hideSugs(){const s=document.getElementById('chat-sugs');if(s)s.style.display='none';}
-function envSug(btn){hideSugs();procMsg(btn.textContent);}
+function envSug(btn){
+  // Respaldo: un toque en los 600 ms posteriores a abrir el chat es el «click» fantasma del botón, no una elección
+  if(Date.now()-_chatAbiertoTs<600) return;
+  hideSugs();procMsg(btn.textContent);
+}
 
 let _chatRecognition = null;
 let _chatEscuchando = false;
@@ -10032,6 +10044,80 @@ function obtenerContextoKB(preguntaUsuaria) {
 
 let activeKBContext = null;
 
+
+// ── Contexto de la app para el chat de IA ─────────────────────────────────────
+// destino 'local'  → IA en el móvil: los datos no salen del teléfono, se incluye todo.
+// destino 'online' → Gemini: solo datos de actividad (no sanitarios). Fase del ciclo, energía y
+//                    etapa (datos de salud, art. 9 RGPD) NO se envían hasta tener un consentimiento
+//                    específico y la política de privacidad completada. La molestia activa nunca sale del móvil.
+function contextoAppChat(destino){
+  const L = [];
+  const hoyStr = new Date().toLocaleDateString('es-ES');
+  try{
+    // ¿Ha entrenado hoy?
+    const fin = (typeof obtenerSesionFinalizadaHoy === 'function') ? obtenerSesionFinalizadaHoy() : null;
+    if(fin && fin.ejercicios && fin.ejercicios.length){
+      L.push('Hoy: ya ha entrenado (' + fin.ejercicios.length + ' ejercicios completados).');
+    } else {
+      L.push('Hoy: todavía no ha entrenado.');
+    }
+    // Qué le toca hoy
+    const plan = (typeof planEntrenadorHoy === 'function') ? planEntrenadorHoy() : null;
+    if(plan){
+      L.push('Le toca hoy (plan de su entrenador): ' + (plan.nombre || 'sesión del plan') + '.');
+    } else {
+      const d = calcularDiaSesionHoy();
+      const sesion = d && d.plantilla && d.plantilla[d.indiceDia];
+      if(sesion) L.push('Le toca hoy: ' + (sesion.label || sesion.tipo) + ' (semana de ' + (ST.dias || 3) + ' días).');
+    }
+    if(typeof RUTINA_HOY !== 'undefined' && RUTINA_HOY && RUTINA_HOY.length){
+      const nombres = RUTINA_HOY.slice(0, destino === 'local' ? 6 : 8).map(e => e.n);
+      L.push('Ejercicios de hoy: ' + nombres.join(', ') + (RUTINA_HOY.length > nombres.length ? ' y ' + (RUTINA_HOY.length - nombres.length) + ' más' : '') + '.');
+    }
+    // Constancia
+    const ses = (ST.historialSesiones || []).filter(x => x && x.ejercicios && x.ejercicios.length);
+    const lunes = new Date(); lunes.setHours(0,0,0,0); lunes.setDate(lunes.getDate() - ((lunes.getDay() + 6) % 7));
+    const diasSemana = new Set();
+    ses.forEach(x => { const f = _fechaSesion(x); if(f && f >= lunes) diasSemana.add(x.fecha); });
+    L.push('Entrenos esta semana: ' + diasSemana.size + ' de ' + (ST.dias || 3) + ' previstos.');
+    if(ses.length){
+      const fechas = ses.map(_fechaSesion).filter(Boolean).sort((a,b) => a - b);
+      const dias = Math.max(1, Math.round((Date.now() - fechas[0]) / 86400000));
+      L.push('Sesiones registradas en total: ' + ses.length + ', la primera hace ' + dias + ' días.');
+      const ultima = fechas[fechas.length - 1];
+      const hace = Math.round((new Date().setHours(0,0,0,0) - ultima) / 86400000);
+      if(hace > 0) L.push('Último entreno: ' + (hace === 1 ? 'ayer' : 'hace ' + hace + ' días') + '.');
+    } else {
+      L.push('Todavía no tiene sesiones registradas.');
+    }
+    // Estado muscular
+    const rec = calcularRecuperacionMuscular();
+    const cansados = Object.entries(rec).filter(([g, v]) => v < 70).map(([g, v]) => g + ' ' + v + '%');
+    L.push('Recuperación muscular estimada: ' + (cansados.length ? 'por debajo del 70 %: ' + cansados.join(', ') : 'todos los grupos recuperados') + '.');
+
+    if(destino === 'local'){
+      const et = ST.etapa === 'embarazo' ? 'embarazo' : ST.etapa === 'postparto' ? 'posparto' : ST.etapa === 'menopausia' ? 'menopausia' : 'general (ni embarazo, ni posparto, ni menopausia)';
+      L.push('Etapa: ' + et + '.');
+      if(cicloAplica() && ST.fur){
+        const c = calcularCiclo();
+        const fi = (typeof FASES_INFO !== 'undefined') ? FASES_INFO.find(x => x.id === c.fase) : null;
+        L.push('Ciclo: día ' + c.dia + ', fase ' + (fi ? fi.nombre : c.fase) + '.');
+      }
+      const etq = { 1: 'mal', 2: 'cansada', 3: 'normal', 4: 'genial' };
+      const reg = (Array.isArray(ST.energiaHist) ? ST.energiaHist : []).slice(-7);
+      if(reg.length){
+        const hoyYmd = new Date().toISOString().slice(0, 10);
+        const hoyR = reg.find(r => r.f === hoyYmd);
+        L.push('Energía hoy: ' + (hoyR ? etq[hoyR.v] : 'sin registrar') + '. Últimos registros (de antiguo a reciente): ' + reg.map(r => etq[r.v] || '?').join(', ') + '.');
+      } else {
+        L.push('Energía: sin registros todavía.');
+      }
+    }
+  }catch(e){ console.warn('contextoAppChat', e); }
+  return '\n\n--- DATOS DE LA APP DE ESTA USUARIA (' + hoyStr + ') ---\n' + L.join('\n') +
+    '\nUsa estos datos solo cuando ayuden a responder. Si te preguntan algo que no figura aquí, di que no lo tienes en la app; no lo supongas ni lo inventes.\n--- FIN DE DATOS ---\n';
+}
+
 async function procMsg(texto, yaMostrado = false){
   if (!yaMostrado) {
     addUsr(texto);
@@ -10076,14 +10162,18 @@ async function procMsg(texto, yaMostrado = false){
       activeKBContext = newCtxKB;
     }
     
-    const sysPrompt = activeKBContext
-      ? CHAT_SYS + ctx + `\n\n--- INFORMACIÓN DE REFERENCIA OBTENIDA DE LOS MANUALES ---\n${activeKBContext}\n--- FIN DE REFERENCIA ---\nUsa esta información para dar tu respuesta.`
-      : CHAT_SYS + ctx;
+    const refKB = activeKBContext
+      ? `\n\n--- INFORMACIÓN DE REFERENCIA OBTENIDA DE LOS MANUALES ---\n${activeKBContext}\n--- FIN DE REFERENCIA ---\nUsa esta información para dar tu respuesta.`
+      : '';
+    // Dos versiones del mensaje de sistema: la de la IA en el móvil lleva todos los datos de la app;
+    // la de Gemini solo los de actividad (ver contextoAppChat)
+    const sysPrompt = CHAT_SYS + ctx + contextoAppChat('online') + refKB;
+    const sysPromptLocal = CHAT_SYS + ctx + contextoAppChat('local') + refKB;
 
     const memoryLimit = (ST.modoIA === 'local') ? -4 : -20;
     const historySlice = chatHist.slice(memoryLimit);
 
-    const { content, engine } = await callChatAI(sysPrompt, userPrompt, historySlice);
+    const { content, engine } = await callChatAI(sysPrompt, userPrompt, historySlice, sysPromptLocal);
 
     // Procesar posibles acciones embebidas en la respuesta de la IA
     let textoVisible = content;
@@ -10278,6 +10368,10 @@ function makeFabDraggable() {
     if (!isInteractionStarted) return;
     
     if (!isDragging) {
+      // El chat se abre al soltar el dedo (touchend). Si no se cancela, el navegador genera después
+      // un «click» en ese mismo punto, que cae sobre lo que haya aparecido debajo (una sugerencia
+      // del chat) y envía una pregunta sin que la usuaria la haya elegido.
+      if (e && e.cancelable) { try { e.preventDefault(); } catch(_) {} }
       abrirChat();
     }
     
@@ -14167,48 +14261,51 @@ const MUSCULOS_ORDEN = [
 ];
 
 function calcularRecuperacionMuscular(){
-  const hoy = new Date();
+  // Modelo por días de descanso necesarios (criterio de la entrenadora):
+  //   carga = Σ series × implicación del músculo en cada ejercicio (series efectivas)
+  //   6 series efectivas = 1 día de descanso; por cada 3 más, 1 día más; por debajo, proporcional.
+  //   Tren inferior ×1,5: la evidencia da 48-72 h de recuperación para el tren inferior frente a ≤24 h para el superior.
+  // % recuperado = tiempo transcurrido desde la sesión / días necesarios (mínimo 10 % para no mostrar 0).
+  const ahora = Date.now();
+  const INFERIOR = ['Cuádriceps','Glúteo','Isquiosurales','Gemelos','Aductor'];
   const musculosPct = {};
   MUSCULOS_ORDEN.forEach(g => musculosPct[g] = 100); // frescos por defecto
 
-  // Acumular series efectivas por músculo individual en las últimas 72h
-  const acum = {};
-  MUSCULOS_ORDEN.forEach(g => acum[g] = 0);
+  (ST.historialSesiones || []).slice(-7).forEach(s => {
+    if(!s || !s.ejercicios) return;
+    // Momento de la sesión: la marca de tiempo si existe; si no, mediodía de su fecha
+    let ts = Number(s.finSesion || s.inicioSesion) || 0;
+    if(!ts){
+      const partes = String(s.fecha || '').split('/');
+      if(partes.length !== 3) return;
+      ts = new Date(parseInt(partes[2]), parseInt(partes[1])-1, parseInt(partes[0]), 12).getTime();
+    }
+    const transcurridos = Math.max(0, (ahora - ts) / 86400000); // días
+    if(transcurridos > 6) return;
 
-  ST.historialSesiones.slice(-7).forEach(s => {
-    if(!s.fecha || !s.ejercicios) return;
-    const partes = s.fecha.split('/');
-    if(partes.length !== 3) return;
-    const fechaSesion = new Date(parseInt(partes[2]), parseInt(partes[1])-1, parseInt(partes[0]));
-    const diasAtras = Math.round((hoy - fechaSesion) / 86400000);
-    if(diasAtras > 3) return;
-
-    // Factor de recuperación temporal: más reciente = más fatiga residual
-    const factorTiempo = diasAtras === 0 ? 1.0 : diasAtras === 1 ? 0.75 : diasAtras === 2 ? 0.45 : 0.2;
-
+    const carga = {};
     s.ejercicios.forEach(ex => {
       const mapa = EMG_EJERCICIO[ex.n] || {};
       Object.entries(mapa).forEach(([grp, pesoEMG]) => {
-        if(acum[grp] === undefined) return;
-        acum[grp] += (ex.s || 3) * pesoEMG * factorTiempo;
+        if(MUSCULOS_ORDEN.indexOf(grp) < 0) return;
+        carga[grp] = (carga[grp] || 0) + (ex.s || 3) * pesoEMG;
       });
+    });
+    Object.entries(carga).forEach(([grp, c]) => {
+      let dias = c <= 6 ? c / 6 : 1 + (c - 6) / 3;
+      if(INFERIOR.indexOf(grp) >= 0) dias *= 1.5;
+      if(dias <= 0) return;
+      const pct = Math.max(10, Math.round(Math.min(1, transcurridos / dias) * 100));
+      // Si hay varias sesiones recientes, manda la que deja el músculo más fatigado
+      musculosPct[grp] = Math.min(musculosPct[grp], pct);
     });
   });
 
-  // Convertir acumulado a % de recuperación por músculo individual
-  MUSCULOS_ORDEN.forEach(g => {
-    const fatiga = Math.min(1, acum[g] / 10);
-    musculosPct[g] = Math.max(10, Math.round((1 - fatiga) * 100));
-  });
-
-  // Agrupar: media ponderada de los músculos de cada grupo funcional
+  // Agrupar: el grupo refleja su músculo más fatigado, no la media
   const resultado = {};
   Object.entries(GRUPOS_MUSCULARES).forEach(([grupo, {musculos}]) => {
-    const vals = musculos.map(m => musculosPct[m] || 100);
-    const media = Math.round(vals.reduce((a,b) => a+b, 0) / vals.length);
-    resultado[grupo] = media;
+    resultado[grupo] = Math.min(...musculos.map(m => musculosPct[m] === undefined ? 100 : musculosPct[m]));
   });
-
   return resultado;
 }
 
@@ -16968,8 +17065,8 @@ function obtenerDiagnosticoTecnico(){
   const ciclo = typeof calcularCiclo === 'function' ? calcularCiclo() : { dia: 'N/A', fase: 'N/A' };
   
   return {
-    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.20',
-    build: '20',
+    version: typeof APP_VERSION_ACTUAL !== 'undefined' ? APP_VERSION_ACTUAL : '1.0.21',
+    build: '21',
     plataforma: platform,
     userAgent: navigator.userAgent,
     resolucion: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight} (dpr: ${window.devicePixelRatio || 1})` : 'N/A',
@@ -18020,7 +18117,7 @@ try {
 } catch (e) { console.warn('Botón atrás no disponible:', e); }
 
 // ── Sistema de Actualizaciones de ONA Digital (GitHub Releases) ──────
-const APP_VERSION_ACTUAL = "1.0.20";
+const APP_VERSION_ACTUAL = "1.0.21";
 const GITHUB_REPO_OWNER = "GuestRei";
 const GITHUB_REPO_NAME = "Ona-Releases";
 let datosActualizacionPendiente = null;
