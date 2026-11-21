@@ -9687,6 +9687,7 @@ IMPORTANTE:
 - CRÍTICO: NO utilices NUNCA asteriscos (ni * ni **) ni ningún otro carácter markdown para poner palabras en negrita o destacar texto. Escribe con texto plano legible y limpio.
 - NO empieces tus respuestas saludando ("Hola") si ya estás en medio de la conversación.
 - Responde de forma ultra-directa y específica a la pregunta. Si te preguntan por una molestia o lesión, enfócate en readaptación o descanso y no hables del ciclo hormonal.
+- AYUDA SOBRE LA APLICACIÓN: Si la usuaria te pregunta cómo hacer algo en la app (cambiar pesos, usar variantes, subir plan de entrenador, registrar regla, apuntar notas de máquinas, fotos de progreso, copia de seguridad, etc.), explica con precisión los pasos y nombres de botones y pestañas exactos indicados en la referencia. Puedes añadir una acción de navegación [ACTION: {"type": "navigate", "value": "s-entreno"}] (o ent-plan, ent-progreso, s-ciclo, s-perfil) si ayuda a guiarla.
 - AUTOMATIZACIÓN Y ACCIONES (CRÍTICO): Si la usuaria te pide explícitamente realizar un cambio en su configuración o perfil, debes añadir al final de tu respuesta (en una nueva línea y sin asteriscos) la etiqueta especial '[ACTION: {"type": "TIPO", "value": "VALOR"}]'.
 
 Acciones soportadas:
@@ -9694,7 +9695,7 @@ Acciones soportadas:
   2. Cambiar entorno: {"type": "change_environment", "value": "casa"|"gimnasio"}
   3. Cambiar días: {"type": "change_days", "value": 2|3|4|5}
   4. Quitar ejercicio: {"type": "strike_exercise", "value": "e1"|"e2"|"e3"|"e4"|"e5"|"e6"} (Prensa es e1, Peso Muerto es e2, Remo es e3, Press Inclinado es e4, Jalón Pecho es e5, Curl Isquios es e6)
-  5. Navegar: {"type": "navigate", "value": "s-dashboard"|"s-entreno"|"s-ciclo"|"s-perfil"|"s-tienda"}
+  5. Navegar: {"type": "navigate", "value": "s-dashboard"|"s-entreno"|"s-ciclo"|"s-perfil"|"s-tienda"|"ent-progreso"|"ent-plan"|"ent-historial"|"ciclo-energia"|"ciclo-registro"}
   6. Registrar molestia física: {"type": "report_molestia", "value": "rodilla"|"lumbar"|"hombro"|"cervical"|"otra"} (Si la usuaria te cuenta que le duele o tiene molestia en alguna zona, añade siempre esta acción para que ONA proteja esa articulación).
   7. Recuperación de molestia: {"type": "clear_molestia", "value": "recuperada"} (Si la usuaria te indica que ya no le duele nada o está recuperada).`;
 
@@ -9875,7 +9876,44 @@ function generarRespuestaChatSimulada(texto) {
   let topicResponse = "";
   let topicFound = false;
   
-  if (t.includes('menstrual') || t.includes('regla') || t.includes('periodo') || t.includes('sangrado') || t.includes('ciclo')) {
+  // ── Consultas operativas sobre el uso de la app ──
+  if (t.includes('pdf') || t.includes('plan de mi entrenador') || ( (t.includes('subir') || t.includes('subo') || t.includes('cargar') || t.includes('cargo') || t.includes('meter') || t.includes('pegar') || t.includes('importar')) && (t.includes('plan') || t.includes('rutina') || t.includes('entrenamiento') || t.includes('entreno') || t.includes('foto')) )) {
+    topicFound = true;
+    topicResponse = "Para subir tu entrenamiento en PDF o foto, ve a la pestaña Entreno > Mi plan (o entra en tu Perfil) y pulsa el botón «Tengo un plan de mi entrenador/a». Puedes subir un archivo PDF, una foto de tu rutina o pegar el texto. ONA organizará automáticamente los ejercicios por días y podrás pulsar «Aplicar este plan».";
+  }
+  else if (t.includes('cambiar peso') || t.includes('cambiar los pesos') || t.includes('cambio peso') || t.includes('cambio los pesos') || t.includes('ajustar peso') || t.includes('ajustar los pesos') || t.includes('modificar peso') || t.includes('poner peso') || t.includes('prueba de peso') || (t.includes('peso') && (t.includes('como') || t.includes('cómo') || t.includes('donde') || t.includes('dónde')))) {
+    topicFound = true;
+    topicResponse = "Para cambiar el peso de un ejercicio, entra en Entreno > Hoy y en la tarjeta del ejercicio pulsa el botón «Cambiar pesos» (icono de balanza ⚖️). Podrás ajustar las series (1 a 5), las repeticiones y el peso en kilos con los botones − y + (en saltos de 0,5 kg). Si es tu primera vez con ese ejercicio, la tarjeta te dará directamente a elegir entre «Hacer la prueba», «Pondré yo el peso» o «Sin peso».";
+  }
+  else if (t.includes('variante') || t.includes('cambiar ejercicio') || t.includes('sustituir ejercicio') || t.includes('otro ejercicio') || t.includes('maquina ocupada') || t.includes('máquina ocupada')) {
+    topicFound = true;
+    topicResponse = "Puedes sustituir un ejercicio pulsando el botón «Variantes» en la parte superior derecha de la tarjeta del ejercicio (en Entreno > Hoy). Te mostrará alternativas con el mismo patrón biomecánico para la sesión de hoy sin modificar tu plan general.";
+  }
+  else if (t.includes('mi plan')) {
+    topicFound = true;
+    topicResponse = "Para gestionar tu plan ve a Entreno > Mi plan. Puedes personalizar los ejercicios de cada día o cargar una rutina externa de tu entrenador/a para que ONA la adapte a tu progreso.";
+  }
+  else if (t.includes('nota') || t.includes('notas') || t.includes('apuntar') || t.includes('apunto') || t.includes('sillin') || t.includes('sillín') || t.includes('asiento') || t.includes('polea') || t.includes('clavija') || (t.includes('altura') && (t.includes('maquina') || t.includes('máquina')))) {
+    topicFound = true;
+    topicResponse = "En cada ejercicio de Entreno > Hoy verás el botón con el icono de una libreta. Púlsalo para abrir «Notas del ejercicio», donde puedes apuntar la altura del asiento, la clavija de la polea o cualquier ajuste para recordarlo en tus siguientes entrenos.";
+  }
+  else if (t.includes('registrar regla') || t.includes('apuntar regla') || t.includes('marcar regla') || t.includes('flor')) {
+    topicFound = true;
+    topicResponse = "Para registrar tu regla, ve a «Mi ciclo» (o «Mi etapa») en la barra inferior y pulsa el botón «Registrar regla» o indica cuándo fue tu última regla. ONA ajustará automáticamente la flor de pétalos y el recuento de días de tu fase actual.";
+  }
+  else if (t.includes('copia de seguridad') || t.includes('backup') || t.includes('guardar datos') || t.includes('restaurar copia')) {
+    topicFound = true;
+    topicResponse = "Tus datos viven solo en tu móvil. En Perfil > Copia de seguridad puedes pulsar «Hacer copia ahora» para descargar el archivo .json o guardarlo en Google Drive. Si cambias de móvil, pulsa «Restaurar una copia» para recuperarlo todo.";
+  }
+  else if (t.includes('progreso') || t.includes('fotos') || t.includes('medidas') || t.includes('mapa corporal') || t.includes('record') || t.includes('récord')) {
+    topicFound = true;
+    topicResponse = "En la pestaña Entreno, pulsa en la subpestaña «Progreso». Allí verás tu calendario de sesiones, el registro de medidas corporales, fotos privadas de evolución, el mapa de músculos trabajados y tus récords personales de fuerza.";
+  }
+  else if (t.includes('codigo rojo') || t.includes('código rojo')) {
+    topicFound = true;
+    topicResponse = "El Código Rojo es un apartado de seguridad sanitaria visible al finalizar la sesión. Te advierte sobre señales de alarma como dolor articular punzante, mareo o sangrado imprevisto ante las cuales debes detener el entrenamiento y consultar a un médico.";
+  }
+  else if (t.includes('menstrual') || t.includes('regla') || t.includes('periodo') || t.includes('sangrado') || t.includes('ciclo')) {
     topicFound = true;
     topicResponse = `Como estás en tu fase ${phaseNames[fase] || fase} (día ${dia} del ciclo), tu cuerpo está bajo la influencia de esta fase hormonal. `;
     if (fase === 'menstrual') {
@@ -9976,26 +10014,41 @@ function obtenerContextoKB(preguntaUsuaria) {
     'me', 'mi', 'te', 'yo', 'cómo', 'qué', 'cual', 'cuál', 'donde', 'dónde'
   ]);
 
+  const isAppQuery = /pdf|foto|archivo|drive|backup|copia de seguridad|pantalla|men[uú]|bot[oó]n|pesta[ñn]a|variante|c[oó]digo rojo|no hoy|strike|sill[ií]n|polea|clavija|racha|bento|20 min|sesi[oó]n extra|reportar fallo/.test(query) ||
+    (/(subir|subo|cargar|cargo|importar|pegar|cambiar|cambio|ajustar|ajusto|apuntar|apunto|guardar)\b/.test(query) && /(plan|rutina|entreno|entrenamiento|peso|pesos|ejercicio|ejercicios|regla)\b/.test(query)) ||
+    (/(c[oó]mo|d[oó]nde)\b/.test(query) && /(hacer|cambiar|cambio|poner|pongo|ver|veo|subir|subo|guardar|descargar|ajustar|usar|funciona)\b/.test(query));
+
   const keywords = query
     .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?¿¡]/g, " ")
     .split(/\s+/)
     .map(w => w.trim())
-    .filter(w => w.length > 2 && !stopWords.has(w));
+    .filter(w => w.length > 1 && !stopWords.has(w));
 
   if (keywords.length === 0) return null;
 
   const scoreBoard = [];
   for (const section of ONA_MANUALS_DB) {
     let score = 0;
+    const isAppSec = section.file === 'Guia_de_Uso_de_la_App';
     const categoryLower = (section.category || '').toLowerCase();
     const contentLower = (section.content || '').toLowerCase();
     const fileLower = (section.file || '').toLowerCase();
 
     for (const kw of keywords) {
-      // 1. Coincidencia exacta en Keywords (Etiquetas)
+      // 1. Coincidencia en Keywords (Etiquetas exactas, parciales o raíz)
       if (section.keywords && Array.isArray(section.keywords)) {
-        if (section.keywords.includes(kw)) {
-          score += 25;
+        for (const sk of section.keywords) {
+          const skLow = String(sk).toLowerCase();
+          if (skLow === kw) {
+            score += 25;
+            break;
+          } else if (skLow.includes(kw) && kw.length >= 3) {
+            score += 15;
+            break;
+          } else if (kw.length >= 4 && skLow.length >= 4 && (skLow.startsWith(kw.slice(0, 4)) || kw.startsWith(skLow.slice(0, 4)))) {
+            score += 10;
+            break;
+          }
         }
       }
       // 2. Coincidencia en Categoría
@@ -10016,6 +10069,11 @@ function obtenerContextoKB(preguntaUsuaria) {
       }
     }
 
+    // Prioridad decisiva para guías operativas de la app cuando la intención es de uso/configuración
+    if (isAppQuery && isAppSec && score > 0) {
+      score += 60;
+    }
+
     if (score > 0) {
       scoreBoard.push({ section, score });
     }
@@ -10029,9 +10087,9 @@ function obtenerContextoKB(preguntaUsuaria) {
   for (const item of scoreBoard) {
     const sec = item.section;
     const textBlock = `[Manual: ${sec.file.replace(/_/g, ' ')} -> Sección: ${sec.category}]\n${sec.content}`;
-    if (totalLength + textBlock.length > 1200) {
+    if (totalLength + textBlock.length > 1500) {
       if (selectedSections.length === 0) {
-        selectedSections.push(textBlock.substring(0, 1200) + '... [Recortado por longitud]');
+        selectedSections.push(textBlock.substring(0, 1500) + '... [Recortado por longitud]');
       }
       break;
     }
@@ -10251,7 +10309,29 @@ function ejecutarAccionIA(action) {
       toast_msg(`Entorno actualizado a ${action.value}`);
     }
   } else if (action.type === 'navigate') {
-    if (action.value) goToNav(action.value);
+    if (action.value) {
+      if (action.value === 'ent-progreso') {
+        goToNav('s-entreno');
+        if (typeof cambiarSubTabEntreno === 'function') cambiarSubTabEntreno('progreso');
+      } else if (action.value === 'ent-plan') {
+        goToNav('s-entreno');
+        if (typeof cambiarSubTabEntreno === 'function') cambiarSubTabEntreno('plan');
+      } else if (action.value === 'ent-historial') {
+        goToNav('s-entreno');
+        if (typeof cambiarSubTabEntreno === 'function') cambiarSubTabEntreno('historial');
+      } else if (action.value === 'ent-hoy') {
+        goToNav('s-entreno');
+        if (typeof cambiarSubTabEntreno === 'function') cambiarSubTabEntreno('hoy');
+      } else if (action.value === 'ciclo-energia') {
+        goToNav('s-ciclo');
+        if (typeof cicloTab === 'function') cicloTab('energia');
+      } else if (action.value === 'ciclo-registro') {
+        goToNav('s-ciclo');
+        if (typeof cicloTab === 'function') cicloTab('registro');
+      } else {
+        goToNav(action.value);
+      }
+    }
   }
 }
 
