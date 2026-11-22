@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidad — ONA Digital</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&family=Young+Serif&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal-50: #ECF8F8; --teal-100: #CAECEA; --teal-800: #1E5753; --teal-950: #071312;
+      --t: #00a8a3; --linea: #CAECEA; --display: 'Young Serif', Georgia, serif;
+      --sans: 'Hanken Grotesk', system-ui, sans-serif;
+    }
+    body { font-family: var(--sans); background: #ffffff; color: var(--teal-950); line-height: 1.6; margin: 0; padding: 0; }
+    .header { border-bottom: 1px solid var(--linea); padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-family: var(--display); font-size: 20px; color: var(--teal-950); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .brand img { width: 32px; height: 32px; }
+    .container { max-width: 840px; margin: 40px auto; padding: 0 24px; }
+    h1 { font-family: var(--display); font-size: 34px; margin-bottom: 12px; color: var(--teal-950); }
+    h2 { font-family: var(--display); font-size: 22px; margin-top: 32px; margin-bottom: 12px; color: var(--teal-800); }
+    p, li { font-size: 15px; color: #1a3331; margin-bottom: 12px; }
+    ul, ol { padding-left: 22px; margin-bottom: 16px; }
+    .meta-box { background: var(--teal-50); border: 1px solid var(--teal-100); padding: 16px; border-radius: 2px; margin-bottom: 28px; font-size: 13.5px; color: var(--teal-800); }
+    .back-link { font-size: 14px; font-weight: 600; color: var(--t); text-decoration: none; }
+    .footer { border-top: 1px solid var(--linea); margin-top: 60px; padding: 24px 0; font-size: 13px; color: var(--teal-800); text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="index.html" class="brand">
+      <img src="logo.png" alt="ONA" onerror="this.style.display='none'">
+      <span>ONA Digital</span>
+    </a>
+    <a href="index.html" class="back-link">← Volver a la Landing Page</a>
+  </div>
+
+  <div class="container">
+    <h1>Política de Privacidad</h1>
+    <div class="meta-box">
+      <strong>Aplicación:</strong> ONA Digital · <strong>Identificador de paquete Android:</strong> <code>com.onadigital.app</code><br>
+      <strong>Versión:</strong> 1.0.22 · <strong>Última actualización:</strong> Noviembre de 2026<br>
+      <strong>Normativa aplicable:</strong> RGPD (UE 2016/679), LOPDGDD 3/2018 y Directrices de Datos de Usuario de Google Play Store.
+    </div>
+
+    <p>
+      La privacidad de las usuarias es la piedra angular del diseño de <strong>ONA Digital</strong>. Este documento expone de forma clara y exhaustiva cómo se recopila, utiliza, protege y elimina cualquier dato generado en la aplicación.
+    </p>
+
+    <h2>1. Arquitectura Local-First y Ausencia de Servidor Central</h2>
+    <p>
+      A diferencia de otras plataformas de fitness que envían información personal a servidores en la nube, <strong>ONA Digital almacena todos los datos de forma 100% local en su dispositivo</strong> móvil mediante el sistema de almacenamiento seguro de Capacitor Preferences y bases de datos locales del teléfono.
+    </p>
+    <p>
+      Esto significa que sus datos íntimos de salud (fases del ciclo menstrual, fechas de regla, síntomas, dolor, respuestas de cribado PAR-Q, patologías marcadas y registros de cargas en el gimnasio) <strong>nunca salen de su teléfono</strong> ni son transmitidos a servidores propios o de terceros con fines de minería de datos, analítica conductual o segmentación publicitaria.
+    </p>
+
+    <h2>2. Datos que Trata la Aplicación</h2>
+    <ul>
+      <li><strong>Datos de Configuración y Perfil:</strong> Nombre de pila o pseudónimo, etapa vital seleccionada (ciclo menstrual, embarazo, posparto o menopausia), nivel de entrenamiento y entorno disponible (mancuernas, gimnasio completo, peso corporal).</li>
+      <li><strong>Datos Especiales de Fisiología y Salud Femenina:</strong> Fechas del ciclo menstrual, duración estimada del ciclo, trimestre de embarazo, fase de recuperación de posparto, condiciones de salud hormonal o articular (SOP, lipedema, dolor lumbar, rodilla, hipertensión, osteoporosis).</li>
+      <li><strong>Cribado Médico PAR-Q:</strong> Respuestas a las 7 preguntas de seguridad clínica previa a la actividad física.</li>
+      <li><strong>Diario de Síntomas y Check-in:</strong> Puntuaciones diarias de fatiga, dolor muscular o articular, nivel de estrés percibido y notas de entrenamiento.</li>
+      <li><strong>Historial Deportivo:</strong> Ejercicios ejecutados, series, repeticiones y cargas (kg) para el cálculo de la progresión de fuerza y RIR.</li>
+    </ul>
+
+    <h2>3. Finalidad del Tratamiento de Datos</h2>
+    <p>Los datos registrados se emplean de forma exclusiva dentro del dispositivo para:</p>
+    <ul>
+      <li>Calcular de manera algorítmica y personalizada las rutinas diarias de entrenamiento adaptadas a la etapa biológica y al nivel de energía del día.</li>
+      <li>Filtrar ejercicios clínicamente contraindicados según la etapa vital (p. ej., evitar posturas en decúbito supino en el segundo y tercer trimestre de embarazo o proteger el suelo pélvico en fase 1 de posparto).</li>
+      <li>Evaluar los criterios de Código Verde para recomendar incrementos seguros de peso o activar alertas de Código Rojo ante señales de alarma médica.</li>
+    </ul>
+
+    <h2>4. Permisos del Sistema Operativo</h2>
+    <ul>
+      <li><strong>Notificaciones Locales (android.permission.POST_NOTIFICATIONS):</strong> Utilizado únicamente si la usuaria activa recordatorios de entrenamiento en la aplicación. Las notificaciones se programan en el propio reloj del sistema operativo, sin intervención de servidores externos.</li>
+      <li><strong>Almacenamiento (android.permission.READ_EXTERNAL_STORAGE / WRITE_EXTERNAL_STORAGE):</strong> Utilizado de forma exclusiva si la usuaria decide exportar un archivo de respaldo o informe de progreso.</li>
+    </ul>
+
+    <h2>5. Terceros, SDKs y Publicidad</h2>
+    <p>
+      ONA Digital <strong>no contiene SDKs publicitarios (como Google AdMob, Unity Ads, etc.)</strong> ni herramientas de analítica invasiva que rastreen el identificador de publicidad de su dispositivo (AAID). No vendemos, alquilamos ni compartimos sus datos con aseguradoras, farmacéuticas ni anunciantes.
+    </p>
+
+    <h2>6. Inteligencia Artificial y Consultas On-Device</h2>
+    <p>
+      El asistente conversacional de ONA Digital funciona con un modelo de IA local integrado en la aplicación móvil (on-device). Esto garantiza que las preguntas formuladas sobre técnica, biomecánica o consejos de entrenamiento no se transmiten a la nube. En caso de utilizar servicios en la nube de respaldo, las consultas se procesan de forma totalmente disociada y efímera sin vincularse a la identidad de la usuaria.
+    </p>
+
+    <h2>7. Derechos del Usuario y Eliminación de Datos</h2>
+    <p>
+      En cumplimiento del RGPD y de las directrices de Google Play, usted tiene derecho a acceder, rectificar, limitar y eliminar la totalidad de sus datos en cualquier instante. Para más detalles sobre cómo borrar inmediatamente sus registros, consulte nuestra <a href="eliminar-datos.html" style="color:var(--t); font-weight:bold;">Guía de Eliminación de Datos</a>.
+    </p>
+
+    <h2>8. Contacto del Responsable</h2>
+    <p>
+      Para cualquier duda o ejercicio de derechos:<br>
+      <strong>Responsable:</strong> Equipo de Desarrollo ONA Digital<br>
+      <strong>Correo de contacto:</strong> <a href="mailto:onadigital.app@gmail.com" style="color:var(--t);">onadigital.app@gmail.com</a>
+    </p>
+
+    <div class="footer">
+      &copy; 2026 ONA Digital. Ficha técnica Google Play: <code>com.onadigital.app</code>.
+    </div>
+  </div>
+</body>
+</html>
