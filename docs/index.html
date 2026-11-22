@@ -7702,11 +7702,20 @@ function _vistaPlanEntrenador(){
   </div>`);
 }
 function _refrescarRutinaTrasPlan(){
+  _cachePlanHoy = null;
   cargarRutinaHoy();
   if(typeof aplicarAjusteCheckin === 'function') aplicarAjusteCheckin();
+  if(typeof actualizarEntrenoBadge === 'function') actualizarEntrenoBadge();
   renderEjercicios();
+  if(typeof initCal === 'function') initCal();
   if(typeof actualizarProgresionSesion === 'function') actualizarProgresionSesion();
   if(typeof renderAvisosRutina === 'function') renderAvisosRutina();
+  if(typeof actualizarStickyBar === 'function') actualizarStickyBar();
+  try{
+    if(typeof renderEntrenoPlan === 'function' && document.getElementById('ent-sub-plan')) {
+      renderEntrenoPlan();
+    }
+  }catch(e){}
 }
 function planEntrenarDia(i){
   const p = ST.planEntrenador;
@@ -7750,12 +7759,19 @@ function elegirDiaHoy(i){
   } else {
     ST.diaForzado = { fecha: new Date().toLocaleDateString('es-ES'), dias: ST.dias || 3, indice: i };
   }
-  if(marcados){ ST.hecho = {}; ST.seriesHechas = {}; }
+  _cachePlanHoy = null;
+  ST.hecho = {};
+  ST.seriesHechas = {};
+  ST._stickyEjercicioId = null;
   saveState();
   cerrarOv();
-  if(pe) _refrescarRutinaTrasPlan();
-  else { cargarRutinaHoy(); if(typeof aplicarAjusteCheckin === 'function') aplicarAjusteCheckin(); renderEjercicios(); if(typeof actualizarProgresionSesion === 'function') actualizarProgresionSesion(); if(typeof renderAvisosRutina === 'function') renderAvisosRutina(); }
-  toast_msg('Hoy entrenas ' + (pe ? '«' + pe.dias[i].nombre + '»' : 'otro día') + ' ✓');
+  _refrescarRutinaTrasPlan();
+  try{
+    const sc = document.querySelector('#s-entreno .scroll');
+    if(sc) sc.scrollTo({ top: 0, behavior: 'smooth' });
+  }catch(e){}
+  const nombreDia = pe ? pe.dias[i].nombre : ((PLANTILLA_SEMANAL[ST.dias || 3] && PLANTILLA_SEMANAL[ST.dias || 3][i] && PLANTILLA_SEMANAL[ST.dias || 3][i].label) || ('Día ' + (i + 1)));
+  toast_msg('Hoy entrenas «' + nombreDia + '» ✓');
 }
 function planVolverARutinaONA(){
   if(ST.planEntrenador){ ST.planEntrenador.hoy = null; ST.planEntrenador.aplicado = false; }
@@ -12875,15 +12891,27 @@ function actualizarEntrenoBadge(){
 
   const titEl = document.getElementById('e-titulo');
   if(titEl){
-    const { indiceDia, plantilla } = calcularDiaSesionHoy();
-    const diaActual = plantilla[indiceDia];
-    titEl.textContent = diaActual.label || `Día ${indiceDia+1}`;
-    if(sub){
-      let msg = descripcionSesion(diaActual);
-      const estadoCI = ST.checkin && ST.checkin.estado;
-      if(estadoCI==='cansada') msg += ' · adaptada a tu energía de hoy';
-      else if(estadoCI==='mal') msg += ' · versión suave de hoy';
-      sub.textContent = msg;
+    const peHoy = (typeof planEntrenadorHoy === 'function') ? planEntrenadorHoy() : null;
+    if(peHoy){
+      titEl.textContent = peHoy.nombre || 'Entrenamiento de hoy';
+      if(sub){
+        let msg = peHoy.ejercicios.length + ' ejercicio' + (peHoy.ejercicios.length === 1 ? '' : 's') + ' · Plan de tu entrenador/a';
+        const estadoCI = ST.checkin && ST.checkin.estado;
+        if(estadoCI==='cansada') msg += ' · adaptada a tu energía de hoy';
+        else if(estadoCI==='mal') msg += ' · versión suave de hoy';
+        sub.textContent = msg;
+      }
+    } else {
+      const { indiceDia, plantilla } = calcularDiaSesionHoy();
+      const diaActual = (plantilla && plantilla[indiceDia]) || (plantilla && plantilla[0]) || { label: 'Entrenamiento' };
+      titEl.textContent = diaActual.label || `Día ${indiceDia+1}`;
+      if(sub){
+        let msg = (typeof descripcionSesion === 'function') ? descripcionSesion(diaActual) : '';
+        const estadoCI = ST.checkin && ST.checkin.estado;
+        if(estadoCI==='cansada') msg += ' · adaptada a tu energía de hoy';
+        else if(estadoCI==='mal') msg += ' · versión suave de hoy';
+        sub.textContent = msg;
+      }
     }
   }
 
