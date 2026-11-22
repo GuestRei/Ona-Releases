@@ -19,19 +19,27 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.21**
+## 🤖 Versión para Android (Instalador APK): **v1.0.22**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.21-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.21/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.22-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.22/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.21 (código 21)
+- **Versión:** 1.0.22 (código 22)
 - **Tamaño:** ~29.7 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
 
 ---
 
-## 🌟 Novedades v1.0.21:
+## 🌟 Novedades v1.0.22:
+- **Actualización Inmediata al Cambiar el Día de Entreno («Full Body A / B / C»):**
+  - Al cambiar de día (Día A, B o C), la vista, títulos (`#e-titulo`), subtítulo biomecánico, calentamiento y ejercicios se actualizan en el mismo instante sin requerir navegar a «Inicio».
+  - Desplazamiento suave y automático al inicio de la sesión para comenzar desde el primer ejercicio.
+  - Sincronización completa con planes importados de entrenador/a en cabeceras y vistas.
+- **Detección de Intención Operativa y Soporte de Carga de PDF en Chat de IA:**
+  - Identificación precisa de consultas de uso de la app (`isAppQuery`) para que preguntas como *«cómo subo mi entrenamiento en pdf»*, *«cómo cambio los pesos»* o *«dónde apunto las notas»* reciban la guía paso a paso adecuada.
+  - Prioridad léxica y de prefijo de raíz (stemming) +60 puntos para manuales de la aplicación frente a tratados teóricos.
+  - Base de conocimiento operativa ampliada a 211 secciones estructuradas con soporte multimodal y fallback offline.
 - **Nuevo Modelo Biomecánico de Estado Muscular / Recuperación (`calcularRecuperacionMuscular`):**
   - Recuperación calculada a partir de los días de descanso necesarios por carga EMG acumulada (6 series efectivas = 1 día de descanso; +3 series = +1 día).
   - Factor multiplicador de ×1.5 para tren inferior (48-72 h de descanso fisiológico vs ≤24 h en tren superior).
