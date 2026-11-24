@@ -8,14 +8,17 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ¡Ya puedes probar y usar **ONA Digital** directamente desde tu iPhone, iPad o navegador web sin necesidad de instalar archivos!
 
-[![Abrir Versión Web](https://img.shields.io/badge/Abrir%20Web%20App-iOS%20%2F%20Safari-00a8a3?style=for-the-badge&logo=safari&logoColor=white)](https://guestrei.github.io/Ona-Releases/)
-[![GitHub Pages](https://img.shields.io/badge/Alojado%20en-GitHub%20Pages-blue?style=for-the-badge&logo=github)](https://guestrei.github.io/Ona-Releases/)
+[![Abrir Web App](https://img.shields.io/badge/Abrir%20Web%20App-iOS%20%2F%20Safari-00a8a3?style=for-the-badge&logo=safari&logoColor=white)](https://guestrei.github.io/Ona-Releases/app)
+[![Landing Page Oficial](https://img.shields.io/badge/Sitio%20Web-Landing%20Page-blue?style=for-the-badge&logo=googlechrome&logoColor=white)](https://guestrei.github.io/Ona-Releases/)
 
 > 📲 **Instalar en iPhone como App Nativa (PWA):**
-> 1. Abre el enlace [https://guestrei.github.io/Ona-Releases/](https://guestrei.github.io/Ona-Releases/) en **Safari**.
-> 2. Pulsa el botón **Compartir** (icono cuadrado con flecha hacia arriba ⎋).
-> 3. Selecciona **«Añadir a pantalla de inicio»** (icono +).
-> 4. ¡Listo! Se creará el icono de ONA en tu pantalla de inicio y se abrirá a pantalla completa.
+> 1. Abre el enlace directo de la aplicación en **Safari**: [https://guestrei.github.io/Ona-Releases/app](https://guestrei.github.io/Ona-Releases/app)
+> 2. Pulsa el botón **Compartir** (icono cuadrado con flecha hacia arriba ⎋ en la barra inferior de Safari).
+> 3. Desplaza hacia abajo en las opciones y selecciona **«Añadir a pantalla de inicio»** (icono +).
+> 4. Confirma pulsando **«Añadir»** en la esquina superior derecha.
+> 5. ¡Listo! Se creará el icono de ONA en tu pantalla de inicio y se abrirá directamente la aplicación a pantalla completa, con experiencia idéntica a una app nativa (sin barras de navegador ni distracciones).
+>
+> *(Nota: La raíz [https://guestrei.github.io/Ona-Releases/](https://guestrei.github.io/Ona-Releases/) contiene la Landing Page oficial y centro de políticas para Google Play; para ejecutar la aplicación web en iOS o navegador, accede directamente a `/app`).*
 
 ---
 
