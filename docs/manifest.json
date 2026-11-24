@@ -2,7 +2,7 @@
   "name": "ONA Digital",
   "short_name": "ONA",
   "description": "Entrenamiento de fuerza y salud femenina adaptado a tu fisiología",
-  "start_url": "./app",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

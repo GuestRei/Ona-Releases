@@ -22,15 +22,28 @@ Bienvenida al canal oficial y público de **ONA Digital**, la aplicación móvil
 
 ---
 
-## 🤖 Versión para Android (Instalador APK): **v1.0.22**
+## 🤖 Versión para Android (Instalador APK): **v1.0.23**
 
-[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.22-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.22/app-release.apk)
+[![Descargar APK](https://img.shields.io/badge/Descargar%20APK-v1.0.23-00a8a3?style=for-the-badge&logo=android&logoColor=white)](https://github.com/GuestRei/Ona-Releases/releases/download/v1.0.23/app-release.apk)
 [![Releases de GitHub](https://img.shields.io/github/v/release/GuestRei/Ona-Releases?color=00a8a3&label=Versi%C3%B3n%20Oficial&style=for-the-badge)](https://github.com/GuestRei/Ona-Releases/releases/latest)
 
 - **Archivo instalador:** `app-release.apk`
-- **Versión:** 1.0.22 (código 22)
+- **Versión:** 1.0.23 (código 23)
 - **Tamaño:** ~29.7 MB
 - **Requisitos:** Android 8.0 o superior (`arm64-v8a`)
+
+---
+
+## 🌟 Novedades v1.0.23:
+- **Chat de IA Ultrarrápido y Auto-Actualizable:**
+  - Optimización del proxy en Cloudflare con alias oficiales *rolling* (`gemini-flash-lite-latest` / `gemini-flash-latest`), descubrimiento dinámico automático ante cambios de modelos de Google y modo de baja latencia (`thinkingLevel: "minimal"`), reduciendo tiempos de 10–15 s a ~0,6–4 s.
+- **Guía de Selección de Ejercicios y Equilibrio Muscular:**
+  - Hombro posterior real (`preferir_ids`) y glúteo medio dedicados en los distintos esquemas semanales (2, 3, 4 y 5 días), incorporación de bíceps en planes de 2 y 3 días y separación de isquiosurales vs glúteo.
+  - **Priorización diaria inteligente:** Tras el check-in, si un músculo lleva menos series esta semana y toca hoy, ONA te pregunta si quieres empezar la sesión por él.
+- **Objetivo «Fuerza», Descansos Automáticos y Subidas de 2,5 kg:**
+  - Renombrado «Rendimiento» → «Fuerza», ajuste de RIR avanzado a `1-2`, descansos recomendados según tipo de ejercicio (`60 s` core, `90 s` aislamiento, `150 s` / `180 s` compuestos) con nuevo botón **2:30** y escalones unificados de **2,5 kg**.
+- **Diseño e Icono Nativo de Notificaciones:**
+  - Rediseño de los botones principales («Vamos a entrenar», «Finalizar entrenamiento» y «20 min») e icono de pesa en notificaciones de Android (`ic_stat_pesa`).
 
 ---
 
